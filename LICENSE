@@ -1,0 +1,28 @@
+Screen Recorder
+Copyright (C) 2026 Emmanuel Wiredu Kwabena Tinagyei
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+SPDX-License-Identifier: GPL-3.0-or-later
+
+The full license text (674 lines) is the canonical GPL-3.0 text published
+by the Free Software Foundation, available at:
+https://www.gnu.org/licenses/gpl-3.0.txt
+
+Why GPL-3.0 instead of MIT: the goal for this project is to stay free and
+open forever. MIT would technically allow someone to take this code, add
+ads or a paywall, and ship it as a closed-source app under a different
+name — exactly the kind of app this project exists as an alternative to.
+GPL-3.0's copyleft requirement means any distributed derivative work must
+also stay open source under GPL-3.0, closing that loophole.

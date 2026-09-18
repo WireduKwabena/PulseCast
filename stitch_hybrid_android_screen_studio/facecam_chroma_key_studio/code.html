@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#0e131e;color:#dee2f2;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-fixed": "#ffdada", "outline": "#ad8888", "on-tertiary-fixed": "#281900", "surface-container": "#1b202b", "surface-dim": "#0e131e", "background": "#0e131e", "on-error-container": "#ffdad6", "on-surface": "#dee2f2", "secondary-fixed-dim": "#00daf3", "surface-tint": "#ffb3b5", "on-primary-container": "#5b0015", "tertiary": "#ffba38", "secondary": "#bdf4ff", "on-error": "#690005", "primary-container": "#ff5167", "secondary-container": "#00e3fd", "outline-variant": "#5d3f40", "secondary-fixed": "#9cf0ff", "on-secondary-container": "#00616d", "on-primary": "#680019", "surface-container-high": "#252a36", "surface-variant": "#303541", "error": "#ffb4ab", "surface-container-low": "#171b27", "on-tertiary-fixed-variant": "#604100", "primary-fixed-dim": "#ffb3b5", "on-secondary-fixed": "#001f24", "surface-bright": "#343945", "on-tertiary": "#432c00", "primary": "#ffb3b5", "inverse-primary": "#be0036", "on-primary-fixed-variant": "#920027", "on-primary-fixed": "#40000c", "surface": "#0e131e", "tertiary-fixed-dim": "#ffba38", "on-background": "#dee2f2", "error-container": "#93000a", "on-tertiary-container": "#3a2600", "inverse-on-surface": "#2b303c", "on-secondary-fixed-variant": "#004f58", "on-secondary": "#00363d", "tertiary-container": "#c08600", "surface-container-lowest": "#090e19", "on-surface-variant": "#e6bcbd", "inverse-surface": "#dee2f2", "tertiary-fixed": "#ffdeac", "surface-container-highest": "#303541" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "space-md": "0.75rem", "floating-margin": "1rem", "space-base": "1rem", "space-lg": "1.5rem", "safe-bottom-nav": "5rem", "space-xxs": "0.125rem", "space-xl": "2rem", "space-xs": "0.25rem", "space-2xl": "3rem" }, fontFamily: { "headline-xl-mobile": ["Space Grotesk"], "label-telemetry-sm": ["JetBrains Mono"], "headline-lg": ["Space Grotesk"], "headline-xl": ["Space Grotesk"], "body-lg": ["Inter"], "body-sm": ["Inter"], "label-telemetry-lg": ["JetBrains Mono"], "button-text": ["Inter"], "headline-sm": ["Space Grotesk"], "body-md": ["Inter"], "label-telemetry-md": ["JetBrains Mono"] }, fontSize: { "headline-xl-mobile": ["26px", { lineHeight: "32px", fontWeight: "700" }], "label-telemetry-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "500" }], "headline-lg": ["24px", { lineHeight: "30px", fontWeight: "600" }], "headline-xl": ["32px", { lineHeight: "38px", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "label-telemetry-lg": ["18px", { lineHeight: "22px", letterSpacing: "-0.02em", fontWeight: "700" }], "button-text": ["14px", { lineHeight: "18px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-sm": ["18px", { lineHeight: "24px", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "label-telemetry-md": ["13px", { lineHeight: "16px", letterSpacing: "-0.01em", fontWeight: "500" }] } } } };</script></head><body class="bg-surface text-on-surface font-body-md flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.3)] pt-safe"><div class="h-28 flex flex-col justify-between px-space-base pb-space-xs"><div class="h-6 flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant"><div class="flex items-center gap-space-xs"><span class="text-on-surface font-bold">10:42</span><span class="px-1.5 py-0.5 rounded-full bg-surface-container-high text-[10px] text-secondary font-semibold uppercase tracking-wider">5G</span></div><div class="flex items-center gap-space-sm"><div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-container/20 text-primary font-bold text-[10px] tracking-wide"><span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>PRO</div><div class="flex items-center gap-1"><span class="text-on-surface">94%</span><span class="material-symbols-outlined text-[16px] text-secondary">battery_charging_full</span></div></div></div><div class="h-14 flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0"><button class="w-11 h-11 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface hover:text-secondary transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[20px]">arrow_back</span></button><img alt="PulseCast Studio" class="h-8 w-auto object-contain hidden sm:block" src="https://lh3.googleusercontent.com/aida/AEtjO1VG6yOHyqXAjzmyUWMNWuW9X7sztWfzv0qbm8sg6EdYCPt0NO3fEvMyzu3I2wXPpMIr4wBZuWkuKdk78sfv5Uc6rfaA7YLgwhaaAgaN_1sZK1QT5LgV3HT8TX0QT2DTV5BdFSeb32sFOR0L5rkWK4bCwrWw_XqhUB4mbhIDd_7Ei6CBgCYkHtVaxDA_qUHwIwHjRhvacuLQ9oGVkaMEuvRjEb8oKD6Ba-bShG5R9EdRrxT02P0Zmmic"/><div class="flex flex-col truncate"><span class="font-label-telemetry-sm text-[10px] text-secondary uppercase tracking-widest leading-none">CAMERA PIP ENGINE</span><h1 class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-tight truncate leading-tight">Camera Pip Engine</h1></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><button class="w-11 h-11 flex items-center justify-center rounded-lg bg-surface-container-high text-tertiary hover:bg-surface-bright transition-colors"><span class="material-symbols-outlined text-[20px]">bookmark</span></button><button class="w-11 h-11 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[20px]">tune</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="flex flex-col relative w-full pt-28 pb-safe bg-surface min-h-screen"><div class="flex flex-col w-full px-space-base pb-safe-bottom-nav gap-space-lg">
+<!-- Telemetry Sub-Bar & Status Indicator -->
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-xs rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary truncate uppercase">HARDWARE ACCELERATED • GPU VULKAN 3.2</span>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">DSP LATENCY:</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary">3.4ms</span>
+</div>
+</div>
+<!-- Main Interactive Viewfinder / Live Feed Stage -->
+<div class="relative w-full bg-surface-container-lowest rounded-xl p-space-sm shadow-xl overflow-hidden flex flex-col gap-space-sm">
+<!-- Live Canvas Viewport with simulated mobile gameplay underlay -->
+<div class="relative w-full aspect-[4/3] rounded-lg overflow-hidden bg-surface-container-high flex items-center justify-center select-none group" id="viewport-stage">
+<!-- Gameplay Background Canvas Grid Pattern -->
+<div class="absolute inset-0 bg-surface-dim opacity-95 flex items-center justify-center">
+<!-- SVG Cyber Game Simulation Preview Background -->
+<svg class="w-full h-full text-surface-container/60" height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="32" id="grid-pattern" patternunits="userSpaceOnUse" width="32">
+<path d="M 32 0 L 0 0 0 32" fill="none" stroke="currentColor" stroke-width="0.8"></path>
+</pattern>
+<lineargradient id="game-glow" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#00daf3" stop-opacity="0.12"></stop>
+<stop offset="100%" stop-color="#ff5167" stop-opacity="0.08"></stop>
+</lineargradient>
+</defs>
+<rect fill="url(#grid-pattern)" height="100%" width="100%"></rect>
+<rect fill="url(#game-glow)" height="100%" width="100%"></rect>
+</svg>
+<!-- Simulated Mobile Game HUD Elements -->
+<div class="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container-high/80 backdrop-blur-md">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface">APEX MOBILE // RANKED LOBBY</span>
+</div>
+<div class="absolute bottom-2 left-2 flex items-center gap-2 opacity-60">
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant">MAP: WORLD'S EDGE</span>
+<span class="font-label-telemetry-sm text-[10px] text-secondary">ALIVE: 42</span>
+</div>
+</div>
+<!-- Floating Drag Handles and Dynamic PIP Node (Docked Top-Right by default) -->
+<div class="absolute top-3 right-3 w-40 h-28 rounded-xl overflow-hidden shadow-2xl transition-all duration-300 cursor-grab active:cursor-grabbing z-20" id="pip-container" style="box-shadow: 0 0 0 2px #00e3fd, 0 8px 24px rgba(0, 227, 253, 0.4);">
+<!-- Live Chroma Feed with Streamer Image -->
+<div class="relative w-full h-full overflow-hidden bg-surface-container-lowest">
+<img alt="Streamer Facecam Preview" class="w-full h-full object-cover transition-transform duration-300" id="facecam-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL2CAOrYgZ0uIwoozchUUSbgAXQPNFXtFmifpsGdY3muv9qGk0KOVYY_2uWSfv4zQfA7Cj8pXsAqiaigovol64r_qcyDKnSU-6iQnQcemMMtAbiPe2singmjdlEoh3Tw5iIvdY0NlqicQbQsHX8wDQBBYqjP3WWWeoxitkD-9Gg80nkd4gL3Jf1XrIV6faPamA3OoHNFdMu-WVP8ZT_jnhnqmm9qqggZkmkUwTkFe3vwgd83a453I"/>
+<!-- Chroma Matte Split Indicator Line (Subtle overlay showing keying effect) -->
+<div class="absolute inset-y-0 left-1/2 w-0.5 bg-secondary-fixed-dim/70 shadow-[0_0_8px_#00daf3] pointer-events-none"></div>
+<!-- Dynamic Audio Pulsing Aura in PIP -->
+<div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-primary-container/20 via-transparent to-transparent"></div>
+<!-- Mic VU Meter overlay in PIP -->
+<div class="absolute bottom-1.5 right-1.5 flex items-end gap-0.5 h-3 px-1 py-0.5 bg-surface-container-lowest/85 backdrop-blur-sm rounded">
+<span class="w-0.5 h-1 bg-secondary-container rounded-full"></span>
+<span class="w-0.5 h-2 bg-secondary-container rounded-full"></span>
+<span class="w-0.5 h-2.5 bg-tertiary rounded-full"></span>
+<span class="w-0.5 h-1.5 bg-primary-container rounded-full animate-pulse"></span>
+</div>
+<!-- Drag anchor point overlay icon -->
+<div class="absolute top-1 left-1 bg-surface-container-high/70 backdrop-blur-md rounded-full w-5 h-5 flex items-center justify-center">
+<span class="material-symbols-outlined text-[13px] text-secondary">drag_pan</span>
+</div>
+</div>
+</div>
+<!-- Live Broadcast Telemetry HUD Overlay in Canvas -->
+<div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10 pointer-events-none">
+<div class="flex items-center gap-1.5 px-2 py-0.5 bg-surface-container-lowest/90 backdrop-blur-md rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface font-semibold tracking-wider">FRONT ULTRA-WIDE (60 FPS)</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 bg-surface-container-lowest/90 backdrop-blur-md rounded">
+<span class="material-symbols-outlined text-[12px] text-tertiary">lock</span>
+<span class="font-label-telemetry-sm text-[10px] text-tertiary font-semibold tracking-wider">EXPOSURE: LOCKED</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 bg-surface-container-lowest/90 backdrop-blur-md rounded">
+<span class="material-symbols-outlined text-[12px] text-secondary">auto_fix_high</span>
+<span class="font-label-telemetry-sm text-[10px] text-secondary font-semibold tracking-wider">AI MATTING: ACTIVE</span>
+</div>
+</div>
+<!-- Real-time Live Decibel VU Fader Meter (Vertical Left edge) -->
+<div class="absolute left-2.5 bottom-2.5 flex items-center gap-1.5 bg-surface-container-lowest/90 backdrop-blur-md px-2 py-1 rounded z-10 pointer-events-none">
+<span class="material-symbols-outlined text-[13px] text-secondary">mic</span>
+<div class="flex items-center gap-0.5 h-2">
+<div class="w-1.5 h-1.5 rounded-xs bg-secondary-container"></div>
+<div class="w-1.5 h-2 rounded-xs bg-secondary-container"></div>
+<div class="w-1.5 h-2 rounded-xs bg-secondary-container"></div>
+<div class="w-1.5 h-2 rounded-xs bg-secondary-container"></div>
+<div class="w-1.5 h-2 rounded-xs bg-tertiary"></div>
+<div class="w-1.5 h-2 rounded-xs bg-primary-container animate-pulse"></div>
+</div>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant ml-1">-4.2 dB</span>
+</div>
+<!-- Docking Guides (Subtle bounding indicators) -->
+<div class="absolute inset-2 border-dashed border-outline-variant/30 rounded-lg pointer-events-none"></div>
+</div>
+<!-- Quick Action Toolstrip under live preview -->
+<div class="grid grid-cols-4 gap-space-xs pt-space-xs">
+<button class="flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors active:scale-95 text-on-surface" id="btn-flip">
+<span class="material-symbols-outlined text-[18px] text-secondary">cameraswitch</span>
+<span class="font-button-text text-[10px] uppercase font-bold text-on-surface-variant">Flip Cam</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors active:scale-95 text-on-surface" id="btn-mirror">
+<span class="material-symbols-outlined text-[18px] text-secondary">flip</span>
+<span class="font-button-text text-[10px] uppercase font-bold text-secondary">Mirrored</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors active:scale-95 text-on-surface" id="btn-lock">
+<span class="material-symbols-outlined text-[18px] text-tertiary">lock_open</span>
+<span class="font-button-text text-[10px] uppercase font-bold text-on-surface-variant">Unlocked</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors active:scale-95 text-on-surface" id="btn-fullscreen">
+<span class="material-symbols-outlined text-[18px] text-primary">fullscreen</span>
+<span class="font-button-text text-[10px] uppercase font-bold text-on-surface-variant">Inspect</span>
+</button>
+</div>
+</div>
+<!-- Section 1: Facecam PIP Frame & Mask Geometry -->
+<div class="flex flex-col gap-space-sm bg-surface-container rounded-xl p-space-base shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">crop_free</span>
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase">Frame Geometry &amp; Mask</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary uppercase bg-surface-container-highest px-2 py-0.5 rounded">16:9 SQUIRCLE</span>
+</div>
+<!-- Frame Shape Selection Chips -->
+<div class="grid grid-cols-5 gap-space-xs mt-space-xs">
+<!-- 1: Circle -->
+<button class="shape-btn flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors group" onclick="setPipShape('circle')">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center group-hover:bg-surface-bright">
+<span class="w-3.5 h-3.5 rounded-full bg-outline"></span>
+</div>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant text-center leading-tight">Circle</span>
+</button>
+<!-- 2: Hexagon -->
+<button class="shape-btn flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors group" onclick="setPipShape('hexagon')">
+<div class="w-6 h-6 rounded-lg bg-surface-variant flex items-center justify-center group-hover:bg-surface-bright">
+<span class="material-symbols-outlined text-[16px] text-outline">hexagon</span>
+</div>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant text-center leading-tight">Hexagon</span>
+</button>
+<!-- 3: 16:9 Squircle (Active) -->
+<button class="shape-btn active-shape flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-surface-container-highest shadow-md transition-colors relative" onclick="setPipShape('squircle')">
+<div class="w-6 h-6 rounded bg-secondary-container/20 flex items-center justify-center">
+<span class="w-4 h-2.5 rounded-sm bg-secondary-container"></span>
+</div>
+<span class="font-label-telemetry-sm text-[9px] text-secondary font-bold text-center leading-tight">16:9 Wide</span>
+<span class="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+</button>
+<!-- 4: Heart / Diamond -->
+<button class="shape-btn flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors group" onclick="setPipShape('diamond')">
+<div class="w-6 h-6 rounded-lg bg-surface-variant flex items-center justify-center group-hover:bg-surface-bright">
+<span class="material-symbols-outlined text-[16px] text-outline rotate-45">square</span>
+</div>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant text-center leading-tight">Diamond</span>
+</button>
+<!-- 5: Full Alpha Cutout -->
+<button class="shape-btn flex flex-col items-center justify-center gap-1 p-2 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors group" onclick="setPipShape('alpha')">
+<div class="w-6 h-6 rounded-lg bg-surface-variant flex items-center justify-center group-hover:bg-surface-bright">
+<span class="material-symbols-outlined text-[16px] text-outline">person_outline</span>
+</div>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant text-center leading-tight">AI Cutout</span>
+</button>
+</div>
+<!-- Granular PIP Size Slider -->
+<div class="flex flex-col gap-1.5 mt-space-sm bg-surface-container-low p-space-sm rounded-lg">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">PIP Scale Factor</span>
+<div class="flex items-center gap-1">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold" id="scale-label">25%</span>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant">(160 × 112 px)</span>
+</div>
+</div>
+<input class="w-full accent-secondary h-1.5 bg-surface-variant rounded-lg cursor-pointer" id="pip-scale-slider" max="45" min="15" type="range" value="25"/>
+<div class="flex justify-between text-[9px] font-label-telemetry-sm text-on-surface-variant pt-0.5">
+<span>MINI (15%)</span>
+<span class="text-secondary font-semibold">STANDARD (25%)</span>
+<span>PRO MAX (35%)</span>
+<span>SUPER (45%)</span>
+</div>
+</div>
+<!-- Corner Snap & Magnetic Docking Presets -->
+<div class="flex flex-col gap-1.5 mt-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Magnetic HUD Screen Dock</span>
+<div class="grid grid-cols-5 gap-space-xs">
+<button class="dock-btn py-1.5 rounded bg-surface-container-high hover:bg-surface-bright text-center font-label-telemetry-sm text-[10px] text-on-surface-variant" onclick="setDock('top-left')">Top-L</button>
+<button class="dock-btn active-dock py-1.5 rounded bg-secondary-container text-on-secondary-container font-bold text-center font-label-telemetry-sm text-[10px]" onclick="setDock('top-right')">Top-R</button>
+<button class="dock-btn py-1.5 rounded bg-surface-container-high hover:bg-surface-bright text-center font-label-telemetry-sm text-[10px] text-on-surface-variant" onclick="setDock('bottom-left')">Btm-L</button>
+<button class="dock-btn py-1.5 rounded bg-surface-container-high hover:bg-surface-bright text-center font-label-telemetry-sm text-[10px] text-on-surface-variant" onclick="setDock('bottom-right')">Btm-R</button>
+<button class="dock-btn py-1.5 rounded bg-surface-container-high hover:bg-surface-bright text-center font-label-telemetry-sm text-[10px] text-on-surface-variant flex items-center justify-center gap-0.5" onclick="setDock('free')">
+<span class="material-symbols-outlined text-[12px]">open_with</span>Free
+        </button>
+</div>
+</div>
+</div>
+<!-- Section 2: Virtual Chroma Key & AI Background Removal -->
+<div class="flex flex-col gap-space-sm bg-surface-container rounded-xl p-space-base shadow-sm">
+<!-- Header with Master Toggle -->
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px]">brush</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase">Chroma Key Engine</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Hardware-accelerated color subtraction</span>
+</div>
+</div>
+<!-- Neon Active Switch -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="chroma-toggle" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:after:bg-on-secondary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface-variant after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
+</label>
+</div>
+<!-- Key Color Swatches -->
+<div class="flex flex-col gap-1.5 mt-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Target Screen Hue</span>
+<div class="grid grid-cols-3 gap-space-xs">
+<!-- Green Screen Option (Active) -->
+<button class="flex items-center gap-2 p-2 rounded-lg bg-surface-container-highest shadow-sm">
+<div class="w-4 h-4 rounded-full bg-[#00ff66] shadow-[0_0_8px_#00ff66]"></div>
+<div class="flex flex-col text-left">
+<span class="font-label-telemetry-sm text-[10px] text-on-surface font-bold">Studio Green</span>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant">#00FF66</span>
+</div>
+</button>
+<!-- Blue Screen Option -->
+<button class="flex items-center gap-2 p-2 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors">
+<div class="w-4 h-4 rounded-full bg-[#0066ff]"></div>
+<div class="flex flex-col text-left">
+<span class="font-label-telemetry-sm text-[10px] text-on-surface">Ultramarine</span>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant">#0066FF</span>
+</div>
+</button>
+<!-- Custom Eyedropper Option -->
+<button class="flex items-center gap-2 p-2 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors">
+<div class="w-4 h-4 rounded-full bg-[#0be881] flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-surface-container-lowest font-bold">colorize</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-label-telemetry-sm text-[10px] text-on-surface">Eyedrop</span>
+<span class="font-label-telemetry-sm text-[9px] text-tertiary">#0BE881</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Fine-Tuning Precision Sliders -->
+<div class="flex flex-col gap-space-sm mt-space-xs bg-surface-container-low p-space-sm rounded-lg">
+<!-- Slider 1: Similarity & Tolerance -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface">Similarity &amp; Tolerance</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold">42%</span>
+</div>
+<div class="relative w-full flex items-center">
+<input class="w-full accent-secondary h-1.5 bg-surface-variant rounded-lg cursor-pointer" max="100" min="0" type="range" value="42"/>
+</div>
+<span class="text-[9px] font-label-telemetry-sm text-on-surface-variant">Expands the targeted Chroma boundary without washing skin</span>
+</div>
+<!-- Slider 2: Edge Smoothness & Feather -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface">Edge Smoothness &amp; Feather</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold">18%</span>
+</div>
+<div class="relative w-full flex items-center">
+<input class="w-full accent-secondary h-1.5 bg-surface-variant rounded-lg cursor-pointer" max="100" min="0" type="range" value="18"/>
+</div>
+<span class="text-[9px] font-label-telemetry-sm text-on-surface-variant">Interpolates anti-aliased strand definition along hair edges</span>
+</div>
+<!-- Slider 3: Color Spill Suppression -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface">Color Spill Suppression</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold">65%</span>
+</div>
+<div class="relative w-full flex items-center">
+<input class="w-full accent-secondary h-1.5 bg-surface-variant rounded-lg cursor-pointer" max="100" min="0" type="range" value="65"/>
+</div>
+<span class="text-[9px] font-label-telemetry-sm text-on-surface-variant">Eliminates green bounce reflections on face, shoulders, and mic boom</span>
+</div>
+<!-- Toggle: AI Edge Rim Glow / Halo -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Electric Crimson Rim Aura</span>
+<span class="text-[10px] font-label-telemetry-sm text-on-surface-variant">Injects cyber backlight along body contour</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:after:bg-on-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface-variant after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Section 3: Animated RGB Frame & Border Customization -->
+<div class="flex flex-col gap-space-sm bg-surface-container rounded-xl p-space-base shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">palette</span>
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase">RGB Frame &amp; Border Tuning</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-primary uppercase bg-surface-container-highest px-2 py-0.5 rounded">NEON AURA</span>
+</div>
+<!-- Border Styling Selector -->
+<div class="grid grid-cols-2 gap-space-xs mt-space-xs">
+<!-- 1: Cyber Neon (Active) -->
+<button class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-highest shadow-md text-left relative overflow-hidden">
+<div class="w-5 h-5 rounded-sm bg-gradient-to-tr from-primary-container to-secondary-container shadow-[0_0_8px_#ff5167]"></div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-bold text-on-surface truncate">Cyber Neon</span>
+<span class="font-label-telemetry-sm text-[9px] text-secondary">Crimson &amp; Cyan Glow</span>
+</div>
+</button>
+<!-- 2: Clean Minimal -->
+<button class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors text-left">
+<div class="w-5 h-5 rounded-sm bg-surface-variant"></div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-on-surface truncate">Clean Minimal</span>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant">1px Graphite Wire</span>
+</div>
+</button>
+<!-- 3: RGB Rainbow Wave -->
+<button class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors text-left">
+<div class="w-5 h-5 rounded-sm bg-gradient-to-r from-red-500 via-green-500 to-blue-500"></div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-on-surface truncate">Rainbow Wave</span>
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant">Active 120Hz Loop</span>
+</div>
+</button>
+<!-- 4: Ranked Gold -->
+<button class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors text-left">
+<div class="w-5 h-5 rounded-sm bg-tertiary-container shadow-[0_0_6px_#ffba38]"></div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm text-on-surface truncate">Ranked Master</span>
+<span class="font-label-telemetry-sm text-[9px] text-tertiary">Gold Metallic Trim</span>
+</div>
+</button>
+</div>
+<!-- Border Thickness & Voice Visualizer -->
+<div class="flex flex-col gap-space-sm bg-surface-container-low p-space-sm rounded-lg mt-space-xs">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface">Stroke Thickness</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold">3.0 px</span>
+</div>
+<input class="w-full accent-secondary h-1.5 bg-surface-variant rounded-lg cursor-pointer" max="8" min="0" step="0.5" type="range" value="3"/>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Mic Audio Visualizer Rim</span>
+<span class="text-[10px] font-label-telemetry-sm text-on-surface-variant">Border pulses in real-time with streamer voice dynamics</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:after:bg-on-secondary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface-variant after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-secondary-container"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Section 4: Beauty Filters & Studio Lighting Balance -->
+<div class="flex flex-col gap-space-sm bg-surface-container rounded-xl p-space-base shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">flare</span>
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase">Studio Lighting &amp; Retouch</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary uppercase bg-surface-container-highest px-2 py-0.5 rounded">NEURAL SHADERS</span>
+</div>
+<div class="grid grid-cols-1 gap-space-sm bg-surface-container-low p-space-sm rounded-lg">
+<!-- Skin Softening -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface">Skin Softening &amp; Blemish Blur</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold">35%</span>
+</div>
+<input class="w-full accent-secondary h-1.5 bg-surface-variant rounded-lg cursor-pointer" max="100" min="0" type="range" value="35"/>
+</div>
+<!-- Studio Ring-Light Boost -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface">Virtual Ring-Light Frontal Fill</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold">+15%</span>
+</div>
+<input class="w-full accent-secondary h-1.5 bg-surface-variant rounded-lg cursor-pointer" max="50" min="-30" type="range" value="15"/>
+</div>
+<!-- Low-Light ISO Boost Adaptive -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Auto Adaptive Low-Light ISO</span>
+<span class="text-[10px] font-label-telemetry-sm text-on-surface-variant">Prevents high-gain sensor grain in dark gaming rooms</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-secondary bg-surface-container-highest px-2 py-1 rounded font-bold">ACTIVE</span>
+</div>
+</div>
+</div>
+<!-- Studio Navigation Context Reminder -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">hub</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Connected Pipeline:</span>
+<span class="font-label-telemetry-sm text-[11px] text-on-surface font-semibold">Live Multistream Studio (RTMP + SRT)</span>
+</div>
+<span class="font-label-telemetry-sm text-[11px] text-secondary font-semibold uppercase">READY</span>
+</div>
+<!-- Bottom Persistent CTA Section -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="grid grid-cols-3 gap-space-xs">
+<!-- Reset Calibration -->
+<button class="col-span-1 py-3.5 px-3 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface-variant font-button-text text-button-text flex items-center justify-center gap-1 transition-transform active:scale-95 shadow-sm" onclick="resetCalibration()">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+<span>Reset</span>
+</button>
+<!-- Apply to Live Floating HUD (Primary CTA) -->
+<button class="col-span-2 py-3.5 px-4 rounded-xl bg-primary-container hover:opacity-95 text-on-primary font-button-text text-button-text font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,81,103,0.45)] transition-transform active:scale-95" onclick="applyCalibration()">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+<span>Apply to Live HUD</span>
+</button>
+</div>
+<!-- Micro Safe area note -->
+<div class="text-center">
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant">Profile saved to Vulkan Framebuffer Slot #1</span>
+</div>
+</div>
+</div>
+<!-- Micro-Interactions Script -->
+<script>
+  // Shape Switching Micro-Interaction
+  function setPipShape(shape) {
+    const pip = document.getElementById('pip-container');
+    const buttons = document.querySelectorAll('.shape-btn');
+    
+    buttons.forEach(btn => {
+      btn.classList.remove('bg-surface-container-highest', 'shadow-md');
+      btn.classList.add('bg-surface-container-high');
+    });
+
+    if (shape === 'circle') {
+      pip.className = 'absolute top-3 right-3 w-32 h-32 rounded-full overflow-hidden shadow-2xl transition-all duration-300 cursor-grab z-20';
+    } else if (shape === 'hexagon') {
+      pip.className = 'absolute top-3 right-3 w-36 h-32 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 cursor-grab z-20';
+    } else if (shape === 'squircle') {
+      pip.className = 'absolute top-3 right-3 w-40 h-28 rounded-xl overflow-hidden shadow-2xl transition-all duration-300 cursor-grab z-20';
+    } else if (shape === 'diamond') {
+      pip.className = 'absolute top-3 right-3 w-32 h-32 rounded-3xl rotate-6 overflow-hidden shadow-2xl transition-all duration-300 cursor-grab z-20';
+    } else if (shape === 'alpha') {
+      pip.className = 'absolute top-3 right-3 w-36 h-36 rounded-none overflow-hidden transition-all duration-300 cursor-grab z-20';
+      pip.style.boxShadow = 'none';
+      return;
+    }
+    pip.style.boxShadow = '0 0 0 2px #00e3fd, 0 8px 24px rgba(0, 227, 253, 0.4)';
+  }
+
+  // Magnetic Docking Interaction
+  function setDock(position) {
+    const pip = document.getElementById('pip-container');
+    const buttons = document.querySelectorAll('.dock-btn');
+
+    buttons.forEach(btn => {
+      btn.classList.remove('bg-secondary-container', 'text-on-secondary-container', 'font-bold');
+      btn.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+    });
+
+    // Reset placement classes
+    pip.classList.remove('top-3', 'bottom-3', 'left-3', 'right-3', 'inset-auto');
+
+    if (position === 'top-left') {
+      pip.classList.add('top-3', 'left-3');
+    } else if (position === 'top-right') {
+      pip.classList.add('top-3', 'right-3');
+    } else if (position === 'bottom-left') {
+      pip.classList.add('bottom-3', 'left-3');
+    } else if (position === 'bottom-right') {
+      pip.classList.add('bottom-3', 'right-3');
+    } else if (position === 'free') {
+      pip.classList.add('top-12', 'left-16');
+    }
+  }
+
+  // Mirror toggle micro-interaction
+  let isMirrored = false;
+  const mirrorBtn = document.getElementById('btn-mirror');
+  if (mirrorBtn) {
+    mirrorBtn.addEventListener('click', () => {
+      isMirrored = !isMirrored;
+      const img = document.getElementById('facecam-img');
+      if (img) {
+        img.style.transform = isMirrored ? 'scaleX(-1)' : 'scaleX(1)';
+      }
+      mirrorBtn.querySelector('span:last-child').textContent = isMirrored ? 'Mirrored' : 'Normal';
+    });
+  }
+
+  // Scale Slider Interaction
+  const slider = document.getElementById('pip-scale-slider');
+  const scaleLabel = document.getElementById('scale-label');
+  if (slider && scaleLabel) {
+    slider.addEventListener('input', (e) => {
+      const val = e.target.value;
+      scaleLabel.textContent = val + '%';
+      const pip = document.getElementById('pip-container');
+      if (pip) {
+        const baseW = 160;
+        const newW = Math.round(baseW * (val / 25));
+        pip.style.width = newW + 'px';
+      }
+    });
+  }
+
+  // Reset Calibration Action
+  function resetCalibration() {
+    setPipShape('squircle');
+    setDock('top-right');
+    if (slider) {
+      slider.value = 25;
+      scaleLabel.textContent = '25%';
+    }
+    const pip = document.getElementById('pip-container');
+    if (pip) pip.style.width = '160px';
+  }
+
+  // Apply to Live HUD feedback
+  function applyCalibration() {
+    const btn = event.currentTarget;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">sync</span><span>CALIBRATED & ENGAGED!</span>';
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+    }, 1800);
+  }
+</script></main></body></html>

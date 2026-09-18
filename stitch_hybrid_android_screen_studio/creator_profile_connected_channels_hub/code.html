@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>PulseCast Studio</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'primary-container': '#ff5167', 'surface-container-lowest': '#090e19', 'on-error': '#690005', 'on-tertiary-fixed': '#281900', 'secondary-fixed': '#9cf0ff', 'error': '#ffb4ab', 'surface-dim': '#0e131e', 'inverse-on-surface': '#2b303c', 'secondary-container': '#00e3fd', 'background': '#0e131e', 'surface-container-low': '#171b27', 'secondary-fixed-dim': '#00daf3', 'tertiary-fixed': '#ffdeac', 'tertiary': '#ffba38', 'on-primary-fixed': '#40000c', 'surface-tint': '#ffb3b5', 'on-surface-variant': '#e6bcbd', 'inverse-surface': '#dee2f2', 'surface-container': '#1b202b', 'on-primary-container': '#5b0015', 'surface-variant': '#303541', 'surface': '#0e131e', 'on-tertiary': '#432c00', 'on-tertiary-container': '#3a2600', 'on-secondary-fixed': '#001f24', 'error-container': '#93000a', 'on-secondary': '#00363d', 'surface-container-highest': '#303541', 'tertiary-fixed-dim': '#ffba38', 'surface-container-high': '#252a36', 'on-primary-fixed-variant': '#920027', 'on-primary': '#680019', 'inverse-primary': '#be0036', 'outline': '#ad8888', 'surface-bright': '#343945', 'on-background': '#dee2f2', 'on-error-container': '#ffdad6', 'on-tertiary-fixed-variant': '#604100', 'tertiary-container': '#c08600', 'primary-fixed': '#ffdada', 'secondary': '#bdf4ff', 'primary': '#ffb3b5', 'primary-fixed-dim': '#ffb3b5', 'on-secondary-fixed-variant': '#004f58', 'on-secondary-container': '#00616d', 'on-surface': '#dee2f2', 'outline-variant': '#5d3f40' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-2xl': '3rem', 'space-lg': '1.5rem', 'space-sm': '0.5rem', 'space-xxs': '0.125rem', 'floating-margin': '1rem', 'space-xl': '2rem', 'safe-bottom-nav': '5rem', 'space-base': '1rem', 'space-xs': '0.25rem', 'space-md': '0.75rem' }, fontFamily: { 'label-telemetry-lg': ['JetBrains Mono'], 'body-lg': ['Inter'], 'headline-lg': ['Space Grotesk'], 'label-telemetry-sm': ['JetBrains Mono'], 'headline-xl': ['Space Grotesk'], 'body-md': ['Inter'], 'headline-xl-mobile': ['Space Grotesk'], 'headline-sm': ['Space Grotesk'], 'label-telemetry-md': ['JetBrains Mono'], 'button-text': ['Inter'], 'body-sm': ['Inter'] }, fontSize: { 'label-telemetry-lg': ['18px', { lineHeight: '22px', letterSpacing: '-0.02em', fontWeight: '700' }], 'body-lg': ['16px', { lineHeight: '24px', fontWeight: '400' }], 'headline-lg': ['24px', { lineHeight: '30px', fontWeight: '600' }], 'label-telemetry-sm': ['11px', { lineHeight: '14px', letterSpacing: '0.02em', fontWeight: '500' }], 'headline-xl': ['32px', { lineHeight: '38px', fontWeight: '700' }], 'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }], 'headline-xl-mobile': ['26px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['18px', { lineHeight: '24px', fontWeight: '600' }], 'label-telemetry-md': ['13px', { lineHeight: '16px', letterSpacing: '-0.01em', fontWeight: '500' }], 'button-text': ['14px', { lineHeight: '18px', letterSpacing: '0.02em', fontWeight: '600' }], 'body-sm': ['12px', { lineHeight: '16px', fontWeight: '400' }] } } } };</script><style>@layer base { html, body { width: 100vw; min-height: 100%; margin: 0; padding: 0; } body { overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style></head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 bg-surface-dim/85 backdrop-blur-xl shadow-[0_1px_16px_rgba(0,0,0,0.4)] pt-safe"><div class="h-28 px-4 flex flex-col justify-between py-2"><div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm tracking-wide"><span class="text-on-surface font-medium">10:42</span><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px]">wifi</span><span class="font-label-telemetry-sm text-label-telemetry-sm font-bold text-secondary">5G</span><div class="flex items-center gap-0.5"><span class="font-label-telemetry-sm text-label-telemetry-sm">94%</span><span class="material-symbols-outlined text-[16px] text-primary">battery_charging_full</span></div></div></div><div class="flex items-center justify-between mt-1"><div class="flex items-center gap-2"><img alt="PulseCast Studio Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VG6yOHyqXAjzmyUWMNWuW9X7sztWfzv0qbm8sg6EdYCPt0NO3fEvMyzu3I2wXPpMIr4wBZuWkuKdk78sfv5Uc6rfaA7YLgwhaaAgaN_1sZK1QT5LgV3HT8TX0QT2DTV5BdFSeb32sFOR0L5rkWK4bCwrWw_XqhUB4mbhIDd_7Ei6CBgCYkHtVaxDA_qUHwIwHjRhvacuLQ9oGVkaMEuvRjEb8oKD6Ba-bShG5R9EdRrxT02P0Zmmic"/><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">PulseCast Studio</span><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-tertiary-container/30 text-tertiary font-label-telemetry-sm text-label-telemetry-sm"><span class="material-symbols-outlined text-[13px] mr-0.5">workspace_premium</span>PRO</span></div><div class="flex items-center gap-1 mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-pulse"></span><span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">128 GB Free • ~18h 45m</span></div></div></div><div class="flex items-center gap-2"><button aria-label="Telemetry Monitor" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary active:scale-95 transition-transform"><span class="material-symbols-outlined text-[22px]">equalizer</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-28 pb-safe-bottom-nav bg-surface overflow-x-hidden"><div class="flex flex-col w-full px-4 pb-12 space-y-5">
+<!-- Screen Navigation Bar -->
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-3">
+<button aria-label="Go Back" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-bright active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm uppercase tracking-wider text-on-surface">Creator Hub</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse"></span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant uppercase tracking-widest">Account • Ingest Nodes</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Share Channel Cards" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-secondary-fixed transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px]">ios_share</span>
+</button>
+<button aria-label="Broadcast Settings" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-secondary-fixed transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+</div>
+</div>
+<!-- Creator Identity Card -->
+<div class="relative w-full rounded-xl bg-surface-container-low p-4 shadow-xl overflow-hidden">
+<div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-primary-container/10 blur-3xl pointer-events-none"></div>
+<div class="absolute -left-10 -bottom-10 w-36 h-36 rounded-full bg-secondary-container/10 blur-2xl pointer-events-none"></div>
+<div class="flex items-start justify-between relative z-10">
+<div class="flex items-center gap-3.5">
+<div class="relative">
+<div class="w-16 h-16 rounded-full p-0.5 bg-gradient-to-tr from-primary-container via-secondary-container to-tertiary">
+<img class="w-full h-full object-cover rounded-full bg-surface-container-highest" data-alt="Portrait of an esports streamer wearing tactical glowing cyberpunk gaming headphones with neon crimson and cyan edge lighting against a dark arena studio background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAftGZcm9nZfxQ7sauaqTgqMfsKdY0ljbB6I96fzaD8ha-RequYWg2lt4hW4Z4MttW79KUkYZzbPk3ns-GBPGqljkqRfoQq8s1fqw_ib03GhgCk_EcHP4rG8zWaS1d1z5Xut8wtAE30Hrp4MmO2gmbSa6wHyvVyCYG_IeebPad4G0-3yvr7UUG1axLu52HpNW4spTZD1LKfcapdDw2Kz1G4EvN-P3H-hiMpOjsmxPsv9Y65lhkCPUA"/>
+</div>
+<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-surface-container-low flex items-center justify-center">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container shadow-[0_0_8px_#00e3fd]"></span>
+</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface truncate">Alex 'Viper' Chen</span>
+<span class="material-symbols-outlined text-secondary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<span class="font-label-telemetry-md text-label-telemetry-md text-secondary-fixed">@AlexViper_Live</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Apex Predator • High-FPS Mobile Broadcaster</span>
+</div>
+</div>
+</div>
+<!-- Pro Membership Tier Badge -->
+<div class="mt-3.5 flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-high relative z-10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[20px]">stars</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm font-bold text-tertiary leading-tight tracking-wider">PULSECAST PRO STUDIO</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Annual Pass • Auto-renews Oct 2025</span>
+</div>
+</div>
+<button class="px-2.5 py-1 rounded bg-tertiary-container/30 text-tertiary font-button-text text-body-sm hover:bg-tertiary-container/50 transition-colors">
+        Manage
+      </button>
+</div>
+<!-- Live Telemetry / Creator Stats -->
+<div class="grid grid-cols-4 gap-2 mt-3 pt-3 relative z-10">
+<div class="flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container text-center">
+<span class="font-label-telemetry-lg text-label-telemetry-lg text-on-surface font-bold">248K</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant uppercase">Followers</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container text-center">
+<span class="font-label-telemetry-lg text-label-telemetry-lg text-secondary-fixed font-bold">1.4M</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant uppercase">Views</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container text-center">
+<span class="font-label-telemetry-lg text-label-telemetry-lg text-on-surface font-bold">342</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant uppercase">Streams</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container text-center">
+<span class="font-label-telemetry-lg text-label-telemetry-lg text-primary font-bold">60FPS</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant uppercase">1080p Ultra</span>
+</div>
+</div>
+</div>
+<!-- Connected Broadcast Channels & Platforms -->
+<div class="flex flex-col space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[20px]">cell_tower</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">Simulcast Channels</span>
+</div>
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary-container text-on-primary-container font-button-text text-body-sm active:scale-95 transition-transform shadow-[0_0_12px_rgba(255,81,103,0.35)]">
+<span class="material-symbols-outlined text-[16px]">add_link</span>
+        Add Ingest
+      </button>
+</div>
+<!-- Channel Card 1: YouTube Live -->
+<div class="flex flex-col p-3.5 rounded-xl bg-surface-container-low shadow-md space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[24px]">smart_display</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-body-lg font-bold text-on-surface">YouTube Live</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded bg-surface-container text-primary font-label-telemetry-sm text-label-telemetry-sm">PRIMARY</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">ViperGaming HD • 184K Subs</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="toggle-yt" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-container after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+<div class="flex items-center justify-between px-2.5 py-1.5 rounded bg-surface-container font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+<span class="text-on-surface">RTMP ingest.youtube.com</span>
+</div>
+<span class="text-secondary font-bold">Key: live_984••••</span>
+</div>
+</div>
+<!-- Channel Card 2: Twitch -->
+<div class="flex flex-col p-3.5 rounded-xl bg-surface-container-low shadow-md space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-secondary-fixed">
+<span class="material-symbols-outlined text-[24px]">stream</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-body-lg font-bold text-on-surface">Twitch</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded bg-surface-container text-secondary-fixed font-label-telemetry-sm text-label-telemetry-sm">LOW LATENCY</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">ViperX_Twitch • 54.2K Followers</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="toggle-tw" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-container after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+<div class="flex items-center justify-between px-2.5 py-1.5 rounded bg-surface-container font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+<span class="text-on-surface">SRT caller://us-east.twitch.tv</span>
+</div>
+<span class="text-secondary font-bold">Encrypted Handshake</span>
+</div>
+</div>
+<!-- Channel Card 3: TikTok Live -->
+<div class="flex flex-col p-3.5 rounded-xl bg-surface-container-low shadow-md space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">music_cast</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-body-lg font-bold text-on-surface">TikTok Live</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded bg-surface-container text-tertiary font-label-telemetry-sm text-label-telemetry-sm">PORTRAIT 9:16</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">@viper_clips • Verified Creator Server</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="toggle-tt" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary-container after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+<div class="flex items-center justify-between px-2.5 py-1.5 rounded bg-surface-container font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+<span class="text-on-surface">RTMP push.tiktokv.com</span>
+</div>
+<span class="text-secondary font-bold">Key: s81f••••</span>
+</div>
+</div>
+<!-- Channel Card 4: Kick (Standby) -->
+<div class="flex flex-col p-3.5 rounded-xl bg-surface-container-low shadow-md space-y-2.5 opacity-80">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px]">sensors_off</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-body-lg font-bold text-on-surface">Kick Streaming</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">OFFLINE</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">kick.com/viperchen • Standby</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" id="toggle-kick" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-primary-container after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-primary after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+</div>
+<!-- Custom Direct RTMP Ingest Button -->
+<button class="w-full py-3 px-4 rounded-xl bg-surface-container flex items-center justify-center gap-2 text-on-surface hover:bg-surface-bright active:scale-[0.99] transition-transform">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">dns</span>
+<span class="font-button-text text-body-md text-secondary-fixed">Add Custom RTMP / SRT Target Node</span>
+</button>
+</div>
+<!-- Studio Cloud Storage Vault -->
+<div class="flex flex-col p-4 rounded-xl bg-surface-container-low shadow-md space-y-3.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container text-[20px]">cloud_sync</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">Cloud Vault</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm px-2 py-0.5 rounded bg-surface-container text-secondary">PRO 500GB</span>
+</div>
+<!-- Progress Meter -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm">
+<span class="text-on-surface font-semibold">128.4 GB Used</span>
+<span class="text-on-surface-variant">371.6 GB Available (25.6%)</span>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden flex">
+<div class="h-full bg-primary-container" style="width: 18.4%;"></div>
+<div class="h-full bg-secondary-container" style="width: 4.8%;"></div>
+<div class="h-full bg-tertiary" style="width: 2.4%;"></div>
+</div>
+</div>
+<!-- Segment Legend -->
+<div class="grid grid-cols-3 gap-1.5 pt-1">
+<div class="flex items-center gap-1.5 p-1.5 rounded bg-surface-container">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface leading-tight font-bold">92 GB</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Master VODs</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 p-1.5 rounded bg-surface-container">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface leading-tight font-bold">24 GB</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Clips &amp; Shorts</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 p-1.5 rounded bg-surface-container">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface leading-tight font-bold">12.4 GB</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Replay Buffers</span>
+</div>
+</div>
+</div>
+<!-- Sync Configuration Toggles -->
+<div class="space-y-2 pt-2">
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">sync</span>
+<span class="font-body-md text-body-md text-on-surface">Auto-sync gameplay recordings</span>
+</div>
+<input checked="" class="w-4 h-4 accent-primary-container" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">wifi</span>
+<span class="font-body-md text-body-md text-on-surface">Backup via Wi-Fi only (Save 5G)</span>
+</div>
+<input checked="" class="w-4 h-4 accent-primary-container" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">upload</span>
+<span class="font-body-md text-body-md text-on-surface">Auto-export Unlisted VOD to YouTube</span>
+</div>
+<input checked="" class="w-4 h-4 accent-primary-container" type="checkbox"/>
+</div>
+</div>
+</div>
+<!-- Branding, Stinger & Floating Orb Skins -->
+<div class="flex flex-col p-4 rounded-xl bg-surface-container-low shadow-md space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[20px]">layers</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">Branding &amp; Overlays</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">3 Active Assets</span>
+</div>
+<!-- Custom Watermark Card -->
+<div class="p-3 rounded-lg bg-surface-container space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[18px]">branding_watermark</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Custom Watermark</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">VIPER_GLOW_LOGO.png</span>
+</div>
+<div class="flex items-center justify-between text-body-sm text-on-surface-variant">
+<span>Watermark Opacity</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-bold">80%</span>
+</div>
+<input class="w-full accent-primary-container h-1.5 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" max="100" min="10" type="range" value="80"/>
+<div class="flex items-center justify-between pt-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Screen Anchor:</span>
+<div class="grid grid-cols-4 gap-1">
+<button class="px-2 py-1 rounded bg-surface-container-highest text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm hover:text-on-surface">TL</button>
+<button class="px-2 py-1 rounded bg-primary-container text-on-primary-container font-label-telemetry-sm text-label-telemetry-sm font-bold shadow-[0_0_8px_rgba(255,81,103,0.4)]">TR</button>
+<button class="px-2 py-1 rounded bg-surface-container-highest text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm hover:text-on-surface">BL</button>
+<button class="px-2 py-1 rounded bg-surface-container-highest text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm hover:text-on-surface">BR</button>
+</div>
+</div>
+</div>
+<!-- Live Stinger Video -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">animation</span>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md font-semibold text-on-surface">Broadcast Transition Sting</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Cyber_Drop_Stinger_1080p.mp4 (00:03s)</span>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface hover:text-secondary-fixed">
+<span class="material-symbols-outlined text-[16px]">play_arrow</span>
+</button>
+</div>
+<!-- Floating Ball Assistive Orb Custom Skin -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container">
+<div class="flex items-center gap-2.5">
+<div class="relative w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="w-5 h-5 rounded-full bg-primary-container shadow-[0_0_8px_#ff5167]"></span>
+<span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-secondary-container"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md font-semibold text-on-surface">Floating Ball Assist Skin</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-primary">Active: Neon Cyber Red</span>
+</div>
+</div>
+<button class="px-2.5 py-1 rounded bg-surface-container-highest text-on-surface font-label-telemetry-sm text-label-telemetry-sm hover:bg-surface-bright transition-colors">
+        Change
+      </button>
+</div>
+</div>
+<!-- Audio & Copyright Licenses (DMCA Shield) -->
+<div class="flex flex-col p-4 rounded-xl bg-surface-container-low shadow-md space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container text-[20px]">security</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">Audio &amp; DMCA Shield</span>
+</div>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-secondary-container/20 text-secondary-fixed font-label-telemetry-sm text-label-telemetry-sm">ARMED</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">graphic_eq</span>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Dual-Track DMCA Isolation</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Splits Spotify / Discord from live Twitch/YT VOD tracks</span>
+</div>
+</div>
+<input checked="" class="w-4 h-4 accent-secondary-container" type="checkbox"/>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">volume_up</span>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Live Sound FX Deck</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">8 Soundboards mapped to floating shortcuts</span>
+</div>
+</div>
+<button class="px-2.5 py-1 rounded bg-surface-container-highest text-on-surface font-label-telemetry-sm text-label-telemetry-sm hover:text-secondary">
+        Edit Pads
+      </button>
+</div>
+</div>
+<!-- Account Session Actions -->
+<div class="flex flex-col space-y-2 pt-2">
+<button class="w-full py-3 px-4 rounded-xl bg-surface-container-low text-on-surface flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">switch_account</span>
+<span class="font-button-text text-body-md">Switch Creator Profile</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">chevron_right</span>
+</button>
+<button class="w-full py-3 px-4 rounded-xl bg-surface-container-low text-error flex items-center justify-center gap-2 hover:bg-error-container/20 transition-colors">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-button-text text-body-md font-semibold">Disconnect Session / Log Out</span>
+</button>
+<div class="text-center pt-2">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">PulseCast Studio Engine v4.2.1-prod • Build 8492</span>
+</div>
+</div>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-dim/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.6)]" data-active-classes="text-primary-container font-semibold"><div class="relative flex items-center justify-around h-16 px-2"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="capture-hub" href="#"><span class="material-symbols-outlined text-[24px]">videocam</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Record</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 transition-colors text-primary-container font-semibold" data-path="live-multistream-studio" href="#"><span class="material-symbols-outlined text-[24px]">cell_tower</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Live</span></a><div class="relative -top-5 flex flex-col items-center"><button aria-label="Instant Record Action" class="relative w-14 h-14 rounded-full bg-primary-container text-on-primary shadow-[0_0_24px_rgba(255,81,103,0.55)] flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"><span class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30 pointer-events-none"></span><span class="material-symbols-outlined text-[28px] leading-none">radio_button_checked</span></button></div><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="timeline-editor" href="#"><span class="material-symbols-outlined text-[24px]">movie_edit</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Editor</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="tools-and-floating-ball-settings" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Tools</span></a></div><div class="w-full flex justify-center pb-1.5"><div class="w-32 h-1 bg-surface-variant/80 rounded-full"></div></div></nav></body></html>

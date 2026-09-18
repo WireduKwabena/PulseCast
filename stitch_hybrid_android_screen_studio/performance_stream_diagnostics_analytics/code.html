@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>PulseCast Studio</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'primary-container': '#ff5167', 'surface-container-lowest': '#090e19', 'on-error': '#690005', 'on-tertiary-fixed': '#281900', 'secondary-fixed': '#9cf0ff', 'error': '#ffb4ab', 'surface-dim': '#0e131e', 'inverse-on-surface': '#2b303c', 'secondary-container': '#00e3fd', 'background': '#0e131e', 'surface-container-low': '#171b27', 'secondary-fixed-dim': '#00daf3', 'tertiary-fixed': '#ffdeac', 'tertiary': '#ffba38', 'on-primary-fixed': '#40000c', 'surface-tint': '#ffb3b5', 'on-surface-variant': '#e6bcbd', 'inverse-surface': '#dee2f2', 'surface-container': '#1b202b', 'on-primary-container': '#5b0015', 'surface-variant': '#303541', 'surface': '#0e131e', 'on-tertiary': '#432c00', 'on-tertiary-container': '#3a2600', 'on-secondary-fixed': '#001f24', 'error-container': '#93000a', 'on-secondary': '#00363d', 'surface-container-highest': '#303541', 'tertiary-fixed-dim': '#ffba38', 'surface-container-high': '#252a36', 'on-primary-fixed-variant': '#920027', 'on-primary': '#680019', 'inverse-primary': '#be0036', 'outline': '#ad8888', 'surface-bright': '#343945', 'on-background': '#dee2f2', 'on-error-container': '#ffdad6', 'on-tertiary-fixed-variant': '#604100', 'tertiary-container': '#c08600', 'primary-fixed': '#ffdada', 'secondary': '#bdf4ff', 'primary': '#ffb3b5', 'primary-fixed-dim': '#ffb3b5', 'on-secondary-fixed-variant': '#004f58', 'on-secondary-container': '#00616d', 'on-surface': '#dee2f2', 'outline-variant': '#5d3f40' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-2xl': '3rem', 'space-lg': '1.5rem', 'space-sm': '0.5rem', 'space-xxs': '0.125rem', 'floating-margin': '1rem', 'space-xl': '2rem', 'safe-bottom-nav': '5rem', 'space-base': '1rem', 'space-xs': '0.25rem', 'space-md': '0.75rem' }, fontFamily: { 'label-telemetry-lg': ['JetBrains Mono'], 'body-lg': ['Inter'], 'headline-lg': ['Space Grotesk'], 'label-telemetry-sm': ['JetBrains Mono'], 'headline-xl': ['Space Grotesk'], 'body-md': ['Inter'], 'headline-xl-mobile': ['Space Grotesk'], 'headline-sm': ['Space Grotesk'], 'label-telemetry-md': ['JetBrains Mono'], 'button-text': ['Inter'], 'body-sm': ['Inter'] }, fontSize: { 'label-telemetry-lg': ['18px', { lineHeight: '22px', letterSpacing: '-0.02em', fontWeight: '700' }], 'body-lg': ['16px', { lineHeight: '24px', fontWeight: '400' }], 'headline-lg': ['24px', { lineHeight: '30px', fontWeight: '600' }], 'label-telemetry-sm': ['11px', { lineHeight: '14px', letterSpacing: '0.02em', fontWeight: '500' }], 'headline-xl': ['32px', { lineHeight: '38px', fontWeight: '700' }], 'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }], 'headline-xl-mobile': ['26px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['18px', { lineHeight: '24px', fontWeight: '600' }], 'label-telemetry-md': ['13px', { lineHeight: '16px', letterSpacing: '-0.01em', fontWeight: '500' }], 'button-text': ['14px', { lineHeight: '18px', letterSpacing: '0.02em', fontWeight: '600' }], 'body-sm': ['12px', { lineHeight: '16px', fontWeight: '400' }] } } } };</script><style>@layer base { html, body { width: 100vw; min-height: 100%; margin: 0; padding: 0; } body { overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style></head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 bg-surface-dim/85 backdrop-blur-xl shadow-[0_1px_16px_rgba(0,0,0,0.4)] pt-safe"><div class="h-28 px-4 flex flex-col justify-between py-2"><div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm tracking-wide"><span class="text-on-surface font-medium">10:42</span><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px]">wifi</span><span class="font-label-telemetry-sm text-label-telemetry-sm font-bold text-secondary">5G</span><div class="flex items-center gap-0.5"><span class="font-label-telemetry-sm text-label-telemetry-sm">94%</span><span class="material-symbols-outlined text-[16px] text-primary">battery_charging_full</span></div></div></div><div class="flex items-center justify-between mt-1"><div class="flex items-center gap-2"><img alt="PulseCast Studio Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VG6yOHyqXAjzmyUWMNWuW9X7sztWfzv0qbm8sg6EdYCPt0NO3fEvMyzu3I2wXPpMIr4wBZuWkuKdk78sfv5Uc6rfaA7YLgwhaaAgaN_1sZK1QT5LgV3HT8TX0QT2DTV5BdFSeb32sFOR0L5rkWK4bCwrWw_XqhUB4mbhIDd_7Ei6CBgCYkHtVaxDA_qUHwIwHjRhvacuLQ9oGVkaMEuvRjEb8oKD6Ba-bShG5R9EdRrxT02P0Zmmic"/><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">PulseCast Studio</span><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-tertiary-container/30 text-tertiary font-label-telemetry-sm text-label-telemetry-sm"><span class="material-symbols-outlined text-[13px] mr-0.5">workspace_premium</span>PRO</span></div><div class="flex items-center gap-1 mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-pulse"></span><span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">128 GB Free • ~18h 45m</span></div></div></div><div class="flex items-center gap-2"><button aria-label="Telemetry Monitor" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary active:scale-95 transition-transform"><span class="material-symbols-outlined text-[22px]">equalizer</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-28 pb-safe-bottom-nav bg-surface overflow-x-hidden"><div class="flex flex-col w-full px-4 py-3 space-y-4">
+<!-- Stream Status Sub-Bar & Tactical Actions -->
+<div class="flex items-center justify-between bg-surface-container-low/90 rounded-xl px-3 py-2.5 shadow-md">
+<div class="flex items-center gap-2.5 min-w-0">
+<button aria-label="Back to Studio" class="w-8 h-8 rounded-lg bg-surface-variant/70 flex items-center justify-center text-on-surface hover:text-secondary active:scale-95 transition-transform shrink-0">
+<span class="material-symbols-outlined text-[19px]">arrow_back</span>
+</button>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-tight truncate">DIAGNOSTICS &amp; HUD</span>
+<span class="w-2 h-2 rounded-full bg-secondary-fixed animate-ping shrink-0"></span>
+</div>
+<div class="flex items-center gap-1.5 font-label-telemetry-sm text-label-telemetry-sm">
+<span class="text-secondary font-bold">HEALTH: 98.4%</span>
+<span class="text-on-surface-variant/60">•</span>
+<span class="text-on-surface-variant">STAGE A • NOMINAL</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<button aria-label="Auto-Tune Bitrate" class="h-8 px-2.5 rounded-lg bg-surface-container-high flex items-center gap-1 text-secondary hover:bg-surface-bright active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm hidden sm:inline">AUTO-TUNE</span>
+</button>
+<button aria-label="Export Logs" class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+</div>
+</div>
+<!-- Primary Broadcast Telemetry Master Card -->
+<div class="relative overflow-hidden rounded-2xl bg-surface-container-low p-4 shadow-xl">
+<div class="absolute -top-12 -right-12 w-40 h-40 bg-secondary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-8 -left-8 w-36 h-36 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex items-start justify-between mb-4">
+<div>
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm mb-1">
+<span class="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+<span>COMPOSITE ENGINE VITALS</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl-mobile text-headline-xl-mobile font-bold text-on-surface tracking-tight">98.4<span class="text-secondary text-headline-sm font-normal">%</span></span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/20 text-secondary-fixed font-label-telemetry-sm text-label-telemetry-sm font-semibold">EXCELLENT</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">SESSION CLOCK</span>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container-lowest mt-0.5 shadow-inner">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-label-telemetry-md text-label-telemetry-md font-bold text-on-surface tracking-wider">01:14:28</span>
+</div>
+</div>
+</div>
+<!-- Telemetry Quad Badges -->
+<div class="grid grid-cols-2 gap-2.5 pt-1">
+<div class="bg-surface-container/90 rounded-xl p-3 flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-telemetry-sm text-label-telemetry-sm">FRAMERATE</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">speed</span>
+</div>
+<div class="mt-1">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">59.8 <span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant font-normal">/ 60 FPS</span></div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-secondary-fixed-dim mt-0.5">Loss: 4 f (0.01%)</div>
+</div>
+</div>
+<div class="bg-surface-container/90 rounded-xl p-3 flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-telemetry-sm text-label-telemetry-sm">INGEST BITRATE</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">swap_vert</span>
+</div>
+<div class="mt-1">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">8,420 <span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant font-normal">Kbps</span></div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary-fixed mt-0.5">Target: 8,500 CBR</div>
+</div>
+</div>
+<div class="bg-surface-container/90 rounded-xl p-3 flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-telemetry-sm text-label-telemetry-sm">RENDER LATENCY</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">timer</span>
+</div>
+<div class="mt-1">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">14.2 <span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant font-normal">ms</span></div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-secondary-fixed-dim mt-0.5">GPU DSP: 3.8 ms</div>
+</div>
+</div>
+<div class="bg-surface-container/90 rounded-xl p-3 flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-telemetry-sm text-label-telemetry-sm">NETWORK BUFFER</span>
+<span class="material-symbols-outlined text-[16px] text-primary">cloud_sync</span>
+</div>
+<div class="mt-1">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">0.00 <span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant font-normal">%</span></div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-secondary mt-0.5">Zero Drop Lock</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Telemetry Graph Section with Range Pills -->
+<div class="bg-surface-container-low rounded-2xl p-4 shadow-md space-y-3">
+<div class="flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-3.5 bg-secondary rounded-full"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Throughput &amp; Pacing</span>
+</div>
+<!-- Tab Controls -->
+<div class="flex items-center bg-surface-container-lowest p-0.5 rounded-lg font-label-telemetry-sm text-label-telemetry-sm">
+<button class="px-2 py-1 rounded bg-surface-container-high text-secondary font-bold shadow-sm">5m</button>
+<button class="px-2 py-1 text-on-surface-variant hover:text-on-surface">15m</button>
+<button class="px-2 py-1 text-on-surface-variant hover:text-on-surface">Live</button>
+<button class="px-2 py-1 text-on-surface-variant hover:text-on-surface">All</button>
+</div>
+</div>
+<!-- Live Telemetry Sparkline & Canvas Container -->
+<div class="bg-surface-container-lowest rounded-xl p-3 relative overflow-hidden">
+<div class="flex items-center justify-between font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant mb-2">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 text-secondary">
+<span class="w-2 h-0.5 bg-secondary rounded-full"></span> Bitrate (Kbps)
+          </span>
+<span class="inline-flex items-center gap-1 text-primary">
+<span class="w-1.5 h-1.5 bg-primary-container rounded-full"></span> Jitter Spike
+          </span>
+</div>
+<span class="text-secondary font-bold">AVG: 8,460</span>
+</div>
+<!-- SVG Graph Visualization -->
+<div class="w-full h-28 relative">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 340 100">
+<defs>
+<lineargradient id="cyanGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#00e3fd" stop-opacity="0.32"></stop>
+<stop offset="100%" stop-color="#00e3fd" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Grid reference lines -->
+<line stroke="#303541" stroke-dasharray="2 4" stroke-width="0.8" x1="0" x2="340" y1="20" y2="20"></line>
+<line stroke="#303541" stroke-dasharray="2 4" stroke-width="0.8" x1="0" x2="340" y1="50" y2="50"></line>
+<line stroke="#303541" stroke-dasharray="2 4" stroke-width="0.8" x1="0" x2="340" y1="80" y2="80"></line>
+<!-- Gradient Area -->
+<path d="M0,75 Q25,35 60,32 T130,28 T195,30 T240,48 T280,24 T340,26 L340,100 L0,100 Z" fill="url(#cyanGradient)"></path>
+<!-- Bitrate Line -->
+<path d="M0,75 Q25,35 60,32 T130,28 T195,30 T240,48 T280,24 T340,26" fill="none" stroke="#00e3fd" stroke-linecap="round" stroke-width="2.2"></path>
+<!-- Jitter Spike Points -->
+<circle class="animate-pulse" cx="240" cy="48" fill="#ff5167" r="3.5"></circle>
+<circle cx="280" cy="24" fill="#ffb3b5" r="2.5"></circle>
+</svg>
+<!-- Dynamic Overlay Pin -->
+<div class="absolute top-3 right-14 bg-surface-container-high/95 px-2 py-0.5 rounded shadow-lg text-[10px] font-label-telemetry-sm font-bold text-secondary flex items-center gap-1">
+<span class="w-1 h-1 bg-secondary rounded-full"></span> 8,512 Kbps
+        </div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm mt-1.5 pt-1">
+<span>-05:00</span>
+<span>-03:45</span>
+<span>-02:30</span>
+<span>-01:15</span>
+<span class="text-secondary font-bold">NOW</span>
+</div>
+</div>
+</div>
+<!-- Hardware & Thermal Engine Deck -->
+<div class="bg-surface-container-low rounded-2xl p-4 shadow-md space-y-3.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-3.5 bg-tertiary rounded-full"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Thermal &amp; SoC Telemetry</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm px-2 py-0.5 rounded-full bg-surface-container-high text-secondary">NOMINAL</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- Thermal Core -->
+<div class="bg-surface-container/90 rounded-xl p-3 space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">SOC TEMP</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary">thermostat</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">41.2</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">°C</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 58%"></div>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant block">Threshold: &lt; 48.0°C</span>
+</div>
+<!-- Battery Discharge -->
+<div class="bg-surface-container/90 rounded-xl p-3 space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">DRAIN RATE</span>
+<span class="material-symbols-outlined text-[16px] text-primary">battery_saver</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-primary">-14.8</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">%/hr</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 44%"></div>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary block">~3h 12m stream left</span>
+</div>
+</div>
+<!-- GPU / CPU Stacked Bars -->
+<div class="bg-surface-container/80 rounded-xl p-3 space-y-2.5">
+<div>
+<div class="flex justify-between font-label-telemetry-sm text-label-telemetry-sm mb-1">
+<span class="text-on-surface font-medium">GPU Pipeline (Vulkan Compute)</span>
+<span class="text-secondary font-bold">68%</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary-fixed-dim h-full rounded-full" style="width: 68%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-telemetry-sm text-label-telemetry-sm mb-1">
+<span class="text-on-surface font-medium">CPU Core Load (Octa-Thread)</span>
+<span class="text-on-surface-variant font-bold">52%</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden">
+<div class="bg-surface-bright h-full rounded-full" style="width: 52%"></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1 font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<span>RAM Buffer: 1.42 GB / 12 GB</span>
+<span class="text-secondary">Leak Protection: ACTIVE</span>
+</div>
+</div>
+</div>
+<!-- Multistream Ingest & Audience Analytics -->
+<div class="bg-surface-container-low rounded-2xl p-4 shadow-md space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-3.5 bg-primary rounded-full"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Multistream Audience</span>
+</div>
+<div class="flex items-center gap-1 text-primary-container font-label-telemetry-sm text-label-telemetry-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span>14,892 PEAK</span>
+</div>
+</div>
+<!-- Channel Cards -->
+<div class="space-y-2">
+<!-- YouTube Card -->
+<div class="bg-surface-container/90 rounded-xl p-3 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-error-container/40 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]">smart_display</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-button-text text-button-text text-on-surface">YouTube Live</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-bright text-[10px] font-label-telemetry-sm text-secondary">RTMP</span>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">1080p60 • Ping: 22ms</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">8,240</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">VIEWERS</div>
+</div>
+</div>
+<!-- Twitch Card -->
+<div class="bg-surface-container/90 rounded-xl p-3 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">stream</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-button-text text-button-text text-on-surface">Twitch SRT</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-bright text-[10px] font-label-telemetry-sm text-tertiary">SRT LOW-LATENCY</span>
+</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">1080p60 • Ping: 18ms</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">4,170</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">VIEWERS</div>
+</div>
+</div>
+</div>
+<!-- Live Monetization & Chat Rate Chips -->
+<div class="grid grid-cols-2 gap-2 pt-1 font-label-telemetry-sm text-label-telemetry-sm">
+<div class="bg-surface-container/60 rounded-xl p-2.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-tertiary">forum</span>
+<div>
+<span class="text-on-surface-variant block">CHAT VELOCITY</span>
+<span class="text-on-surface font-bold">342 msgs/min</span>
+</div>
+</div>
+<div class="bg-surface-container/60 rounded-xl p-2.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-secondary">monetization_on</span>
+<div>
+<span class="text-on-surface-variant block">SESSION REVENUE</span>
+<span class="text-secondary font-bold">$184.50 USD</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pro Engine Diagnostic & Quick Action Suite -->
+<div class="bg-surface-container-low rounded-2xl p-4 shadow-md space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-3.5 bg-secondary-fixed rounded-full"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Diagnostic Suite &amp; Tools</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">HEURISTIC V4</span>
+</div>
+<div class="space-y-2">
+<!-- Uplink Speed Card -->
+<div class="bg-surface-container/80 rounded-xl p-3 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]">wifi_tethering</span>
+</div>
+<div>
+<div class="font-button-text text-button-text text-on-surface">Current Wi-Fi 6E Uplink</div>
+<div class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">94.2 Mbps Stable Bandwidth</div>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-surface-bright text-on-surface font-button-text text-button-text hover:bg-surface-variant active:scale-95 transition-transform">
+          Re-Test
+        </button>
+</div>
+<!-- Quick Action Controls -->
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="bg-surface-container/80 hover:bg-surface-container-high p-3 rounded-xl flex flex-col items-start gap-1.5 active:scale-98 transition-all">
+<span class="material-symbols-outlined text-[20px] text-secondary">cleaning_services</span>
+<span class="font-button-text text-button-text text-on-surface text-left">Flush Buffers</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant text-left">Zero-drop render cache reset</span>
+</button>
+<button class="bg-surface-container/80 hover:bg-surface-container-high p-3 rounded-xl flex flex-col items-start gap-1.5 active:scale-98 transition-all">
+<span class="material-symbols-outlined text-[20px] text-tertiary">network_check</span>
+<span class="font-button-text text-button-text text-on-surface text-left">Adaptive Guard</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary text-left">Enabled (Cellular failover)</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Micro-interactions for diagnostics HUD
+  document.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Haptic tactile click simulation
+      if (navigator.vibrate) {
+        navigator.vibrate(12);
+      }
+    });
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-dim/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.6)]" data-active-classes="text-primary-container font-semibold"><div class="relative flex items-center justify-around h-16 px-2"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="capture-hub" href="#"><span class="material-symbols-outlined text-[24px]">videocam</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Record</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 transition-colors text-primary-container font-semibold" data-path="live-multistream-studio" href="#"><span class="material-symbols-outlined text-[24px]">cell_tower</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Live</span></a><div class="relative -top-5 flex flex-col items-center"><button aria-label="Instant Record Action" class="relative w-14 h-14 rounded-full bg-primary-container text-on-primary shadow-[0_0_24px_rgba(255,81,103,0.55)] flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"><span class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30 pointer-events-none"></span><span class="material-symbols-outlined text-[28px] leading-none">radio_button_checked</span></button></div><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="timeline-editor" href="#"><span class="material-symbols-outlined text-[24px]">movie_edit</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Editor</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="tools-and-floating-ball-settings" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Tools</span></a></div><div class="w-full flex justify-center pb-1.5"><div class="w-32 h-1 bg-surface-variant/80 rounded-full"></div></div></nav></body></html>

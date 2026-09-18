@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>PulseCast Studio</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'primary-container': '#ff5167', 'surface-container-lowest': '#090e19', 'on-error': '#690005', 'on-tertiary-fixed': '#281900', 'secondary-fixed': '#9cf0ff', 'error': '#ffb4ab', 'surface-dim': '#0e131e', 'inverse-on-surface': '#2b303c', 'secondary-container': '#00e3fd', 'background': '#0e131e', 'surface-container-low': '#171b27', 'secondary-fixed-dim': '#00daf3', 'tertiary-fixed': '#ffdeac', 'tertiary': '#ffba38', 'on-primary-fixed': '#40000c', 'surface-tint': '#ffb3b5', 'on-surface-variant': '#e6bcbd', 'inverse-surface': '#dee2f2', 'surface-container': '#1b202b', 'on-primary-container': '#5b0015', 'surface-variant': '#303541', 'surface': '#0e131e', 'on-tertiary': '#432c00', 'on-tertiary-container': '#3a2600', 'on-secondary-fixed': '#001f24', 'error-container': '#93000a', 'on-secondary': '#00363d', 'surface-container-highest': '#303541', 'tertiary-fixed-dim': '#ffba38', 'surface-container-high': '#252a36', 'on-primary-fixed-variant': '#920027', 'on-primary': '#680019', 'inverse-primary': '#be0036', 'outline': '#ad8888', 'surface-bright': '#343945', 'on-background': '#dee2f2', 'on-error-container': '#ffdad6', 'on-tertiary-fixed-variant': '#604100', 'tertiary-container': '#c08600', 'primary-fixed': '#ffdada', 'secondary': '#bdf4ff', 'primary': '#ffb3b5', 'primary-fixed-dim': '#ffb3b5', 'on-secondary-fixed-variant': '#004f58', 'on-secondary-container': '#00616d', 'on-surface': '#dee2f2', 'outline-variant': '#5d3f40' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-2xl': '3rem', 'space-lg': '1.5rem', 'space-sm': '0.5rem', 'space-xxs': '0.125rem', 'floating-margin': '1rem', 'space-xl': '2rem', 'safe-bottom-nav': '5rem', 'space-base': '1rem', 'space-xs': '0.25rem', 'space-md': '0.75rem' }, fontFamily: { 'label-telemetry-lg': ['JetBrains Mono'], 'body-lg': ['Inter'], 'headline-lg': ['Space Grotesk'], 'label-telemetry-sm': ['JetBrains Mono'], 'headline-xl': ['Space Grotesk'], 'body-md': ['Inter'], 'headline-xl-mobile': ['Space Grotesk'], 'headline-sm': ['Space Grotesk'], 'label-telemetry-md': ['JetBrains Mono'], 'button-text': ['Inter'], 'body-sm': ['Inter'] }, fontSize: { 'label-telemetry-lg': ['18px', { lineHeight: '22px', letterSpacing: '-0.02em', fontWeight: '700' }], 'body-lg': ['16px', { lineHeight: '24px', fontWeight: '400' }], 'headline-lg': ['24px', { lineHeight: '30px', fontWeight: '600' }], 'label-telemetry-sm': ['11px', { lineHeight: '14px', letterSpacing: '0.02em', fontWeight: '500' }], 'headline-xl': ['32px', { lineHeight: '38px', fontWeight: '700' }], 'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }], 'headline-xl-mobile': ['26px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['18px', { lineHeight: '24px', fontWeight: '600' }], 'label-telemetry-md': ['13px', { lineHeight: '16px', letterSpacing: '-0.01em', fontWeight: '500' }], 'button-text': ['14px', { lineHeight: '18px', letterSpacing: '0.02em', fontWeight: '600' }], 'body-sm': ['12px', { lineHeight: '16px', fontWeight: '400' }] } } } };</script><style>@layer base { html, body { width: 100vw; min-height: 100%; margin: 0; padding: 0; } body { overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 bg-surface-dim/85 backdrop-blur-xl shadow-[0_1px_16px_rgba(0,0,0,0.4)] pt-safe"><div class="h-28 px-4 flex flex-col justify-between py-2"><div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm tracking-wide"><span class="text-on-surface font-medium">10:42</span><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px]">wifi</span><span class="font-label-telemetry-sm text-label-telemetry-sm font-bold text-secondary">5G</span><div class="flex items-center gap-0.5"><span class="font-label-telemetry-sm text-label-telemetry-sm">94%</span><span class="material-symbols-outlined text-[16px] text-primary">battery_charging_full</span></div></div></div><div class="flex items-center justify-between mt-1"><div class="flex items-center gap-2"><img alt="PulseCast Studio Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VG6yOHyqXAjzmyUWMNWuW9X7sztWfzv0qbm8sg6EdYCPt0NO3fEvMyzu3I2wXPpMIr4wBZuWkuKdk78sfv5Uc6rfaA7YLgwhaaAgaN_1sZK1QT5LgV3HT8TX0QT2DTV5BdFSeb32sFOR0L5rkWK4bCwrWw_XqhUB4mbhIDd_7Ei6CBgCYkHtVaxDA_qUHwIwHjRhvacuLQ9oGVkaMEuvRjEb8oKD6Ba-bShG5R9EdRrxT02P0Zmmic"/><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">PulseCast Studio</span><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-tertiary-container/30 text-tertiary font-label-telemetry-sm text-label-telemetry-sm"><span class="material-symbols-outlined text-[13px] mr-0.5">workspace_premium</span>PRO</span></div><div class="flex items-center gap-1 mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-pulse"></span><span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">128 GB Free • ~18h 45m</span></div></div></div><div class="flex items-center gap-2"><button aria-label="Telemetry Monitor" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary active:scale-95 transition-transform"><span class="material-symbols-outlined text-[22px]">equalizer</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-28 pb-safe-bottom-nav bg-surface overflow-x-hidden"><div class="flex flex-col w-full px-4 space-y-4 select-none">
+<!-- Top Utility & Export Header Bar -->
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-1">
+<button aria-label="Undo Action" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-bright active:scale-90 transition-all" id="undo-btn">
+<span class="material-symbols-outlined text-[20px]">undo</span>
+</button>
+<button aria-label="Redo Action" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-outline hover:bg-surface-bright active:scale-90 transition-all" id="redo-btn">
+<span class="material-symbols-outlined text-[20px]">redo</span>
+</button>
+<div class="h-4 w-px bg-surface-variant mx-1"></div>
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low text-secondary font-label-telemetry-sm text-label-telemetry-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+<span id="timestamp-counter">02:14.18</span>
+</div>
+</div>
+<!-- Export Menu & Resolution Selector -->
+<div class="relative">
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-bright transition-colors text-body-sm font-body-sm font-semibold" id="res-trigger">
+<span class="text-tertiary font-label-telemetry-sm text-label-telemetry-sm">1080p 60fps</span>
+<span class="material-symbols-outlined text-[16px] text-outline">expand_more</span>
+</button>
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary-container text-on-primary-container font-button-text text-button-text shadow-lg hover:brightness-110 active:scale-95 transition-all" id="export-action-btn">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+<span>Export</span>
+</button>
+</div>
+<!-- Quick Resolution Specs Floating Popover -->
+<div class="hidden absolute right-0 top-11 z-30 w-64 p-3 rounded-xl bg-surface-container-high shadow-2xl backdrop-blur-xl" id="res-modal">
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-surface-variant/40">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Export Settings</span>
+<span class="text-tertiary font-label-telemetry-sm text-label-telemetry-sm px-1.5 py-0.5 rounded bg-surface-container-lowest">FHD</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Profile</span>
+<span class="text-secondary font-label-telemetry-sm text-label-telemetry-sm">1080p @ 60fps</span>
+</div>
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Target Bitrate</span>
+<span class="text-on-surface font-label-telemetry-sm text-label-telemetry-sm">18.4 Mbps (Ultra)</span>
+</div>
+<div class="flex justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Est. File Size</span>
+<span class="text-tertiary font-label-telemetry-sm text-label-telemetry-sm">~324.6 MB</span>
+</div>
+<div class="pt-2 flex gap-1.5">
+<button class="flex-1 py-1 text-center rounded bg-surface-container font-button-text text-body-sm text-on-surface hover:bg-surface-bright">MP4</button>
+<button class="flex-1 py-1 text-center rounded bg-surface-container-lowest text-outline font-button-text text-body-sm hover:text-on-surface">GIF Clip</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Video Player Preview Viewport -->
+<div class="relative w-full rounded-2xl bg-surface-container-lowest overflow-hidden shadow-2xl flex flex-col items-center justify-center group" id="player-container" style="aspect-ratio: 16/9;">
+<img class="w-full h-full object-cover transition-transform duration-300" data-alt="High quality intense first-person mobile gaming battle royale stream capture with neon cyber-grid HUD, health bar overlays, particle explosions in red and cyan, high resolution crisp cinematic graphics" id="video-frame" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ4MGXOcJM2i_pcI8rYnZcabBl0bn_qon7M31A82OEM-tUiY3O8JwbQjmPAk4UP4F3S_gF2eL_GjrGat670hATUEW7UwueXGyoPWXrAkUvQGS0f9v2Ce-yMgLCqhKS_lF-tt4rsFRi4tiFRrYqMux97-Bb8YL25oXO5U3hrxPDblc1cCh4LrZrBQtpfvh-SZmTXD2hZGPEs3tMHyU5HO1ziBCym6Urn4fvokLLI6JHbWtSOJKUFc4"/>
+<!-- Pinch-to-zoom indicator badge -->
+<div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 px-2 py-1 rounded-md bg-surface-container-lowest/80 backdrop-blur-md text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span class="material-symbols-outlined text-[14px] text-secondary">pinch</span>
+<span>100% Fit</span>
+</div>
+<!-- Timed Caption Watermark / Overlay Display -->
+<div class="absolute bottom-10 px-3 py-1 rounded-lg bg-surface-container-lowest/85 backdrop-blur-md shadow-xl text-center flex items-center gap-1.5 transition-all" id="caption-preview-node">
+<span class="font-headline-sm text-headline-sm text-tertiary font-bold tracking-wide animate-pulse">INSANE CLUTCH!</span>
+<span class="text-[18px]">🔥</span>
+</div>
+<!-- Live Preview Controls Scrim -->
+<div class="absolute inset-x-0 bottom-0 px-3 py-2 bg-gradient-to-t from-surface-container-lowest/90 via-surface-container-lowest/40 to-transparent flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center hover:scale-105 active:scale-95 transition-all" id="play-pause-btn">
+<span class="material-symbols-outlined text-[20px]" id="play-icon">play_arrow</span>
+</button>
+<span class="font-label-telemetry-md text-label-telemetry-md text-on-surface font-semibold">02:14 <span class="text-outline">/ 08:35</span></span>
+</div>
+<!-- Aspect Ratio Switcher Capsule -->
+<div class="flex items-center p-0.5 rounded-full bg-surface-container-high/80 backdrop-blur-md text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<button class="aspect-pill px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container font-semibold transition-all" data-ratio="16-9">16:9</button>
+<button class="aspect-pill px-2 py-0.5 rounded-full hover:text-on-surface transition-all" data-ratio="9-16">9:16</button>
+<button class="aspect-pill px-2 py-0.5 rounded-full hover:text-on-surface transition-all" data-ratio="1-1">1:1</button>
+</div>
+</div>
+</div>
+<!-- Multi-track Precision Timeline Editor -->
+<div class="w-full rounded-2xl bg-surface-container-low p-3 space-y-2 relative shadow-inner">
+<!-- Timeline Head Controls & Scrubber Ruler -->
+<div class="flex items-center justify-between px-1 pb-1">
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1 px-2 py-1 rounded bg-surface-container-high text-on-surface hover:bg-surface-bright active:scale-95 transition-all font-label-telemetry-sm text-label-telemetry-sm" id="split-trigger-btn">
+<span class="material-symbols-outlined text-[16px] text-primary-container">content_cut</span>
+<span>Split</span>
+</button>
+<button class="flex items-center gap-1 px-2 py-1 rounded bg-surface-container-high text-on-surface hover:bg-surface-bright active:scale-95 transition-all font-label-telemetry-sm text-label-telemetry-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">bookmark_add</span>
+<span>Marker</span>
+</button>
+</div>
+<!-- Ruler Ticks Monospace Bar -->
+<div class="flex items-center gap-4 text-outline font-label-telemetry-sm text-label-telemetry-sm select-none">
+<span>02:00</span>
+<span class="text-on-surface font-semibold">02:14</span>
+<span>02:30</span>
+<span>02:45</span>
+</div>
+</div>
+<!-- Interactive Track Workspace (Scrub Container) -->
+<div class="relative w-full overflow-x-auto py-1 space-y-1.5 scrollbar-none" id="timeline-scroll-viewport">
+<!-- Master Precision Scrubber Needle / Playhead -->
+<div class="absolute top-0 bottom-0 left-[38%] w-0.5 bg-primary-container z-20 pointer-events-none flex flex-col items-center">
+<div class="w-3.5 h-3.5 -mt-1.5 rounded-sm rotate-45 bg-primary-container shadow-[0_0_8px_#ff5167]"></div>
+<div class="w-px flex-1 bg-primary-container"></div>
+</div>
+<!-- TRACK 1: Text & Overlay Track (Subtitle timed segment) -->
+<div class="h-6 w-full rounded bg-surface-container-lowest relative flex items-center overflow-hidden">
+<div class="absolute left-1.5 text-[10px] font-label-telemetry-sm text-outline z-10">T1: Overlays</div>
+<!-- Caption Marker Block -->
+<div class="absolute left-[24%] w-[32%] h-full rounded bg-tertiary-container/40 flex items-center justify-between px-2 text-tertiary font-label-telemetry-sm text-label-telemetry-sm shadow-sm">
+<span class="truncate font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">subtitles</span>
+            CLUTCH! 🔥
+          </span>
+<span class="material-symbols-outlined text-[12px] opacity-70">drag_handle</span>
+</div>
+</div>
+<!-- TRACK 2: Primary Video Clip Track with Filmstrip & Yellow Handles -->
+<div class="relative h-14 w-full rounded-lg bg-surface-container-lowest overflow-hidden flex items-center">
+<!-- Reel Container with Trim Bounds -->
+<div class="relative w-full h-full flex items-center p-0.5">
+<!-- Active Trimming Frame Box with Vivid Handles -->
+<div class="relative w-full h-full flex items-center rounded bg-surface-container shadow-md">
+<!-- Left Yellow Trim Handle -->
+<div class="absolute left-0 top-0 bottom-0 w-3.5 bg-tertiary rounded-l cursor-ew-resize flex items-center justify-center z-10 active:brightness-125">
+<span class="material-symbols-outlined text-on-tertiary text-[14px]">chevron_left</span>
+</div>
+<!-- Thumbnail Reel Frames Placeholder Sequence -->
+<div class="flex-1 h-full flex gap-1 px-3 overflow-hidden opacity-90">
+<div class="w-16 h-full flex-shrink-0 bg-cover bg-center rounded-sm overflow-hidden" data-alt="Screenshot frame of video game shooter match entering combat hallway with health bars and high tech red HUD lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBpGAXfRF97R5-8aIw3PQCcFyY3HxgRjP5HGHfahyqIaYSV_Zg_J3EDyAjIFs-RdAXHqBMJ-T6Bwuew5rW1imUIRhPXKfaikN7ukhiDx1ilwe3P_utGQIJlZHphTCmIJNCTCO7d1yFFNK8MsrHDfZEJL74WFC_dYf63ZS8OMp79t7InFiq9kRK9YN2WNSr8Zh4hURcI1QbqL2CkBokrThuXqgc_XSbcuPwxb3JpXaiVBQvi2xORLnQ')"></div>
+<div class="w-16 h-full flex-shrink-0 bg-cover bg-center rounded-sm overflow-hidden" data-alt="Screenshot frame of video game tactical confrontation showing muzzle flash and neon damage hit markers in dark futuristic stadium" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAvhptAuJnY4ZJlAsYRPCmczxmYIdp_8dPAXQpWjfzDFPS-e7DgpGVkhEGntuWEkdxds3YuZggSa2EJzf6c7TohPQPrFr9_9tWEu0mlG7z3nm0j92o1R9IsYKTEBE9Yi6z7HngAq9kymLTf4mNWcroTzSur7qWw2JTJN-eulSkac0Cm8nEFAw14gddradl4RVkPD3ys9y__Tf4pDeQzi35zwXYhskqZnGs4qTbBp0wC5n8WTUEEkno')"></div>
+<div class="w-16 h-full flex-shrink-0 bg-cover bg-center rounded-sm overflow-hidden" data-alt="Screenshot frame of video game climactic squad victory screen with golden trophy particle flair and cybernetic avatars" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDlPaEq2vFkKMHCYAHJwY6sZ5FC_78rijTjUXc93F5XjbEFITO2eW6mHezsIDbrnPhRW76_nbMfUnK4mvZRMQg6yeznz8LEelWRKzxduzPpYI3UATlvR8pD3jKladpgZChbMrqMrwXYXRVXI7P_w6jpOOZIar28RB3wHN7YRIU3uyqi9E8BuD9exmpeW8n6pTl5IbQnDI6wkBPHp29ulA9ycTHQY3lwAPKGM8p9Rxed7LPcm1sX4Ms')"></div>
+<div class="w-16 h-full flex-shrink-0 bg-cover bg-center rounded-sm overflow-hidden" data-alt="Screenshot frame of video game match summary leaderboard with holographic rewards screen and dynamic ambient lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqEgC2nqVZig53BDo-90y4oQXaTfl0MwseG5Q7OuYI5fEzMF6pkqtrgufzqMa82gHk14-PHL3uyenB2QB_ja71fYjVHo-zJkYExiQZVSdoZcU0MT6TzRjd5Nm18xrnv1AOeDg0x1J0aWK4kFR4h6N-3twXKofKiM7_XKRT1pNcD7qkHI3tITE0orU5sfvBqtMDeCzWfeILkHwDxTNw44u2eV7sfUQUnqXfdzKiU33RPllrnoeL0Kc')"></div>
+</div>
+<!-- Right Yellow Trim Handle -->
+<div class="absolute right-0 top-0 bottom-0 w-3.5 bg-tertiary rounded-r cursor-ew-resize flex items-center justify-center z-10 active:brightness-125">
+<span class="material-symbols-outlined text-on-tertiary text-[14px]">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- TRACK 3: Audio & Voiceover Waveform Track -->
+<div class="h-9 w-full rounded bg-surface-container-lowest relative flex items-center px-2">
+<div class="flex items-center gap-1.5 z-10 pr-2">
+<button class="w-5 h-5 rounded flex items-center justify-center bg-surface-container text-secondary hover:text-white" title="Mute/Unmute">
+<span class="material-symbols-outlined text-[13px]">mic</span>
+</button>
+<span class="px-1 py-0.5 rounded bg-secondary-container/20 text-secondary-container font-label-telemetry-sm text-[10px] font-bold">+200%</span>
+</div>
+<!-- SVG High-precision Waveform Graphic -->
+<div class="flex-1 h-6 flex items-center">
+<svg class="w-full h-full text-secondary/70" fill="currentColor" preserveaspectratio="none" viewbox="0 0 300 24">
+<rect height="8" rx="1.5" width="3" x="0" y="8"></rect>
+<rect height="12" rx="1.5" width="3" x="5" y="6"></rect>
+<rect height="16" rx="1.5" width="3" x="10" y="4"></rect>
+<rect height="10" rx="1.5" width="3" x="15" y="7"></rect>
+<rect height="18" rx="1.5" width="3" x="20" y="3"></rect>
+<rect height="20" rx="1.5" width="3" x="25" y="2"></rect>
+<rect height="14" rx="1.5" width="3" x="30" y="5"></rect>
+<rect height="8" rx="1.5" width="3" x="35" y="8"></rect>
+<rect height="6" rx="1.5" width="3" x="40" y="9"></rect>
+<rect height="18" rx="1.5" width="3" x="45" y="3"></rect>
+<rect height="22" rx="1.5" width="3" x="50" y="1"></rect>
+<rect height="16" rx="1.5" width="3" x="55" y="4"></rect>
+<rect height="12" rx="1.5" width="3" x="60" y="6"></rect>
+<rect height="10" rx="1.5" width="3" x="65" y="7"></rect>
+<rect height="20" rx="1.5" width="3" x="70" y="2"></rect>
+<rect height="14" rx="1.5" width="3" x="75" y="5"></rect>
+<rect height="18" rx="1.5" width="3" x="80" y="3"></rect>
+<rect height="12" rx="1.5" width="3" x="85" y="6"></rect>
+<rect height="8" rx="1.5" width="3" x="90" y="8"></rect>
+<rect height="20" rx="1.5" width="3" x="95" y="2"></rect>
+<rect height="22" rx="1.5" width="3" x="100" y="1"></rect>
+<rect height="16" rx="1.5" width="3" x="105" y="4"></rect>
+<rect height="14" rx="1.5" width="3" x="110" y="5"></rect>
+<rect height="10" rx="1.5" width="3" x="115" y="7"></rect>
+<rect height="18" rx="1.5" width="3" x="120" y="3"></rect>
+<rect height="20" rx="1.5" width="3" x="125" y="2"></rect>
+<rect height="12" rx="1.5" width="3" x="130" y="6"></rect>
+<rect height="8" rx="1.5" width="3" x="135" y="8"></rect>
+<rect height="16" rx="1.5" width="3" x="140" y="4"></rect>
+<rect height="22" rx="1.5" width="3" x="145" y="1"></rect>
+<rect height="18" rx="1.5" width="3" x="150" y="3"></rect>
+<rect height="14" rx="1.5" width="3" x="155" y="5"></rect>
+<rect height="10" rx="1.5" width="3" x="160" y="7"></rect>
+<rect height="20" rx="1.5" width="3" x="165" y="2"></rect>
+<rect height="16" rx="1.5" width="3" x="170" y="4"></rect>
+<rect height="8" rx="1.5" width="3" x="175" y="8"></rect>
+<rect height="18" rx="1.5" width="3" x="180" y="3"></rect>
+<rect height="22" rx="1.5" width="3" x="185" y="1"></rect>
+<rect height="14" rx="1.5" width="3" x="190" y="5"></rect>
+<rect height="10" rx="1.5" width="3" x="195" y="7"></rect>
+<rect height="18" rx="1.5" width="3" x="200" y="3"></rect>
+<rect height="12" rx="1.5" width="3" x="205" y="6"></rect>
+<rect height="20" rx="1.5" width="3" x="210" y="2"></rect>
+<rect height="8" rx="1.5" width="3" x="215" y="8"></rect>
+<rect height="16" rx="1.5" width="3" x="220" y="4"></rect>
+<rect height="20" rx="1.5" width="3" x="225" y="2"></rect>
+<rect height="12" rx="1.5" width="3" x="230" y="6"></rect>
+<rect height="18" rx="1.5" width="3" x="235" y="3"></rect>
+<rect height="22" rx="1.5" width="3" x="240" y="1"></rect>
+<rect height="14" rx="1.5" width="3" x="245" y="5"></rect>
+<rect height="8" rx="1.5" width="3" x="250" y="8"></rect>
+<rect height="18" rx="1.5" width="3" x="255" y="3"></rect>
+<rect height="12" rx="1.5" width="3" x="260" y="6"></rect>
+<rect height="20" rx="1.5" width="3" x="265" y="2"></rect>
+<rect height="10" rx="1.5" width="3" x="270" y="7"></rect>
+<rect height="16" rx="1.5" width="3" x="275" y="4"></rect>
+<rect height="8" rx="1.5" width="3" x="280" y="8"></rect>
+<rect height="18" rx="1.5" width="3" x="285" y="3"></rect>
+<rect height="14" rx="1.5" width="3" x="290" y="5"></rect>
+<rect height="8" rx="1.5" width="3" x="295" y="8"></rect>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<!-- Horizontal Scrollable Studio Tool Palette Dock -->
+<div class="w-full">
+<div class="flex items-center justify-between px-1 pb-1.5">
+<span class="text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm tracking-wider uppercase">Editing Palette</span>
+<span class="text-secondary font-label-telemetry-sm text-label-telemetry-sm">Trim &amp; Cut Active</span>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+<!-- Tool 1: Trim & Cut (Active highlighted state) -->
+<button class="flex flex-col items-center justify-center min-w-[72px] h-[70px] rounded-xl bg-primary-container text-on-primary-container shadow-md active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[22px]">content_cut</span>
+<span class="font-button-text text-body-sm mt-1 leading-tight font-semibold">Trim / Cut</span>
+</button>
+<!-- Tool 2: Speed Ramp -->
+<button class="flex flex-col items-center justify-center min-w-[72px] h-[70px] rounded-xl bg-surface-container text-on-surface hover:bg-surface-bright active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-[22px] text-tertiary group-hover:scale-110 transition-transform">speed</span>
+<span class="font-button-text text-body-sm mt-1 leading-tight">Speed (1x)</span>
+</button>
+<!-- Tool 3: Crop & Ratio -->
+<button class="flex flex-col items-center justify-center min-w-[72px] h-[70px] rounded-xl bg-surface-container text-on-surface hover:bg-surface-bright active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-[22px] text-secondary group-hover:scale-110 transition-transform">aspect_ratio</span>
+<span class="font-button-text text-body-sm mt-1 leading-tight">Crop</span>
+</button>
+<!-- Tool 4: Voiceover Mic -->
+<button class="flex flex-col items-center justify-center min-w-[72px] h-[70px] rounded-xl bg-surface-container text-on-surface hover:bg-surface-bright active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-[22px] text-primary group-hover:scale-110 transition-transform">mic_external_on</span>
+<span class="font-button-text text-body-sm mt-1 leading-tight">Voiceover</span>
+</button>
+<!-- Tool 5: AI Auto-Captions -->
+<button class="flex flex-col items-center justify-center min-w-[72px] h-[70px] rounded-xl bg-surface-container text-on-surface hover:bg-surface-bright active:scale-95 transition-all group">
+<div class="relative">
+<span class="material-symbols-outlined text-[22px] text-secondary group-hover:scale-110 transition-transform">auto_awesome</span>
+</div>
+<span class="font-button-text text-body-sm mt-1 leading-tight">Captions</span>
+</button>
+<!-- Tool 6: Blur / Mosaic Mask -->
+<button class="flex flex-col items-center justify-center min-w-[72px] h-[70px] rounded-xl bg-surface-container text-on-surface hover:bg-surface-bright active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-[22px] text-outline group-hover:scale-110 transition-transform">blur_on</span>
+<span class="font-button-text text-body-sm mt-1 leading-tight">Blur Mask</span>
+</button>
+<!-- Tool 7: Export to GIF / MP4 Clip -->
+<button class="flex flex-col items-center justify-center min-w-[72px] h-[70px] rounded-xl bg-surface-container text-on-surface hover:bg-surface-bright active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-[22px] text-tertiary group-hover:scale-110 transition-transform">gif_box</span>
+<span class="font-button-text text-body-sm mt-1 leading-tight">GIF Maker</span>
+</button>
+</div>
+</div>
+<!-- Active Tool Adjustment Drawer: Speed & Trim micro-adjustment dial -->
+<div class="w-full p-3 rounded-2xl bg-surface-container-high/90 backdrop-blur-md flex items-center justify-between shadow-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[20px]">tune</span>
+<div class="flex flex-col">
+<span class="text-on-surface font-headline-sm text-body-md font-semibold leading-tight">Speed Curve Mode</span>
+<span class="text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">Smooth bullet-time ramp (0.5x → 4.0x)</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-1 rounded bg-surface-container-lowest text-tertiary font-label-telemetry-sm text-label-telemetry-sm font-bold">1.0x</span>
+<button class="w-8 h-8 rounded-full bg-surface-container text-on-surface flex items-center justify-center hover:bg-surface-bright">
+<span class="material-symbols-outlined text-[18px]">show_chart</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Play/Pause State Toggle
+    const playBtn = document.getElementById('play-pause-btn');
+    const playIcon = document.getElementById('play-icon');
+    let isPlaying = false;
+
+    if (playBtn && playIcon) {
+      playBtn.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        playIcon.textContent = isPlaying ? 'pause' : 'play_arrow';
+      });
+    }
+
+    // Resolution Popover Toggle
+    const resTrigger = document.getElementById('res-trigger');
+    const resModal = document.getElementById('res-modal');
+
+    if (resTrigger && resModal) {
+      resTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        resModal.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!resModal.contains(e.target) && !resTrigger.contains(e.target)) {
+          resModal.classList.add('hidden');
+        }
+      });
+    }
+
+    // Aspect Ratio Capsule Switcher
+    const aspectPills = document.querySelectorAll('.aspect-pill');
+    const playerBox = document.getElementById('player-container');
+
+    aspectPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        aspectPills.forEach(p => {
+          p.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-semibold');
+          p.classList.add('text-on-surface-variant');
+        });
+        pill.classList.remove('text-on-surface-variant');
+        pill.classList.add('bg-primary-container', 'text-on-primary-container', 'font-semibold');
+
+        const ratio = pill.getAttribute('data-ratio');
+        if (playerBox) {
+          if (ratio === '16-9') {
+            playerBox.style.aspectRatio = '16/9';
+          } else if (ratio === '9-16') {
+            playerBox.style.aspectRatio = '9/16';
+            playerBox.style.maxHeight = '320px';
+          } else if (ratio === '1-1') {
+            playerBox.style.aspectRatio = '1/1';
+            playerBox.style.maxHeight = '280px';
+          }
+        }
+      });
+    });
+
+    // Interactive Feedback for Split Tool
+    const splitBtn = document.getElementById('split-trigger-btn');
+    if (splitBtn) {
+      splitBtn.addEventListener('click', () => {
+        splitBtn.classList.add('scale-90');
+        setTimeout(() => splitBtn.classList.remove('scale-90'), 150);
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-dim/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.6)]" data-active-classes="text-primary-container font-semibold"><div class="relative flex items-center justify-around h-16 px-2"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="capture-hub" href="#"><span class="material-symbols-outlined text-[24px]">videocam</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Record</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="live-multistream-studio" href="#"><span class="material-symbols-outlined text-[24px]">cell_tower</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Live</span></a><div class="relative -top-5 flex flex-col items-center"><button aria-label="Instant Record Action" class="relative w-14 h-14 rounded-full bg-primary-container text-on-primary shadow-[0_0_24px_rgba(255,81,103,0.55)] flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"><span class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30 pointer-events-none"></span><span class="material-symbols-outlined text-[28px] leading-none">radio_button_checked</span></button></div><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 transition-colors text-primary-container font-semibold" data-path="timeline-editor" href="#"><span class="material-symbols-outlined text-[24px]">movie_edit</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Editor</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="tools-and-floating-ball-settings" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Tools</span></a></div><div class="w-full flex justify-center pb-1.5"><div class="w-32 h-1 bg-surface-variant/80 rounded-full"></div></div></nav></body></html>

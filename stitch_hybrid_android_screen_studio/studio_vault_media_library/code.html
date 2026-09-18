@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>PulseCast Studio</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'primary-container': '#ff5167', 'surface-container-lowest': '#090e19', 'on-error': '#690005', 'on-tertiary-fixed': '#281900', 'secondary-fixed': '#9cf0ff', 'error': '#ffb4ab', 'surface-dim': '#0e131e', 'inverse-on-surface': '#2b303c', 'secondary-container': '#00e3fd', 'background': '#0e131e', 'surface-container-low': '#171b27', 'secondary-fixed-dim': '#00daf3', 'tertiary-fixed': '#ffdeac', 'tertiary': '#ffba38', 'on-primary-fixed': '#40000c', 'surface-tint': '#ffb3b5', 'on-surface-variant': '#e6bcbd', 'inverse-surface': '#dee2f2', 'surface-container': '#1b202b', 'on-primary-container': '#5b0015', 'surface-variant': '#303541', 'surface': '#0e131e', 'on-tertiary': '#432c00', 'on-tertiary-container': '#3a2600', 'on-secondary-fixed': '#001f24', 'error-container': '#93000a', 'on-secondary': '#00363d', 'surface-container-highest': '#303541', 'tertiary-fixed-dim': '#ffba38', 'surface-container-high': '#252a36', 'on-primary-fixed-variant': '#920027', 'on-primary': '#680019', 'inverse-primary': '#be0036', 'outline': '#ad8888', 'surface-bright': '#343945', 'on-background': '#dee2f2', 'on-error-container': '#ffdad6', 'on-tertiary-fixed-variant': '#604100', 'tertiary-container': '#c08600', 'primary-fixed': '#ffdada', 'secondary': '#bdf4ff', 'primary': '#ffb3b5', 'primary-fixed-dim': '#ffb3b5', 'on-secondary-fixed-variant': '#004f58', 'on-secondary-container': '#00616d', 'on-surface': '#dee2f2', 'outline-variant': '#5d3f40' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-2xl': '3rem', 'space-lg': '1.5rem', 'space-sm': '0.5rem', 'space-xxs': '0.125rem', 'floating-margin': '1rem', 'space-xl': '2rem', 'safe-bottom-nav': '5rem', 'space-base': '1rem', 'space-xs': '0.25rem', 'space-md': '0.75rem' }, fontFamily: { 'label-telemetry-lg': ['JetBrains Mono'], 'body-lg': ['Inter'], 'headline-lg': ['Space Grotesk'], 'label-telemetry-sm': ['JetBrains Mono'], 'headline-xl': ['Space Grotesk'], 'body-md': ['Inter'], 'headline-xl-mobile': ['Space Grotesk'], 'headline-sm': ['Space Grotesk'], 'label-telemetry-md': ['JetBrains Mono'], 'button-text': ['Inter'], 'body-sm': ['Inter'] }, fontSize: { 'label-telemetry-lg': ['18px', { lineHeight: '22px', letterSpacing: '-0.02em', fontWeight: '700' }], 'body-lg': ['16px', { lineHeight: '24px', fontWeight: '400' }], 'headline-lg': ['24px', { lineHeight: '30px', fontWeight: '600' }], 'label-telemetry-sm': ['11px', { lineHeight: '14px', letterSpacing: '0.02em', fontWeight: '500' }], 'headline-xl': ['32px', { lineHeight: '38px', fontWeight: '700' }], 'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }], 'headline-xl-mobile': ['26px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['18px', { lineHeight: '24px', fontWeight: '600' }], 'label-telemetry-md': ['13px', { lineHeight: '16px', letterSpacing: '-0.01em', fontWeight: '500' }], 'button-text': ['14px', { lineHeight: '18px', letterSpacing: '0.02em', fontWeight: '600' }], 'body-sm': ['12px', { lineHeight: '16px', fontWeight: '400' }] } } } };</script><style>@layer base { html, body { width: 100vw; min-height: 100%; margin: 0; padding: 0; } body { overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style></head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 bg-surface-dim/85 backdrop-blur-xl shadow-[0_1px_16px_rgba(0,0,0,0.4)] pt-safe"><div class="h-28 px-4 flex flex-col justify-between py-2"><div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm tracking-wide"><span class="text-on-surface font-medium">10:42</span><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px]">wifi</span><span class="font-label-telemetry-sm text-label-telemetry-sm font-bold text-secondary">5G</span><div class="flex items-center gap-0.5"><span class="font-label-telemetry-sm text-label-telemetry-sm">94%</span><span class="material-symbols-outlined text-[16px] text-primary">battery_charging_full</span></div></div></div><div class="flex items-center justify-between mt-1"><div class="flex items-center gap-2"><img alt="PulseCast Studio Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VG6yOHyqXAjzmyUWMNWuW9X7sztWfzv0qbm8sg6EdYCPt0NO3fEvMyzu3I2wXPpMIr4wBZuWkuKdk78sfv5Uc6rfaA7YLgwhaaAgaN_1sZK1QT5LgV3HT8TX0QT2DTV5BdFSeb32sFOR0L5rkWK4bCwrWw_XqhUB4mbhIDd_7Ei6CBgCYkHtVaxDA_qUHwIwHjRhvacuLQ9oGVkaMEuvRjEb8oKD6Ba-bShG5R9EdRrxT02P0Zmmic"/><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">PulseCast Studio</span><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-tertiary-container/30 text-tertiary font-label-telemetry-sm text-label-telemetry-sm"><span class="material-symbols-outlined text-[13px] mr-0.5">workspace_premium</span>PRO</span></div><div class="flex items-center gap-1 mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-pulse"></span><span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">128 GB Free • ~18h 45m</span></div></div></div><div class="flex items-center gap-2"><button aria-label="Telemetry Monitor" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary active:scale-95 transition-transform"><span class="material-symbols-outlined text-[22px]">equalizer</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-28 pb-safe-bottom-nav bg-surface overflow-x-hidden"><div class="flex flex-col w-full">
+<!-- Sub-Header & Studio Vault Control Strip -->
+<div class="px-4 pt-3 pb-2 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container shadow-[0_0_8px_rgba(255,81,103,0.8)]"></div>
+<h1 class="font-headline-xl-mobile text-headline-xl-mobile text-on-surface tracking-tight leading-none">Studio Vault</h1>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-secondary font-label-telemetry-sm text-label-telemetry-sm">38 Items</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button aria-label="Search Vault" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform" id="search-toggle-btn">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+<button class="px-3.5 h-10 rounded-full bg-surface-container text-on-surface font-button-text text-button-text hover:bg-surface-container-high active:scale-95 transition-all flex items-center gap-1.5" id="batch-select-btn">
+<span class="material-symbols-outlined text-[18px] text-primary">checklist</span>
+<span>Select</span>
+</button>
+</div>
+</div>
+<!-- Collapsible Search & Filter Tray -->
+<div class="px-4 pb-2 hidden" id="vault-search-tray">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-11 pl-11 pr-4 bg-surface-container-lowest rounded-xl font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-1 focus:ring-secondary-container" placeholder="Search clips by game, tag, audio or date..." type="text"/>
+</div>
+</div>
+<!-- Storage Telemetry & Optimization HUD -->
+<div class="px-4 py-2">
+<div class="bg-surface-container-low rounded-2xl p-4 shadow-md flex flex-col gap-3.5 relative overflow-hidden">
+<!-- Glow ambient background -->
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Storage Heading & Metrics -->
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant uppercase tracking-wider">Internal Broadcast Storage</span>
+<div class="flex items-baseline gap-2 mt-0.5">
+<span class="font-label-telemetry-lg text-label-telemetry-lg text-on-surface">68.4 GB</span>
+<span class="font-label-telemetry-md text-label-telemetry-md text-on-surface-variant">/ 256 GB</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary ml-1 font-semibold">(27% Used)</span>
+</div>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm bg-surface-container px-2.5 py-1 rounded-full">
+<span class="material-symbols-outlined text-[14px] text-tertiary">speed</span>
+<span>NVMe 1.4 GB/s</span>
+</div>
+</div>
+<!-- Multi-segmented Storage Strip -->
+<div class="w-full flex flex-col gap-1.5">
+<div class="w-full h-2.5 rounded-full bg-surface-container-highest overflow-hidden flex p-0.5 gap-0.5">
+<!-- Raw 4K/1080p Record (Crimson) 48% of used -->
+<div class="h-full rounded-full bg-primary-container shadow-[0_0_8px_rgba(255,81,103,0.8)]" style="width: 44%;"></div>
+<!-- Live Stream VODs (Cyan) 26% -->
+<div class="h-full rounded-full bg-secondary-container shadow-[0_0_8px_rgba(0,227,253,0.8)]" style="width: 26%;"></div>
+<!-- Edited Highlights (Amber) 18% -->
+<div class="h-full rounded-full bg-tertiary shadow-[0_0_8px_rgba(255,186,56,0.8)]" style="width: 18%;"></div>
+<!-- Audio & Screens (Purple) 12% -->
+<div class="h-full rounded-full bg-surface-tint" style="width: 12%;"></div>
+</div>
+<!-- Legend Tags -->
+<div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm pt-1 overflow-x-auto no-scrollbar gap-3">
+<div class="flex items-center gap-1.5 shrink-0">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span>Raw Rec (36.2 GB)</span>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span>VODs (19.4 GB)</span>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Clips (8.8 GB)</span>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<span class="w-2 h-2 rounded-full bg-surface-tint"></span>
+<span>Audio (4.0 GB)</span>
+</div>
+</div>
+</div>
+<!-- Fast Optimizer Buttons -->
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="w-full py-2 px-3 rounded-xl bg-surface-container hover:bg-surface-container-high active:scale-98 transition-all flex items-center justify-between text-left group">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-secondary-container/15 flex items-center justify-center text-secondary-container">
+<span class="material-symbols-outlined text-[18px]">compress</span>
+</div>
+<div class="flex flex-col leading-tight">
+<span class="font-button-text text-button-text text-on-surface">Batch H.265</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">Save ~18.2 GB</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant group-hover:translate-x-0.5 transition-transform">arrow_forward_ios</span>
+</button>
+<button class="w-full py-2 px-3 rounded-xl bg-surface-container hover:bg-surface-container-high active:scale-98 transition-all flex items-center justify-between text-left group">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-tertiary/15 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[18px]">cleaning_services</span>
+</div>
+<div class="flex flex-col leading-tight">
+<span class="font-button-text text-button-text text-on-surface">Purge Cache</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary">3.4 GB Temporary</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant group-hover:translate-x-0.5 transition-transform">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Horizontal Scrollable Category Filter Pills -->
+<div class="w-full overflow-x-auto no-scrollbar py-2.5 px-4 flex items-center gap-2">
+<button class="category-chip px-3.5 py-1.5 rounded-full bg-primary-container text-on-primary-container font-button-text text-button-text shrink-0 shadow-[0_0_12px_rgba(255,81,103,0.45)] transition-all">
+      All Media (38)
+    </button>
+<button class="category-chip px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-button-text text-button-text shrink-0 transition-all">
+      Recordings (16)
+    </button>
+<button class="category-chip px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-button-text text-button-text shrink-0 transition-all">
+      Live Stream VODs (8)
+    </button>
+<button class="category-chip px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-button-text text-button-text shrink-0 transition-all">
+      Edited Clips (10)
+    </button>
+<button class="category-chip px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-button-text text-button-text shrink-0 transition-all">
+      Screenshots (4)
+    </button>
+<button class="category-chip px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-button-text text-button-text shrink-0 transition-all">
+      Audio Tracks (12)
+    </button>
+</div>
+<!-- Sort Bar with Quick Actions -->
+<div class="px-4 py-1.5 flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<div class="flex items-center gap-1.5">
+<span>Sorted by:</span>
+<button class="flex items-center gap-0.5 text-secondary font-bold hover:underline">
+<span>Latest Captured</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Toggle grid density" class="p-1 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[18px]">view_agenda</span>
+</button>
+<button aria-label="Multi-column view" class="p-1 rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+</button>
+</div>
+</div>
+<!-- Media Feed / Vault Cards -->
+<div class="px-4 py-2 flex flex-col gap-4">
+<!-- Card 1: Featured Raw Gameplay Clutch Recording -->
+<article class="w-full bg-surface-container-low rounded-2xl p-3 flex flex-col gap-3 shadow-lg relative group transition-all hover:bg-surface-container">
+<!-- Media Thumbnail Header Container -->
+<div class="relative w-full aspect-video rounded-xl overflow-hidden bg-surface-container-lowest flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" data-alt="High-intensity first-person mobile shooter battle royale clutch moment, neon cyberpunk HUD, lasers, motion blur, red and cyber cyan lighting reflecting across futuristic weapon scope, dramatic esports perspective." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkb46PekimJh1vDovOMBUmITamzdSr2yLUJmqYhbwjwuMZDYtVWvbuKgrCaipReWKoqDIh0VUMtFC7VxCARhe6oQopvqUQD5TuO9J6Og8NXffkmiwGXYhTx0uEfmPcCGhF_XKETf_XHA267Kbcym9ajSCyQrMcrEm91GUzXWDPToh_DAh2NUxGTLtqM1iLSVD32ffOykatIYYmDx67h84QK9W7YGp-IMH1zYP3HWOAWplwCWCPjrE"/>
+<!-- Subtle Top Vignette Gradient -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-dim/95 via-transparent to-black/60 pointer-events-none"></div>
+<!-- Top Badges Overlay -->
+<div class="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-primary-container text-on-primary font-label-telemetry-sm text-label-telemetry-sm tracking-wide font-bold flex items-center gap-1 shadow-[0_0_8px_rgba(255,81,103,0.7)]">
+<span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+            RAW REC
+          </span>
+<span class="px-2 py-0.5 rounded-md bg-surface-dim/80 backdrop-blur-md text-secondary font-label-telemetry-sm text-label-telemetry-sm font-semibold">
+            1080p60
+          </span>
+<span class="px-2 py-0.5 rounded-md bg-surface-dim/80 backdrop-blur-md text-on-surface font-label-telemetry-sm text-label-telemetry-sm">
+            24 Mbps
+          </span>
+</div>
+<!-- Top Right Batch Select Circle checkbox -->
+<button class="batch-checkbox absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-surface-dim/70 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-white transition-colors" data-checked="false">
+<span class="material-symbols-outlined text-[18px]">radio_button_unchecked</span>
+</button>
+<!-- Center Play Glyphs -->
+<button aria-label="Play recording preview" class="w-12 h-12 rounded-full bg-surface-dim/80 backdrop-blur-md text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform group-hover:bg-primary-container group-hover:text-on-primary">
+<span class="material-symbols-outlined text-[26px] ml-0.5" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<!-- Bottom Overlay Badges -->
+<div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between">
+<span class="px-2 py-0.5 rounded-md bg-surface-dim/90 backdrop-blur-md text-on-surface font-label-telemetry-sm text-label-telemetry-sm font-bold tracking-tight">
+            14:28
+          </span>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-surface-dim/90 backdrop-blur-md text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+              1.8 GB
+            </span>
+</div>
+</div>
+</div>
+<!-- Card Metadata Content -->
+<div class="flex flex-col gap-1">
+<div class="flex items-start justify-between gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-snug line-clamp-1">
+            Apex Ranked Season 19 Clutch (Final Circle)
+          </h2>
+<button aria-label="More options" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span>Today, 14:20</span>
+<span>•</span>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[14px]">headphones</span>
+<span>Stereo Sys + Mic (48kHz)</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Utility Row -->
+<div class="grid grid-cols-4 gap-1.5 pt-1">
+<button class="py-2 px-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-button-text text-button-text flex flex-col items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px] text-primary">movie_edit</span>
+<span class="text-[11px] leading-none">Trim / Cut</span>
+</button>
+<button class="py-2 px-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-button-text text-button-text flex flex-col items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px] text-secondary">gif</span>
+<span class="text-[11px] leading-none">Make GIF</span>
+</button>
+<button class="py-2 px-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-button-text text-button-text flex flex-col items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px] text-tertiary">graphic_eq</span>
+<span class="text-[11px] leading-none">Audio Rip</span>
+</button>
+<button class="py-2 px-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-button-text text-button-text flex flex-col items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">cloud_upload</span>
+<span class="text-[11px] leading-none">Upload</span>
+</button>
+</div>
+</article>
+<!-- Card 2: Live Stream VOD Card with Multistream & Facecam PIP -->
+<article class="w-full bg-surface-container-low rounded-2xl p-3 flex flex-col gap-3 shadow-lg relative group transition-all hover:bg-surface-container">
+<!-- Media Thumbnail with Corner PIP Facecam -->
+<div class="relative w-full aspect-video rounded-xl overflow-hidden bg-surface-container-lowest flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" data-alt="A futuristic neon cyberpunk live gaming stream broadcast with high production value, dark tech room ambient glow, holographic widgets overlay, neon pink and cyan atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIVQDSLxwP6kElTG5oqnFQF-_RmGuCmYKZeFpS2PoG-gDTeo_P8wrqO9CYrTgxBr746JNk31Rz7ZZjgk-xsTHoHCaNjDeZG9Hge2iSfYmMyU0D4spiPOBcS1N4RoM3Vc1UHCX53hTgw4G44tEO61mE9Ff9YDGy1mv2jkoisarAKDcfXZHXj3_RIECDTQw88FtdQYYmZXLFA_RG_snD6YwcdoyRTNMcmiDKv6bAtdF3gkJFlg4PWUM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-dim/95 via-transparent to-black/60 pointer-events-none"></div>
+<!-- PIP Facecam simulation badge in top right corner -->
+<div class="absolute bottom-2.5 right-2.5 w-24 aspect-video rounded-lg overflow-hidden shadow-2xl bg-surface-dim">
+<img class="w-full h-full object-cover" data-alt="Close-up webcam stream of an energetic gamer wearing pro headset, illuminated by blue and magenta studio key lights, smiling at the screen with neon microphone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjxFsHjK8SD1e0_ZP9gTB8GNccgXutwX4FD7oYM6NDcT7dUpT8pd1QRADMm-zsIDDrdBrDwSpCXWeHcpXLN9NCsYvXDtM6WeVa4UTstVtM9xCR8Wsuzjulowh7KSGbf1H7e2sUaJRdTCBLgerdTlw0ZLrn5RRe3Xvpwcc9-z9NC6tjlggVz7QQ25BJCqeiLEuI7Vpd2rx7VM9a4pIVox731uNncmCQeSEoMkfOIl-_LsEDc0HHocU"/>
+<span class="absolute bottom-1 right-1 px-1 py-0.2 bg-black/70 rounded text-[9px] font-label-telemetry-sm text-white">PIP</span>
+</div>
+<!-- Top Badges Overlay -->
+<div class="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-secondary-container text-on-secondary-container font-label-telemetry-sm text-label-telemetry-sm font-bold flex items-center gap-1 shadow-[0_0_8px_rgba(0,227,253,0.5)]">
+<span class="material-symbols-outlined text-[14px]">cell_tower</span>
+            VOD • MULTISTREAM
+          </span>
+<span class="px-2 py-0.5 rounded-md bg-surface-dim/80 backdrop-blur-md text-on-surface font-label-telemetry-sm text-label-telemetry-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> YT + Twitch
+          </span>
+</div>
+<button class="batch-checkbox absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-surface-dim/70 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-white transition-colors" data-checked="false">
+<span class="material-symbols-outlined text-[18px]">radio_button_unchecked</span>
+</button>
+<button aria-label="Play VOD preview" class="w-12 h-12 rounded-full bg-surface-dim/80 backdrop-blur-md text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform group-hover:bg-secondary-container group-hover:text-on-secondary-container">
+<span class="material-symbols-outlined text-[26px] ml-0.5" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="absolute bottom-2.5 left-2.5 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-md bg-surface-dim/90 backdrop-blur-md text-on-surface font-label-telemetry-sm text-label-telemetry-sm font-bold">
+            01:45:12
+          </span>
+<span class="px-2 py-0.5 rounded-md bg-surface-dim/90 backdrop-blur-md text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+            8.4 GB
+          </span>
+</div>
+</div>
+<!-- VOD Content & Broadcast Insights -->
+<div class="flex flex-col gap-1">
+<div class="flex items-start justify-between gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-snug line-clamp-1">
+            Neon Cyberpunk 2049 Launch Stream + Live Q&amp;A
+          </h2>
+<button aria-label="More options" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span>Yesterday</span>
+<span>•</span>
+<span class="text-secondary font-medium">2.4k Peak Viewers</span>
+<span>•</span>
+<span class="text-tertiary">48 Super Chats</span>
+</div>
+</div>
+<!-- Action Row For VODs -->
+<div class="grid grid-cols-3 gap-2 pt-1">
+<button class="py-2 px-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-button-text text-button-text flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px] text-tertiary">auto_awesome</span>
+<span class="text-[12px]">Auto Shorts (5)</span>
+</button>
+<button class="py-2 px-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-button-text text-button-text flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px] text-secondary">output</span>
+<span class="text-[12px]">Export VOD</span>
+</button>
+<button class="py-2 px-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-button-text text-button-text flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px] text-primary">sync</span>
+<span class="text-[12px]">Cloud Mirror</span>
+</button>
+</div>
+</article>
+<!-- Card 3 & 4: Two Column Layout for 9:16 Short Clip & Pure Audio Track -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Card 3: 9:16 Vertical Highlight / Reel -->
+<article class="w-full bg-surface-container-low rounded-2xl p-3 flex gap-3 shadow-lg relative group transition-all hover:bg-surface-container">
+<!-- 9:16 Preview Thumbnail -->
+<div class="relative w-24 aspect-[9/16] shrink-0 rounded-xl overflow-hidden bg-surface-container-lowest flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Vertical mobile game screen capture showing a rapid sniper headshot elimination with vivid chromatic aberration, glowing crosshairs, and dynamic anime action speed lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNlplvgiqox_fxyJfHj8T1wIDVtUoaBqHARFdUMgLhbWRMXbh8RJbafRYzB-1GKjY1RZrq4kp8jrSaybjF1ozcqgWgAg1IUhEMvbhYgtSpPo9sZ0Eeih8u0UejOib5tQQ1KcPvUF60I_aohfzVWE7dBoIEl0-BtZklaVUcQLIYoCMNPdkEY2wcXphqF8yZ0BYza13f_OqKHU7HWjOpRzYyO3Lm3mNO9yXYAYI9fB-FtBEs7f0RKGo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-dim/90 via-transparent to-black/40 pointer-events-none"></div>
+<span class="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded bg-tertiary-container/80 text-on-tertiary font-label-telemetry-sm text-[10px] font-bold">
+            9:16
+          </span>
+<span class="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/80 text-white font-label-telemetry-sm text-[10px] font-bold">
+            0:45
+          </span>
+</div>
+<!-- Info & Fast Export -->
+<div class="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+<div class="flex flex-col">
+<div class="flex items-start justify-between gap-1">
+<span class="px-2 py-0.5 rounded bg-tertiary/20 text-tertiary font-label-telemetry-sm text-label-telemetry-sm font-semibold w-fit">
+                TikTok / Shorts
+              </span>
+<button class="batch-checkbox w-6 h-6 rounded-full flex items-center justify-center text-on-surface-variant hover:text-white" data-checked="false">
+<span class="material-symbols-outlined text-[16px]">radio_button_unchecked</span>
+</button>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface tracking-tight mt-1 line-clamp-2 leading-tight">
+              Insane 1v4 Sniper Flick Shot (Speed Ramped)
+            </h3>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant mt-1">
+              2 days ago • 142 MB • Subtitled
+            </span>
+</div>
+<div class="flex items-center gap-2 mt-3">
+<button class="flex-1 py-1.5 px-2.5 rounded-lg bg-primary-container text-on-primary font-button-text text-button-text flex items-center justify-center gap-1 active:scale-95 shadow-sm transition-transform">
+<span class="material-symbols-outlined text-[16px]">share</span>
+<span class="text-[12px]">Share</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface flex items-center justify-center active:scale-95">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4: Audio Extraction Snippet (Pure Waveform) -->
+<article class="w-full bg-surface-container-low rounded-2xl p-3.5 flex flex-col justify-between shadow-lg relative group transition-all hover:bg-surface-container">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-xl bg-secondary-container/15 flex items-center justify-center text-secondary-container">
+<span class="material-symbols-outlined text-[22px]">mic</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-secondary font-label-telemetry-sm text-label-telemetry-sm font-bold">
+                  MP3 320k
+                </span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">08:35</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface tracking-tight line-clamp-1 mt-0.5">
+                Squad Voice Comms &amp; Game FX
+              </h3>
+</div>
+</div>
+<button class="batch-checkbox w-6 h-6 rounded-full flex items-center justify-center text-on-surface-variant hover:text-white" data-checked="false">
+<span class="material-symbols-outlined text-[16px]">radio_button_unchecked</span>
+</button>
+</div>
+<!-- Visual Mini Waveform Display (SVG) -->
+<div class="w-full h-10 bg-surface-container-lowest rounded-lg my-3 px-3 flex items-center gap-1 overflow-hidden">
+<!-- Tactile Waveform Bars -->
+<div class="w-1 h-3 rounded-full bg-secondary-container/50"></div>
+<div class="w-1 h-5 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-7 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-4 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-6 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-8 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-3 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-5 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-7 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-2 rounded-full bg-secondary-container/40"></div>
+<div class="w-1 h-4 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-6 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-8 rounded-full bg-primary-container"></div>
+<div class="w-1 h-5 rounded-full bg-primary-container"></div>
+<div class="w-1 h-7 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-4 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-6 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-2 rounded-full bg-secondary-container/30"></div>
+<div class="w-1 h-5 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-7 rounded-full bg-secondary-container"></div>
+<div class="w-1 h-3 rounded-full bg-secondary-container"></div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span>Match #4 • 19.6 MB</span>
+<div class="flex items-center gap-2">
+<button class="text-secondary hover:underline font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">play_circle</span> Listen
+            </button>
+<button class="text-on-surface hover:text-secondary flex items-center gap-1 ml-2">
+<span class="material-symbols-outlined text-[16px]">file_download</span> Save
+            </button>
+</div>
+</div>
+</article>
+</div>
+</div>
+<!-- Tactical Floating Batch Selection Tray (Toggles on Select / Multi-check) -->
+<aside class="fixed bottom-20 left-4 right-4 z-40 bg-surface-dim/95 backdrop-blur-2xl rounded-2xl p-3 shadow-[0_8px_32px_rgba(0,0,0,0.85)] border-0 flex items-center justify-between transition-all duration-300 translate-y-32 opacity-0 pointer-events-none" id="floating-batch-bar">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary font-bold text-[13px]">
+<span id="selected-count-badge">0</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface leading-tight">Items Selected</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">Ready for batch operation</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="px-3 py-2 rounded-xl bg-secondary-container text-on-secondary-container font-button-text text-button-text flex items-center gap-1.5 shadow-sm active:scale-95 transition-transform" id="batch-backup-btn">
+<span class="material-symbols-outlined text-[18px]">cloud_upload</span>
+<span class="text-[12px]">Backup</span>
+</button>
+<button class="p-2 rounded-xl bg-error-container text-on-error-container hover:bg-error hover:text-on-error active:scale-95 transition-colors" id="batch-delete-btn">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+<button class="p-2 rounded-xl bg-surface-container text-on-surface-variant hover:text-on-surface active:scale-95" id="batch-cancel-btn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</aside>
+<!-- Interactive Logic for Filtering, Batch Selection, and Search Toggles -->
+<script>
+    (function initVaultInteractions() {
+      // Toggle Search Tray
+      const searchToggle = document.getElementById('search-toggle-btn');
+      const searchTray = document.getElementById('vault-search-tray');
+      if (searchToggle && searchTray) {
+        searchToggle.addEventListener('click', () => {
+          searchTray.classList.toggle('hidden');
+        });
+      }
+
+      // Category filter pill switching
+      const categoryChips = document.querySelectorAll('.category-chip');
+      categoryChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          categoryChips.forEach(c => {
+            c.className = 'category-chip px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-button-text text-button-text shrink-0 transition-all';
+          });
+          chip.className = 'category-chip px-3.5 py-1.5 rounded-full bg-primary-container text-on-primary-container font-button-text text-button-text shrink-0 shadow-[0_0_12px_rgba(255,81,103,0.45)] transition-all';
+        });
+      });
+
+      // Batch Selection Bar Toggle
+      const batchSelectBtn = document.getElementById('batch-select-btn');
+      const batchBar = document.getElementById('floating-batch-bar');
+      const countBadge = document.getElementById('selected-count-badge');
+      const cancelBatchBtn = document.getElementById('batch-cancel-btn');
+      const checkboxes = document.querySelectorAll('.batch-checkbox');
+
+      let isBatchActive = false;
+      let selectedCount = 0;
+
+      function updateBatchBar() {
+        if (selectedCount > 0) {
+          batchBar.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+          batchBar.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        } else if (!isBatchActive) {
+          batchBar.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+          batchBar.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        }
+        if (countBadge) countBadge.textContent = selectedCount;
+      }
+
+      if (batchSelectBtn) {
+        batchSelectBtn.addEventListener('click', () => {
+          isBatchActive = !isBatchActive;
+          if (isBatchActive) {
+            batchSelectBtn.classList.add('bg-primary-container', 'text-on-primary-container');
+            batchSelectBtn.classList.remove('bg-surface-container', 'text-on-surface');
+            // Auto select first item as demo
+            if (checkboxes.length > 0 && selectedCount === 0) {
+              const firstBox = checkboxes[0];
+              firstBox.setAttribute('data-checked', 'true');
+              firstBox.innerHTML = '<span class="material-symbols-outlined text-[18px] text-primary-container" style="font-variation-settings: \'FILL\' 1;">check_circle</span>';
+              selectedCount = 1;
+            }
+          } else {
+            batchSelectBtn.classList.remove('bg-primary-container', 'text-on-primary-container');
+            batchSelectBtn.classList.add('bg-surface-container', 'text-on-surface');
+            checkboxes.forEach(box => {
+              box.setAttribute('data-checked', 'false');
+              box.innerHTML = '<span class="material-symbols-outlined text-[18px]">radio_button_unchecked</span>';
+            });
+            selectedCount = 0;
+          }
+          updateBatchBar();
+        });
+      }
+
+      checkboxes.forEach(box => {
+        box.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const current = box.getAttribute('data-checked') === 'true';
+          if (!current) {
+            box.setAttribute('data-checked', 'true');
+            box.innerHTML = '<span class="material-symbols-outlined text-[18px] text-primary-container" style="font-variation-settings: \'FILL\' 1;">check_circle</span>';
+            selectedCount++;
+          } else {
+            box.setAttribute('data-checked', 'false');
+            box.innerHTML = '<span class="material-symbols-outlined text-[18px]">radio_button_unchecked</span>';
+            selectedCount = Math.max(0, selectedCount - 1);
+          }
+          updateBatchBar();
+        });
+      });
+
+      if (cancelBatchBtn) {
+        cancelBatchBtn.addEventListener('click', () => {
+          isBatchActive = false;
+          selectedCount = 0;
+          if (batchSelectBtn) {
+            batchSelectBtn.classList.remove('bg-primary-container', 'text-on-primary-container');
+            batchSelectBtn.classList.add('bg-surface-container', 'text-on-surface');
+          }
+          checkboxes.forEach(box => {
+            box.setAttribute('data-checked', 'false');
+            box.innerHTML = '<span class="material-symbols-outlined text-[18px]">radio_button_unchecked</span>';
+          });
+          updateBatchBar();
+        });
+      }
+    })();
+  </script>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-dim/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.6)]" data-active-classes="text-primary-container font-semibold"><div class="relative flex items-center justify-around h-16 px-2"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 transition-colors text-primary-container font-semibold" data-path="capture-hub" href="#"><span class="material-symbols-outlined text-[24px]">videocam</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Record</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="live-multistream-studio" href="#"><span class="material-symbols-outlined text-[24px]">cell_tower</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Live</span></a><div class="relative -top-5 flex flex-col items-center"><button aria-label="Instant Record Action" class="relative w-14 h-14 rounded-full bg-primary-container text-on-primary shadow-[0_0_24px_rgba(255,81,103,0.55)] flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"><span class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30 pointer-events-none"></span><span class="material-symbols-outlined text-[28px] leading-none">radio_button_checked</span></button></div><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="timeline-editor" href="#"><span class="material-symbols-outlined text-[24px]">movie_edit</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Editor</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="tools-and-floating-ball-settings" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Tools</span></a></div><div class="w-full flex justify-center pb-1.5"><div class="w-32 h-1 bg-surface-variant/80 rounded-full"></div></div></nav></body></html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed-dim": "#ffb3b5", "on-primary-fixed-variant": "#920027", "on-secondary-fixed": "#001f24", "on-tertiary-container": "#3a2600", "outline-variant": "#5d3f40", "on-primary-fixed": "#40000c", "error": "#ffb4ab", "background": "#0e131e", "surface-tint": "#ffb3b5", "inverse-surface": "#dee2f2", "inverse-primary": "#be0036", "tertiary": "#ffba38", "on-secondary": "#00363d", "secondary-fixed-dim": "#00daf3", "primary-container": "#ff5167", "surface-bright": "#343945", "surface-container-lowest": "#090e19", "on-surface": "#dee2f2", "on-background": "#dee2f2", "on-surface-variant": "#e6bcbd", "on-secondary-container": "#00616d", "surface-container-high": "#252a36", "secondary-container": "#00e3fd", "on-error": "#690005", "secondary": "#bdf4ff", "secondary-fixed": "#9cf0ff", "error-container": "#93000a", "surface-container-low": "#171b27", "tertiary-fixed-dim": "#ffba38", "tertiary-container": "#c08600", "on-primary": "#680019", "inverse-on-surface": "#2b303c", "surface-container": "#1b202b", "surface-container-highest": "#303541", "on-tertiary-fixed": "#281900", "tertiary-fixed": "#ffdeac", "primary-fixed": "#ffdada", "on-error-container": "#ffdad6", "on-tertiary-fixed-variant": "#604100", "on-tertiary": "#432c00", "surface-variant": "#303541", "surface": "#0e131e", "on-secondary-fixed-variant": "#004f58", "surface-dim": "#0e131e", "primary": "#ffb3b5", "outline": "#ad8888", "on-primary-container": "#5b0015" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-2xl": "3rem", "space-sm": "0.5rem", "space-base": "1rem", "floating-margin": "1rem", "space-md": "0.75rem", "space-xl": "2rem", "safe-bottom-nav": "5rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-xxs": "0.125rem" }, "fontFamily": { "body-lg": ["Inter"], "label-telemetry-sm": ["JetBrains Mono"], "body-sm": ["Inter"], "headline-sm": ["Space Grotesk"], "body-md": ["Inter"], "label-telemetry-lg": ["JetBrains Mono"], "label-telemetry-md": ["JetBrains Mono"], "button-text": ["Inter"], "headline-xl-mobile": ["Space Grotesk"], "headline-lg": ["Space Grotesk"], "headline-xl": ["Space Grotesk"] }, "fontSize": { "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "label-telemetry-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-telemetry-lg": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-telemetry-md": ["13px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "button-text": ["14px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600" }], "headline-xl-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }], "headline-lg": ["24px", { "lineHeight": "30px", "fontWeight": "600" }], "headline-xl": ["32px", { "lineHeight": "38px", "fontWeight": "700" }] } } } }</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#0e131e;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-surface font-body-md text-body-md text-on-surface min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)] pt-safe"><div class="h-16 px-space-base flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-primary-container text-[20px]">radio_button_checked</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">PULSE<span class="text-primary-container">CAST</span></span><span class="font-label-telemetry-sm text-label-telemetry-sm bg-primary-container/20 text-primary-container px-1 py-0.5 rounded">PRO</span></div><span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant truncate max-w-[130px]">Live Studio</span></div></div><div class="flex items-center gap-space-md"><div class="hidden xs:flex items-center gap-space-xs bg-surface-container-high/60 px-space-xs py-0.5 rounded-full"><span class="material-symbols-outlined text-secondary text-[14px]">wifi_tethering</span><span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">60fps</span><span class="font-label-telemetry-sm text-label-telemetry-sm text-outline-variant">|</span><span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary">48GB</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen px-space-base"><div class="flex flex-col w-full pb-6 space-y-space-base">
+<!-- Modal Drag Pill Indicator -->
+<div class="flex justify-center pt-space-xxs pb-space-xs">
+<div class="w-12 h-1.5 rounded-full bg-surface-container-highest"></div>
+</div>
+<!-- Header Section -->
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-container text-[20px]">verified_user</span>
+<h1 class="font-headline-xl-mobile text-headline-xl-mobile text-on-surface tracking-tight">Pre-Flight Checklist</h1>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Hardware, network &amp; privacy validation before going live</p>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-high px-space-xs py-1 rounded-full text-secondary">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm">SECURE</span>
+</div>
+</div>
+<!-- Overall Readiness Score Card -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container p-space-base shadow-xl">
+<div class="absolute -right-8 -top-8 w-36 h-36 rounded-full bg-secondary-container/10 blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<div class="flex flex-col space-y-1">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary tracking-wider uppercase">Systems Diagnostic</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface flex items-baseline gap-1">
+          96<span class="text-secondary text-[18px] font-label-telemetry-lg">%</span>
+<span class="font-label-telemetry-md text-label-telemetry-md text-secondary ml-1 font-semibold">FLIGHT READY</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">5 checks verified • 1 manual review recommended</p>
+</div>
+<!-- Mini Radial Progress Meter SVG -->
+<div class="relative w-16 h-16 flex items-center justify-center flex-shrink-0">
+<svg class="w-16 h-16 transform -rotate-90" viewbox="0 0 64 64">
+<circle class="text-surface-container-highest" cx="32" cy="32" fill="none" r="28" stroke="currentColor" stroke-width="4.5"></circle>
+<circle class="text-secondary-fixed-dim" cx="32" cy="32" fill="none" r="28" stroke="currentColor" stroke-dasharray="175.9" stroke-dashoffset="7.03" stroke-linecap="round" stroke-width="4.5"></circle>
+</svg>
+<span class="absolute material-symbols-outlined text-secondary text-[22px]">rocket_launch</span>
+</div>
+</div>
+</div>
+<!-- Target Multistream Profile Banner -->
+<div class="rounded-xl bg-surface-container-low p-space-base">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">podcasts</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Target Destination</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-surface-container-highest px-space-xs py-0.5 rounded">SRT DUAL-RELAY</span>
+</div>
+<div class="flex flex-col space-y-2">
+<div class="flex items-center gap-space-sm text-on-surface">
+<div class="flex items-center gap-1 bg-surface-container-high px-space-xs py-1 rounded">
+<span class="material-symbols-outlined text-primary-container text-[16px]">play_circle</span>
+<span class="font-button-text text-button-text">YouTube Live</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">&amp;</span>
+<div class="flex items-center gap-1 bg-surface-container-high px-space-xs py-1 rounded">
+<span class="material-symbols-outlined text-secondary text-[16px]">tv</span>
+<span class="font-button-text text-button-text">Twitch SRT</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<span class="flex items-center gap-1 text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 1080p60
+        </span>
+<span>•</span>
+<span class="text-on-surface">8,500 Kbps CBR</span>
+<span>•</span>
+<span class="text-secondary">HEVC (H.265)</span>
+</div>
+</div>
+</div>
+<!-- Stream Metadata Quick-Confirm Accordion/Card -->
+<div class="rounded-xl bg-surface-container p-space-base space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">badge</span>
+<span class="font-button-text text-button-text text-on-surface">Broadcast Metadata</span>
+</div>
+<button class="flex items-center gap-0.5 font-label-telemetry-sm text-label-telemetry-sm text-secondary active:opacity-75 transition-opacity" type="button">
+<span>Edit</span>
+<span class="material-symbols-outlined text-[14px]">edit</span>
+</button>
+</div>
+<div class="rounded-lg bg-surface-container-lowest p-space-sm flex flex-col space-y-1.5">
+<div class="font-body-md text-body-md text-on-surface font-semibold line-clamp-1">
+        🔴 ROAD TO PREDATOR RANK | Apex Mobile Season 9 | 120 FPS Ultra
+      </div>
+<div class="flex flex-wrap items-center gap-space-xs font-label-telemetry-sm text-label-telemetry-sm">
+<span class="bg-surface-container-high text-on-surface px-1.5 py-0.5 rounded">Apex Legends Mobile</span>
+<span class="bg-surface-container-high text-on-surface-variant px-1.5 py-0.5 rounded">Ranked Grind</span>
+<span class="bg-surface-container-high text-secondary px-1.5 py-0.5 rounded">Audience: Public (All Ages)</span>
+</div>
+</div>
+</div>
+<!-- Diagnostic Checklist Header -->
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-telemetry-md text-label-telemetry-md text-on-surface-variant uppercase tracking-wider">Automated Verification</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">Real-Time Polling</span>
+</div>
+<!-- Verification Checklist Grid / List -->
+<div class="flex flex-col space-y-space-sm">
+<!-- 1. [PASS] Battery & Power -->
+<div class="rounded-xl bg-surface-container p-space-base flex items-center justify-between">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-secondary-container/15 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary text-[20px]">battery_charging_90</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-button-text text-button-text text-on-surface truncate">Battery &amp; Thermal Power</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-surface-container-highest px-1 rounded">84%</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Fast charging • Est. 2h 45m broadcast time</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-secondary-container/20 flex items-center justify-center flex-shrink-0 ml-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">check</span>
+</div>
+</div>
+<!-- 2. [PASS] Network Uplink Speed -->
+<div class="rounded-xl bg-surface-container p-space-base flex items-center justify-between">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-secondary-container/15 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary text-[20px]">wifi_tethering</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-button-text text-button-text text-on-surface truncate">Wi-Fi 6E Uplink Pipeline</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-surface-container-highest px-1 rounded">16ms</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">94.2 Mbps stable • 0.0% packet drop jitter</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-secondary-container/20 flex items-center justify-center flex-shrink-0 ml-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">check</span>
+</div>
+</div>
+<!-- 3. [PASS] Audio Input & DMCA Engine with Live Mini VU Meter -->
+<div class="rounded-xl bg-surface-container p-space-base flex flex-col space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-secondary-container/15 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary text-[20px]">mic</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-button-text text-button-text text-on-surface truncate">Mic Input &amp; DMCA Shield</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-surface-container-highest px-1 rounded">ARMED</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Cardioid Active • Low latency filter active</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-secondary-container/20 flex items-center justify-center flex-shrink-0 ml-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">check</span>
+</div>
+</div>
+<!-- Mini Segmented Dynamic VU Meter Strip -->
+<div class="bg-surface-container-lowest p-2 rounded-lg flex items-center gap-space-xs">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant w-10">-18dB</span>
+<div class="flex-1 flex gap-1 h-2 items-center">
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-tertiary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-surface-container-high"></div>
+<div class="flex-1 h-1.5 rounded-full bg-surface-container-high"></div>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">OPTIMAL</span>
+</div>
+</div>
+<!-- 4. [WARNING / ATTENTION NEEDED] Do Not Disturb (DND) Mode -->
+<div class="rounded-xl bg-tertiary-container/20 p-space-base flex flex-col space-y-space-sm transition-all duration-300" id="dndCard">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-tertiary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-tertiary text-[20px]">notifications_active</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-button-text text-button-text text-tertiary truncate">Do Not Disturb (DND): Inactive</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary-container bg-tertiary px-1 rounded font-bold">WARNING</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mt-1">
+              Incoming WhatsApp, calls, or popups may be captured directly on live video stream!
+            </p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-end">
+<button class="bg-tertiary text-on-tertiary font-button-text text-button-text px-space-base py-1.5 rounded-lg active:scale-95 transition-transform flex items-center gap-1 shadow-sm" id="enableDndBtn" type="button">
+<span class="material-symbols-outlined text-[16px]">do_not_disturb_on</span>
+<span>Enable DND Shield Now</span>
+</button>
+</div>
+</div>
+<!-- 5. [PASS] Privacy & Notification Shield -->
+<div class="rounded-xl bg-surface-container p-space-base flex items-center justify-between">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-secondary-container/15 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary text-[20px]">visibility_off</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-button-text text-button-text text-on-surface truncate">Privacy Mask Engine</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-surface-container-highest px-1 rounded">ON</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Auto-blackout on password inputs &amp; PIN screens</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-secondary-container/20 flex items-center justify-center flex-shrink-0 ml-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">check</span>
+</div>
+</div>
+<!-- 6. [PASS] Video Encoder & Thermals -->
+<div class="rounded-xl bg-surface-container p-space-base flex items-center justify-between">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-secondary-container/15 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary text-[20px]">memory</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-button-text text-button-text text-on-surface truncate">Vulkan Hardware Mux</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-surface-container-highest px-1 rounded">38.5°C</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Nominal SoC temp • GPU clock locked at 60 FPS</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-secondary-container/20 flex items-center justify-center flex-shrink-0 ml-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">check</span>
+</div>
+</div>
+</div>
+<!-- Launch Execution Area -->
+<div class="pt-space-sm flex flex-col space-y-space-sm">
+<!-- Giant Glowing Launch Action -->
+<button class="w-full relative overflow-hidden bg-primary-container text-on-primary-container font-headline-sm text-headline-sm py-3.5 px-space-base rounded-xl shadow-[0_0_24px_rgba(255,81,103,0.45)] active:scale-[0.98] transition-transform flex items-center justify-center gap-space-sm" id="launchLiveBtn" type="button">
+<span class="w-3.5 h-3.5 rounded-full bg-on-primary-container animate-ping absolute left-5 opacity-75"></span>
+<span class="w-3.5 h-3.5 rounded-full bg-on-primary-container relative"></span>
+<span class="tracking-wide uppercase font-bold">Launch Live Multistream</span>
+</button>
+<!-- Secondary Test Rehearsal Button -->
+<button class="w-full bg-surface-container-high text-on-surface font-button-text text-button-text py-3 px-space-base rounded-xl hover:bg-surface-container-highest active:scale-[0.99] transition-all flex items-center justify-center gap-space-xs" type="button">
+<span class="material-symbols-outlined text-secondary text-[18px]">science</span>
+<span>Test Rehearsal (Private Unlisted Test)</span>
+</button>
+</div>
+</div>
+<script>
+  (function() {
+    const dndBtn = document.getElementById('enableDndBtn');
+    const dndCard = document.getElementById('dndCard');
+    
+    if (dndBtn && dndCard) {
+      dndBtn.addEventListener('click', function() {
+        dndCard.className = "rounded-xl bg-surface-container p-space-base flex items-center justify-between transition-all duration-300";
+        dndCard.innerHTML = `
+          <div class="flex items-center gap-space-md min-w-0">
+            <div class="w-9 h-9 rounded-lg bg-secondary-container/15 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-secondary text-[20px]">do_not_disturb_on</span>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <div class="flex items-center gap-space-xs">
+                <span class="font-button-text text-button-text text-on-surface truncate">Do Not Disturb (DND): Active</span>
+                <span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-surface-container-highest px-1 rounded">SHIELD ARMED</span>
+              </div>
+              <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Calls &amp; popups silenced during broadcast</span>
+            </div>
+          </div>
+          <div class="w-6 h-6 rounded-full bg-secondary-container/20 flex items-center justify-center flex-shrink-0 ml-2">
+            <span class="material-symbols-outlined text-secondary text-[16px]">check</span>
+          </div>
+        `;
+      });
+    }
+
+    const launchBtn = document.getElementById('launchLiveBtn');
+    if (launchBtn) {
+      launchBtn.addEventListener('click', function() {
+        launchBtn.innerHTML = `
+          <span class="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+          <span class="tracking-wide uppercase font-bold">Igniting SRT Uplinks...</span>
+        `;
+        setTimeout(function() {
+          launchBtn.classList.remove('bg-primary-container');
+          launchBtn.classList.add('bg-secondary-container', 'text-on-secondary-container');
+          launchBtn.innerHTML = `
+            <span class="material-symbols-outlined text-[20px]">broadcast_on_home</span>
+            <span class="tracking-wide uppercase font-bold">ON AIR • STREAMING</span>
+          `;
+        }, 1200);
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/85 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.5)]" data-active-classes="text-primary-container font-semibold"><div class="flex items-center justify-around h-16 px-space-xs"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="record" href="#"><span class="material-symbols-outlined text-[22px]">fiber_manual_record</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Record</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] transition-colors text-primary-container font-semibold" data-path="live-studio" href="#"><span class="material-symbols-outlined text-[22px]">sensors</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Live</span></a><div class="flex items-center justify-center min-h-[44px] px-1"><a class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-[0_0_16px_rgba(255,81,103,0.4)] active:scale-95 transition-transform hover:brightness-110" data-path="quick-trigger" href="#"><span class="material-symbols-outlined text-[26px]">bolt</span></a></div><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="editor" href="#"><span class="material-symbols-outlined text-[22px]">movie_edit</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Editor</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="tools" href="#"><span class="material-symbols-outlined text-[22px]">tune</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Tools</span></a></div></nav></body></html>

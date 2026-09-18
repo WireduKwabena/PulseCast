@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>PulseCast Studio</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'primary-container': '#ff5167', 'surface-container-lowest': '#090e19', 'on-error': '#690005', 'on-tertiary-fixed': '#281900', 'secondary-fixed': '#9cf0ff', 'error': '#ffb4ab', 'surface-dim': '#0e131e', 'inverse-on-surface': '#2b303c', 'secondary-container': '#00e3fd', 'background': '#0e131e', 'surface-container-low': '#171b27', 'secondary-fixed-dim': '#00daf3', 'tertiary-fixed': '#ffdeac', 'tertiary': '#ffba38', 'on-primary-fixed': '#40000c', 'surface-tint': '#ffb3b5', 'on-surface-variant': '#e6bcbd', 'inverse-surface': '#dee2f2', 'surface-container': '#1b202b', 'on-primary-container': '#5b0015', 'surface-variant': '#303541', 'surface': '#0e131e', 'on-tertiary': '#432c00', 'on-tertiary-container': '#3a2600', 'on-secondary-fixed': '#001f24', 'error-container': '#93000a', 'on-secondary': '#00363d', 'surface-container-highest': '#303541', 'tertiary-fixed-dim': '#ffba38', 'surface-container-high': '#252a36', 'on-primary-fixed-variant': '#920027', 'on-primary': '#680019', 'inverse-primary': '#be0036', 'outline': '#ad8888', 'surface-bright': '#343945', 'on-background': '#dee2f2', 'on-error-container': '#ffdad6', 'on-tertiary-fixed-variant': '#604100', 'tertiary-container': '#c08600', 'primary-fixed': '#ffdada', 'secondary': '#bdf4ff', 'primary': '#ffb3b5', 'primary-fixed-dim': '#ffb3b5', 'on-secondary-fixed-variant': '#004f58', 'on-secondary-container': '#00616d', 'on-surface': '#dee2f2', 'outline-variant': '#5d3f40' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-2xl': '3rem', 'space-lg': '1.5rem', 'space-sm': '0.5rem', 'space-xxs': '0.125rem', 'floating-margin': '1rem', 'space-xl': '2rem', 'safe-bottom-nav': '5rem', 'space-base': '1rem', 'space-xs': '0.25rem', 'space-md': '0.75rem' }, fontFamily: { 'label-telemetry-lg': ['JetBrains Mono'], 'body-lg': ['Inter'], 'headline-lg': ['Space Grotesk'], 'label-telemetry-sm': ['JetBrains Mono'], 'headline-xl': ['Space Grotesk'], 'body-md': ['Inter'], 'headline-xl-mobile': ['Space Grotesk'], 'headline-sm': ['Space Grotesk'], 'label-telemetry-md': ['JetBrains Mono'], 'button-text': ['Inter'], 'body-sm': ['Inter'] }, fontSize: { 'label-telemetry-lg': ['18px', { lineHeight: '22px', letterSpacing: '-0.02em', fontWeight: '700' }], 'body-lg': ['16px', { lineHeight: '24px', fontWeight: '400' }], 'headline-lg': ['24px', { lineHeight: '30px', fontWeight: '600' }], 'label-telemetry-sm': ['11px', { lineHeight: '14px', letterSpacing: '0.02em', fontWeight: '500' }], 'headline-xl': ['32px', { lineHeight: '38px', fontWeight: '700' }], 'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }], 'headline-xl-mobile': ['26px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['18px', { lineHeight: '24px', fontWeight: '600' }], 'label-telemetry-md': ['13px', { lineHeight: '16px', letterSpacing: '-0.01em', fontWeight: '500' }], 'button-text': ['14px', { lineHeight: '18px', letterSpacing: '0.02em', fontWeight: '600' }], 'body-sm': ['12px', { lineHeight: '16px', fontWeight: '400' }] } } } };</script><style>@layer base { html, body { width: 100vw; min-height: 100%; margin: 0; padding: 0; } body { overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 bg-surface-dim/85 backdrop-blur-xl shadow-[0_1px_16px_rgba(0,0,0,0.4)] pt-safe"><div class="h-28 px-4 flex flex-col justify-between py-2"><div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm tracking-wide"><span class="text-on-surface font-medium">10:42</span><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px]">wifi</span><span class="font-label-telemetry-sm text-label-telemetry-sm font-bold text-secondary">5G</span><div class="flex items-center gap-0.5"><span class="font-label-telemetry-sm text-label-telemetry-sm">94%</span><span class="material-symbols-outlined text-[16px] text-primary">battery_charging_full</span></div></div></div><div class="flex items-center justify-between mt-1"><div class="flex items-center gap-2"><img alt="PulseCast Studio Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VG6yOHyqXAjzmyUWMNWuW9X7sztWfzv0qbm8sg6EdYCPt0NO3fEvMyzu3I2wXPpMIr4wBZuWkuKdk78sfv5Uc6rfaA7YLgwhaaAgaN_1sZK1QT5LgV3HT8TX0QT2DTV5BdFSeb32sFOR0L5rkWK4bCwrWw_XqhUB4mbhIDd_7Ei6CBgCYkHtVaxDA_qUHwIwHjRhvacuLQ9oGVkaMEuvRjEb8oKD6Ba-bShG5R9EdRrxT02P0Zmmic"/><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">PulseCast Studio</span><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-tertiary-container/30 text-tertiary font-label-telemetry-sm text-label-telemetry-sm"><span class="material-symbols-outlined text-[13px] mr-0.5">workspace_premium</span>PRO</span></div><div class="flex items-center gap-1 mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-pulse"></span><span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">128 GB Free • ~18h 45m</span></div></div></div><div class="flex items-center gap-2"><button aria-label="Telemetry Monitor" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary active:scale-95 transition-transform"><span class="material-symbols-outlined text-[22px]">equalizer</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-28 pb-safe-bottom-nav bg-surface overflow-x-hidden"><div class="flex flex-col w-full px-4 py-3 space-y-5">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">tune</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Capture Studio Config</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Hardware encoder calibration &amp; HUD gestures</p>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-secondary font-label-telemetry-sm text-label-telemetry-sm tracking-wide">ARM64-v8a</span>
+</div>
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-4 shadow-md space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="flex h-2 w-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-button-text text-button-text text-on-surface">Floating Ball Overlay HUD</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-surface-container-highest px-2 py-0.5 rounded" id="ball-size-badge">MID • 48px</span>
+</div>
+<div class="relative h-44 w-full rounded-lg bg-surface-container-lowest overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-br from-surface-container-high/40 via-surface-container-lowest to-surface-container-low/60"></div>
+<div class="absolute inset-x-8 inset-y-2 rounded-lg bg-surface-dim/80 shadow-lg flex flex-col justify-between p-2">
+<div class="flex items-center justify-between opacity-50">
+<div class="w-12 h-1.5 rounded-full bg-surface-variant"></div>
+<div class="w-4 h-1.5 rounded-full bg-surface-variant"></div>
+</div>
+<div class="flex flex-col items-center justify-center space-y-1 opacity-70">
+<span class="material-symbols-outlined text-secondary text-[26px]">smart_display</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Target Canvas (1440p)</span>
+</div>
+<div class="flex justify-center opacity-40">
+<div class="w-16 h-1 rounded-full bg-surface-variant"></div>
+</div>
+</div>
+<div class="absolute right-9 top-12 transition-all duration-300 flex items-center gap-2" id="interactive-ball-wrap">
+<div class="flex items-center gap-1 bg-surface-container-high/90 backdrop-blur-md rounded-full px-2 py-1 shadow-xl transition-opacity duration-300" id="ball-radial-menu">
+<span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings: 'FILL' 1;">radio_button_checked</span>
+<span class="material-symbols-outlined text-[15px] text-on-surface-variant">draw</span>
+<span class="material-symbols-outlined text-[15px] text-secondary">videocam</span>
+<span class="material-symbols-outlined text-[15px] text-on-surface-variant">photo_camera</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center shadow-[0_0_16px_rgba(0,227,253,0.35)] relative cursor-pointer active:scale-95 transition-transform" id="interactive-ball">
+<span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-surface-container-lowest"></span>
+<span class="material-symbols-outlined text-secondary text-[22px]">blur_on</span>
+</div>
+</div>
+<div class="absolute bottom-2 left-3 flex items-center gap-1.5 bg-surface-container-highest/80 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-tertiary text-[12px]">touch_app</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary">Magnetic Snap: Active</span>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-3 pt-1">
+<div>
+<div class="flex justify-between items-center mb-1.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Ball Scale</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary" id="scale-val">Medium (100%)</span>
+</div>
+<div class="grid grid-cols-3 gap-2 bg-surface-container-lowest p-1 rounded-lg">
+<button class="scale-btn py-1.5 rounded text-center font-button-text text-button-text text-on-surface-variant hover:text-on-surface transition-colors" data-size="sm" onclick="setBallScale('sm')" type="button">Small</button>
+<button class="scale-btn py-1.5 rounded text-center font-button-text text-button-text bg-surface-container-high text-secondary shadow" data-size="md" onclick="setBallScale('md')" type="button">Medium</button>
+<button class="scale-btn py-1.5 rounded text-center font-button-text text-button-text text-on-surface-variant hover:text-on-surface transition-colors" data-size="lg" onclick="setBallScale('lg')" type="button">Large</button>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Idle Opacity</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary" id="opacity-label">85%</span>
+</div>
+<input class="w-full accent-secondary bg-surface-container-lowest rounded-lg h-2 cursor-pointer" id="opacity-slider" max="100" min="30" oninput="updateOpacity(this.value)" type="range" value="85"/>
+</div>
+</div>
+<div class="space-y-2 pt-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Radial Dock Shortcut Modules</span>
+<div class="grid grid-cols-5 gap-1.5">
+<button class="dock-toggle flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container-high text-primary shadow active:scale-95 transition-transform" onclick="toggleShortcut(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">radio_button_checked</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm mt-1 text-on-surface">Record</span>
+</button>
+<button class="dock-toggle flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container-high text-secondary shadow active:scale-95 transition-transform" onclick="toggleShortcut(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">screenshot_monitor</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm mt-1 text-on-surface">Capture</span>
+</button>
+<button class="dock-toggle flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container-high text-tertiary shadow active:scale-95 transition-transform" onclick="toggleShortcut(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">brush</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm mt-1 text-on-surface">Draw</span>
+</button>
+<button class="dock-toggle flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container-high text-secondary shadow active:scale-95 transition-transform" onclick="toggleShortcut(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">picture_in_picture</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm mt-1 text-on-surface">PIP Cam</span>
+</button>
+<button class="dock-toggle flex flex-col items-center justify-center p-2 rounded-lg bg-surface-container-lowest text-on-surface-variant/50 shadow active:scale-95 transition-transform" onclick="toggleShortcut(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">home</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm mt-1 text-on-surface-variant">Home</span>
+</button>
+</div>
+</div>
+<div class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<div class="flex flex-col pr-2">
+<span class="font-button-text text-button-text text-on-surface">Hide Ball During Recording</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Ball completely vanishes when capture starts</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-lowest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
+</label>
+</div>
+<div class="space-y-1.5 pt-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-[18px]">vibration</span>
+<span class="font-button-text text-button-text text-on-surface">Shake to Stop Recording</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary bg-surface-container-highest px-2 py-0.5 rounded" id="shake-badge">Normal</span>
+</div>
+<div class="grid grid-cols-3 gap-2 bg-surface-container-lowest p-1 rounded-lg">
+<button class="shake-btn py-1 rounded text-center font-button-text text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" onclick="setShake('Low')" type="button">Low</button>
+<button class="shake-btn py-1 rounded text-center font-button-text text-body-sm bg-surface-container-high text-tertiary shadow" onclick="setShake('Normal')" type="button">Normal</button>
+<button class="shake-btn py-1 rounded text-center font-button-text text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" onclick="setShake('High')" type="button">High</button>
+</div>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container-low p-4 space-y-4 shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">movie</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Video Encoder &amp; Frame Pacing</h3>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-primary bg-primary-container/20 px-2 py-0.5 rounded">HEVC / H.265</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Master Resolution</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">2560 x 1440 QHD</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="res-btn p-2 rounded-lg bg-surface-container-high text-secondary shadow flex flex-col items-center" onclick="selectRes(this, '2560 x 1440 QHD')" type="button">
+<span class="font-headline-sm text-headline-sm leading-none">2K</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm mt-0.5 text-on-surface">1440p</span>
+</button>
+<button class="res-btn p-2 rounded-lg bg-surface-container-lowest text-on-surface-variant flex flex-col items-center" onclick="selectRes(this, '1920 x 1080 FHD')" type="button">
+<span class="font-headline-sm text-headline-sm leading-none">FHD</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm mt-0.5 text-on-surface-variant">1080p</span>
+</button>
+<button class="res-btn p-2 rounded-lg bg-surface-container-lowest text-on-surface-variant flex flex-col items-center" onclick="selectRes(this, '1280 x 720 HD')" type="button">
+<span class="font-headline-sm text-headline-sm leading-none">HD</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm mt-0.5 text-on-surface-variant">720p</span>
+</button>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Frame Rate Target</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary">V-Sync Locked</span>
+</div>
+<div class="grid grid-cols-5 gap-1.5">
+<button class="fps-btn py-2 rounded-lg bg-surface-container-lowest text-on-surface-variant text-center" onclick="selectFps(this)" type="button">
+<span class="font-label-telemetry-md text-label-telemetry-md block">Auto</span>
+</button>
+<button class="fps-btn py-2 rounded-lg bg-surface-container-lowest text-on-surface-variant text-center" onclick="selectFps(this)" type="button">
+<span class="font-label-telemetry-md text-label-telemetry-md block">30</span>
+</button>
+<button class="fps-btn py-2 rounded-lg bg-surface-container-high text-secondary shadow text-center" onclick="selectFps(this)" type="button">
+<span class="font-label-telemetry-md text-label-telemetry-md block">60</span>
+</button>
+<button class="fps-btn py-2 rounded-lg bg-surface-container-lowest text-on-surface-variant text-center" onclick="selectFps(this)" type="button">
+<span class="font-label-telemetry-md text-label-telemetry-md block">90</span>
+</button>
+<button class="fps-btn py-2 rounded-lg bg-surface-container-lowest text-on-surface-variant text-center" onclick="selectFps(this)" type="button">
+<span class="font-label-telemetry-md text-label-telemetry-md block">120</span>
+</button>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">CBR Video Bitrate</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-primary" id="bitrate-indicator">24 Mbps (Ultra High)</span>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<button class="bitrate-btn py-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm" onclick="selectBitrate(this, 'Auto VBR')" type="button">Auto</button>
+<button class="bitrate-btn py-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm" onclick="selectBitrate(this, '8 Mbps (Standard)')" type="button">8M</button>
+<button class="bitrate-btn py-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm" onclick="selectBitrate(this, '16 Mbps (High)')" type="button">16M</button>
+<button class="bitrate-btn py-1.5 rounded-lg bg-surface-container-high text-primary shadow font-label-telemetry-sm text-label-telemetry-sm" onclick="selectBitrate(this, '24 Mbps (Ultra High)')" type="button">24M</button>
+</div>
+</div>
+<div class="space-y-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Capture Canvas Orientation</span>
+<div class="grid grid-cols-3 gap-2 bg-surface-container-lowest p-1 rounded-lg">
+<button class="orient-btn py-1.5 rounded text-center font-button-text text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" onclick="selectOrient(this)" type="button">Auto</button>
+<button class="orient-btn py-1.5 rounded text-center font-button-text text-body-sm bg-surface-container-high text-secondary shadow" onclick="selectOrient(this)" type="button">Landscape</button>
+<button class="orient-btn py-1.5 rounded text-center font-button-text text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" onclick="selectOrient(this)" type="button">Portrait</button>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container-low p-4 space-y-4 shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">mic</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Audio Routing &amp; AI DSP</h3>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-surface-container-highest px-2 py-0.5 rounded">48kHz • 16-bit</span>
+</div>
+<div class="space-y-2">
+<div class="grid grid-cols-2 gap-2">
+<button class="audio-src-btn p-2.5 rounded-lg bg-surface-container-lowest text-left flex items-center justify-between" onclick="selectAudioSrc(this)" type="button">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">mic_off</span>
+<span class="font-button-text text-button-text text-on-surface-variant">Mute</span>
+</div>
+</button>
+<button class="audio-src-btn p-2.5 rounded-lg bg-surface-container-lowest text-left flex items-center justify-between" onclick="selectAudioSrc(this)" type="button">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">mic</span>
+<span class="font-button-text text-button-text text-on-surface-variant">Mic Only</span>
+</div>
+</button>
+<button class="audio-src-btn p-2.5 rounded-lg bg-surface-container-lowest text-left flex items-center justify-between" onclick="selectAudioSrc(this)" type="button">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">volume_up</span>
+<span class="font-button-text text-button-text text-on-surface-variant">Internal Only</span>
+</div>
+</button>
+<button class="audio-src-btn p-2.5 rounded-lg bg-surface-container-high shadow text-left flex items-center justify-between" onclick="selectAudioSrc(this)" type="button">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">new_window</span>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-secondary">Internal + Mic</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary">PRO DUO</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex flex-col pr-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[18px]">noise_control_off</span>
+<span class="font-button-text text-button-text text-on-surface">AI Neural Noise Cancellation</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Eliminates fan whine &amp; key-clicks in real-time</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-lowest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
+</label>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container-low p-4 space-y-4 shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[20px]">stylus</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Privacy, Brush &amp; Touches</h3>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-lowest space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-button-text text-button-text text-on-surface">Live Screen Brush Styling</span>
+<span class="w-4 h-4 rounded-full bg-primary ring-2 ring-surface-variant" id="brush-preview"></span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<button class="w-7 h-7 rounded-full bg-primary ring-2 ring-on-surface shadow" onclick="setBrushColor('#ffb3b5', this)" type="button"></button>
+<button class="w-7 h-7 rounded-full bg-secondary ring-1 ring-surface-variant hover:scale-110 transition-transform" onclick="setBrushColor('#bdf4ff', this)" type="button"></button>
+<button class="w-7 h-7 rounded-full bg-tertiary ring-1 ring-surface-variant hover:scale-110 transition-transform" onclick="setBrushColor('#ffba38', this)" type="button"></button>
+<button class="w-7 h-7 rounded-full bg-secondary-container ring-1 ring-surface-variant hover:scale-110 transition-transform" onclick="setBrushColor('#00e3fd', this)" type="button"></button>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Width</span>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-1 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-on-surface"></span>
+<span class="w-3.5 h-3.5 rounded-full bg-secondary"></span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex flex-col pr-2">
+<span class="font-button-text text-button-text text-on-surface">Studio Privacy Watermark</span>
+<span class="font-body-sm text-body-sm text-tertiary">No Watermark • Lifetime Pro Active</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-lowest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-surface after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-secondary text-[22px]">touch_app</span>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface">Show Tap Pointer Bubbles</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Developer Options &gt; Show Taps Bridge</span>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded bg-surface-container-high text-secondary font-button-text text-body-sm hover:bg-surface-bright active:scale-95 transition-all" type="button">Setup</button>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container-low p-4 space-y-3 shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">hard_drive</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Storage Destination</h3>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">UFS 3.1 • 850 MB/s</span>
+</div>
+<div class="space-y-2">
+<div class="p-3 rounded-lg bg-surface-container-high shadow flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-[24px]">phone_android</span>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface">Internal Flash Storage</span>
+<span class="font-body-sm text-body-sm text-secondary">112.4 GB Free (18h 45m at 24Mbps)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[20px]">radio_button_checked</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-lowest opacity-75 flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant text-[24px]">sd_card</span>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface-variant">MicroSD Card (SanDisk Extreme)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">482.0 GB Free • V30 Speed Class</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">radio_button_unchecked</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-secondary to-primary h-full w-[38%]"></div>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span>PulseCast Media: 14.2 GB</span>
+<span>Total System: 38% Full</span>
+</div>
+</div>
+<div class="pt-1 pb-4">
+<button class="w-full py-3.5 px-4 rounded-xl bg-primary-container text-on-primary font-button-text text-button-text shadow-[0_0_20px_rgba(255,81,103,0.35)] flex items-center justify-center gap-2 active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">save</span>
+<span>Apply Studio Configuration</span>
+</button>
+</div>
+</div>
+<script>
+  function updateOpacity(val) {
+    const interactiveBall = document.getElementById('interactive-ball');
+    const opacityLabel = document.getElementById('opacity-label');
+    if (interactiveBall && opacityLabel) {
+      interactiveBall.style.opacity = (val / 100);
+      opacityLabel.textContent = val + '%';
+    }
+  }
+
+  function setBallScale(size) {
+    const ball = document.getElementById('interactive-ball');
+    const badge = document.getElementById('ball-size-badge');
+    const label = document.getElementById('scale-val');
+    const buttons = document.querySelectorAll('.scale-btn');
+
+    buttons.forEach(btn => {
+      if (btn.getAttribute('data-size') === size) {
+        btn.className = 'scale-btn py-1.5 rounded text-center font-button-text text-button-text bg-surface-container-high text-secondary shadow';
+      } else {
+        btn.className = 'scale-btn py-1.5 rounded text-center font-button-text text-button-text text-on-surface-variant hover:text-on-surface transition-colors';
+      }
+    });
+
+    if (!ball || !badge || !label) return;
+
+    if (size === 'sm') {
+      ball.style.width = '36px';
+      ball.style.height = '36px';
+      badge.textContent = 'MINI \u2022 36px';
+      label.textContent = 'Small (75%)';
+    } else if (size === 'md') {
+      ball.style.width = '48px';
+      ball.style.height = '48px';
+      badge.textContent = 'MID \u2022 48px';
+      label.textContent = 'Medium (100%)';
+    } else if (size === 'lg') {
+      ball.style.width = '58px';
+      ball.style.height = '58px';
+      badge.textContent = 'PRO \u2022 58px';
+      label.textContent = 'Large (120%)';
+    }
+  }
+
+  function toggleShortcut(btn) {
+    const icon = btn.querySelector('.material-symbols-outlined');
+    const isDeactivated = btn.classList.contains('bg-surface-container-lowest');
+    
+    if (isDeactivated) {
+      btn.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant/50');
+      btn.classList.add('bg-surface-container-high', 'text-secondary', 'shadow');
+    } else {
+      btn.classList.remove('bg-surface-container-high', 'text-secondary', 'text-primary', 'text-tertiary', 'shadow');
+      btn.classList.add('bg-surface-container-lowest', 'text-on-surface-variant/50');
+    }
+  }
+
+  function setShake(level) {
+    const badge = document.getElementById('shake-badge');
+    if (badge) badge.textContent = level;
+    document.querySelectorAll('.shake-btn').forEach(b => {
+      if (b.textContent.trim() === level) {
+        b.className = 'shake-btn py-1 rounded text-center font-button-text text-body-sm bg-surface-container-high text-tertiary shadow';
+      } else {
+        b.className = 'shake-btn py-1 rounded text-center font-button-text text-body-sm text-on-surface-variant hover:text-on-surface transition-colors';
+      }
+    });
+  }
+
+  function selectRes(btn, label) {
+    document.querySelectorAll('.res-btn').forEach(b => {
+      b.className = 'res-btn p-2 rounded-lg bg-surface-container-lowest text-on-surface-variant flex flex-col items-center';
+      const spans = b.querySelectorAll('span');
+      if (spans[1]) spans[1].className = 'font-label-telemetry-sm text-label-telemetry-sm mt-0.5 text-on-surface-variant';
+    });
+    btn.className = 'res-btn p-2 rounded-lg bg-surface-container-high text-secondary shadow flex flex-col items-center';
+    const activeSpans = btn.querySelectorAll('span');
+    if (activeSpans[1]) activeSpans[1].className = 'font-label-telemetry-sm text-label-telemetry-sm mt-0.5 text-on-surface';
+  }
+
+  function selectFps(btn) {
+    document.querySelectorAll('.fps-btn').forEach(b => {
+      b.className = 'fps-btn py-2 rounded-lg bg-surface-container-lowest text-on-surface-variant text-center';
+    });
+    btn.className = 'fps-btn py-2 rounded-lg bg-surface-container-high text-secondary shadow text-center';
+  }
+
+  function selectBitrate(btn, label) {
+    document.querySelectorAll('.bitrate-btn').forEach(b => {
+      b.className = 'bitrate-btn py-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm';
+    });
+    btn.className = 'bitrate-btn py-1.5 rounded-lg bg-surface-container-high text-primary shadow font-label-telemetry-sm text-label-telemetry-sm';
+    const ind = document.getElementById('bitrate-indicator');
+    if (ind) ind.textContent = label;
+  }
+
+  function selectOrient(btn) {
+    document.querySelectorAll('.orient-btn').forEach(b => {
+      b.className = 'orient-btn py-1.5 rounded text-center font-button-text text-body-sm text-on-surface-variant hover:text-on-surface transition-colors';
+    });
+    btn.className = 'orient-btn py-1.5 rounded text-center font-button-text text-body-sm bg-surface-container-high text-secondary shadow';
+  }
+
+  function selectAudioSrc(btn) {
+    document.querySelectorAll('.audio-src-btn').forEach(b => {
+      b.className = 'audio-src-btn p-2.5 rounded-lg bg-surface-container-lowest text-left flex items-center justify-between';
+      const check = b.querySelector('.material-symbols-outlined:last-child');
+      if (check && check.textContent.includes('check_circle')) check.remove();
+    });
+    btn.className = 'audio-src-btn p-2.5 rounded-lg bg-surface-container-high shadow text-left flex items-center justify-between';
+    if (!btn.querySelector('.material-symbols-outlined:last-child.check_icon')) {
+      const checkIcon = document.createElement('span');
+      checkIcon.className = 'material-symbols-outlined text-secondary text-[16px] check_icon';
+      checkIcon.textContent = 'check_circle';
+      btn.appendChild(checkIcon);
+    }
+  }
+
+  function setBrushColor(hex, el) {
+    const preview = document.getElementById('brush-preview');
+    if (preview) preview.style.backgroundColor = hex;
+    el.parentElement.querySelectorAll('button').forEach(b => {
+      b.classList.remove('ring-2', 'ring-on-surface');
+      b.classList.add('ring-1', 'ring-surface-variant');
+    });
+    el.classList.remove('ring-1', 'ring-surface-variant');
+    el.classList.add('ring-2', 'ring-on-surface');
+  }
+
+  const ballElement = document.getElementById('interactive-ball');
+  if (ballElement) {
+    ballElement.addEventListener('click', function() {
+      const menu = document.getElementById('ball-radial-menu');
+      if (menu) {
+        menu.classList.toggle('opacity-0');
+        menu.classList.toggle('pointer-events-none');
+      }
+    });
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-dim/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.6)]" data-active-classes="text-primary-container font-semibold"><div class="relative flex items-center justify-around h-16 px-2"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="capture-hub" href="#"><span class="material-symbols-outlined text-[24px]">videocam</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Record</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="live-multistream-studio" href="#"><span class="material-symbols-outlined text-[24px]">cell_tower</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Live</span></a><div class="relative -top-5 flex flex-col items-center"><button aria-label="Instant Record Action" class="relative w-14 h-14 rounded-full bg-primary-container text-on-primary shadow-[0_0_24px_rgba(255,81,103,0.55)] flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"><span class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30 pointer-events-none"></span><span class="material-symbols-outlined text-[28px] leading-none">radio_button_checked</span></button></div><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="timeline-editor" href="#"><span class="material-symbols-outlined text-[24px]">movie_edit</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Editor</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 transition-colors text-primary-container font-semibold" data-path="tools-and-floating-ball-settings" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Tools</span></a></div><div class="w-full flex justify-center pb-1.5"><div class="w-32 h-1 bg-surface-variant/80 rounded-full"></div></div></nav></body></html>

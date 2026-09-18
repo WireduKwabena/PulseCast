@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#0e131e;color:#dee2f2;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-highest": "#303541", "on-secondary-fixed-variant": "#004f58", "primary-fixed": "#ffdada", "tertiary": "#ffba38", "on-background": "#dee2f2", "on-error": "#690005", "surface-container-lowest": "#090e19", "primary-fixed-dim": "#ffb3b5", "on-secondary-fixed": "#001f24", "on-tertiary-fixed-variant": "#604100", "on-tertiary": "#432c00", "inverse-surface": "#dee2f2", "on-primary-container": "#5b0015", "tertiary-container": "#c08600", "on-primary-fixed": "#40000c", "error-container": "#93000a", "tertiary-fixed": "#ffdeac", "secondary-container": "#00e3fd", "surface-tint": "#ffb3b5", "inverse-primary": "#be0036", "surface-dim": "#0e131e", "on-tertiary-container": "#3a2600", "primary": "#ffb3b5", "surface": "#0e131e", "secondary": "#bdf4ff", "surface-container-high": "#252a36", "tertiary-fixed-dim": "#ffba38", "secondary-fixed": "#9cf0ff", "error": "#ffb4ab", "outline": "#ad8888", "on-surface-variant": "#e6bcbd", "secondary-fixed-dim": "#00daf3", "on-primary": "#680019", "primary-container": "#ff5167", "background": "#0e131e", "on-surface": "#dee2f2", "inverse-on-surface": "#2b303c", "on-primary-fixed-variant": "#920027", "on-error-container": "#ffdad6", "surface-container": "#1b202b", "on-secondary-container": "#00616d", "surface-variant": "#303541", "surface-container-low": "#171b27", "surface-bright": "#343945", "on-secondary": "#00363d", "on-tertiary-fixed": "#281900", "outline-variant": "#5d3f40" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-md": "0.75rem", "space-xs": "0.25rem", "safe-bottom-nav": "5rem", "space-base": "1rem", "space-xxs": "0.125rem", "floating-margin": "1rem", "space-xl": "2rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-2xl": "3rem" }, "fontFamily": { "headline-xl": ["Space Grotesk"], "headline-sm": ["Space Grotesk"], "button-text": ["Inter"], "body-lg": ["Inter"], "headline-lg": ["Space Grotesk"], "label-telemetry-md": ["JetBrains Mono"], "body-sm": ["Inter"], "label-telemetry-sm": ["JetBrains Mono"], "label-telemetry-lg": ["JetBrains Mono"], "headline-xl-mobile": ["Space Grotesk"], "body-md": ["Inter"] }, "fontSize": { "headline-xl": ["32px", { "lineHeight": "38px", "fontWeight": "700" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "button-text": ["14px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-lg": ["24px", { "lineHeight": "30px", "fontWeight": "600" }], "label-telemetry-md": ["13px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "label-telemetry-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "label-telemetry-lg": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-xl-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface-container-lowest/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 px-space-base flex flex-col justify-center gap-space-xxs"><div class="flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #ff2d55
+- Font: spaceGrotesk
+- Mode: dark
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7p8g8xRc0urgX-M7Lgx3g4qgMpuTf17Phflm2eeMw0L06yZ0VRMnJy7g3am-SIZiQnE88fDAwG82vLECXbNYkYZBqjVrl-YpUFHkzjBUssNA5XA1OsUOn5Ibr1KYcAnwOVyO50yuVTsaOvOfIYTHsaLvu5lfpinVQuCvgDIL-pyPgV6VHMuCGouYbdO8tBoKB1tjuhVfrP1SlYg-vHZlfavGGnuSOwFEkbe6t-gDZfg735DdsU7I"/><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">PulseCast</span><span class="px-space-xs py-0.5 rounded bg-primary-container/20 text-primary font-label-telemetry-sm text-label-telemetry-sm uppercase tracking-wider font-bold">PRO</span></div></div><div class="flex items-center gap-space-sm"><button aria-label="Telemetry Diagnostics" class="w-11 h-11 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined">equalizer</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div><div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="text-on-surface">128 GB Free • ~18h 45m</span></div><div class="flex items-center gap-space-xs text-primary font-medium"><span class="material-symbols-outlined text-[14px]">hdr_auto</span><span>Studio Tools</span></div></div></div></header><main class="flex flex-col relative w-full pt-20 pb-safe-bottom-nav bg-surface flex-grow min-h-screen"><div class="flex flex-col w-full px-space-base gap-space-lg pb-space-2xl">
+<!-- Screen Header Sub-strip -->
+<div class="flex flex-col gap-space-xs mt-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_10px_rgba(0,227,253,0.8)]"></span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm uppercase tracking-widest text-secondary font-bold">Audio Engine &amp; DSP Core</span>
+</div>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-highest text-secondary-fixed font-label-telemetry-sm text-label-telemetry-sm">4.2 ms LATENCY</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span>24-Bit / 48kHz PCM Floating Point</span>
+<span class="flex items-center gap-1 text-primary-container font-semibold">
+<span class="material-symbols-outlined text-[14px]">shield_with_heart</span>
+        DMCA Filter Hardware Mode
+      </span>
+</div>
+</div>
+<!-- Master Broadcast Output Card & Dual VU Segmented Meters -->
+<div class="flex flex-col p-space-base rounded-xl bg-surface-container-low shadow-xl gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]">graphic_eq</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Master Output Bus</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">L/R Broadcast Stream Target</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<div class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm uppercase transition-all duration-150" id="clip-indicator">
+          CLIP LIMITER
+        </div>
+<span class="font-label-telemetry-lg text-label-telemetry-lg text-on-surface font-bold ml-1">-1.2 <span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">dB</span></span>
+</div>
+</div>
+<!-- Dual Stereo LED Peak VU Bars (Segmented Hardware Mixers) -->
+<div class="flex flex-col gap-1.5 p-space-sm rounded-lg bg-surface-container-lowest">
+<!-- Channel L -->
+<div class="flex items-center gap-space-sm">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant w-3">L</span>
+<div class="flex-grow grid grid-cols-24 gap-0.5 h-3.5 items-center" id="vu-meter-l">
+<!-- Green Safe Zones (1-16) -->
+<div class="h-full rounded-xs bg-secondary-container opacity-90 shadow-[0_0_4px_rgba(0,227,253,0.5)]"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<!-- Amber Caution Zones (17-20) -->
+<div class="h-full rounded-xs bg-tertiary opacity-90 shadow-[0_0_4px_rgba(255,186,56,0.5)]"></div>
+<div class="h-full rounded-xs bg-tertiary opacity-90"></div>
+<div class="h-full rounded-xs bg-tertiary opacity-90"></div>
+<div class="h-full rounded-xs bg-tertiary opacity-90"></div>
+<!-- Red Peak Clipping Zone (21-24) -->
+<div class="h-full rounded-xs bg-primary-container opacity-90 shadow-[0_0_6px_rgba(255,81,103,0.8)]"></div>
+<div class="h-full rounded-xs bg-primary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-surface-container-highest opacity-40"></div>
+<div class="h-full rounded-xs bg-surface-container-highest opacity-40"></div>
+</div>
+</div>
+<!-- Channel R -->
+<div class="flex items-center gap-space-sm">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant w-3">R</span>
+<div class="flex-grow grid grid-cols-24 gap-0.5 h-3.5 items-center" id="vu-meter-r">
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-secondary-container opacity-90"></div>
+<div class="h-full rounded-xs bg-surface-container-highest opacity-40"></div>
+<!-- Amber Caution Zones -->
+<div class="h-full rounded-xs bg-tertiary opacity-90"></div>
+<div class="h-full rounded-xs bg-tertiary opacity-90"></div>
+<div class="h-full rounded-xs bg-tertiary opacity-90"></div>
+<div class="h-full rounded-xs bg-surface-container-highest opacity-40"></div>
+<!-- Red Peak Clipping Zone -->
+<div class="h-full rounded-xs bg-surface-container-highest opacity-40"></div>
+<div class="h-full rounded-xs bg-surface-container-highest opacity-40"></div>
+<div class="h-full rounded-xs bg-surface-container-highest opacity-40"></div>
+<div class="h-full rounded-xs bg-surface-container-highest opacity-40"></div>
+</div>
+</div>
+<!-- Decibel Scale markings -->
+<div class="flex justify-between text-[9px] font-label-telemetry-sm text-on-surface-variant px-5 mt-0.5">
+<span>-∞</span>
+<span>-24</span>
+<span>-12</span>
+<span>-6</span>
+<span>-3</span>
+<span>0</span>
+<span class="text-primary-container font-bold">+6 dB</span>
+</div>
+</div>
+<!-- Master Fader & Quick Actions -->
+<div class="flex items-center gap-space-md pt-space-xs">
+<button class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-error-container hover:text-on-error-container active:scale-95 transition-all shadow-md" id="master-mute">
+<span class="material-symbols-outlined text-[24px]">volume_up</span>
+</button>
+<div class="flex-grow flex flex-col gap-1">
+<div class="flex justify-between font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">
+<span>Master Broadcast Fader</span>
+<span class="text-on-surface font-semibold">92%</span>
+</div>
+<input class="w-full accent-primary-container h-2 bg-surface-container-highest rounded-lg cursor-pointer" max="100" min="0" type="range" value="92"/>
+</div>
+</div>
+</div>
+<!-- Multi-Track Audio Channels Header -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">instant_mix</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Live Channel Strips</h2>
+</div>
+<span class="px-space-xs py-0.5 rounded bg-surface-container text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">4 TRACKS DIRECT</span>
+</div>
+<!-- Track 1: Game Sound -->
+<div class="p-space-base rounded-xl bg-surface-container-low flex flex-col gap-space-md shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]">sports_esports</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Game Audio</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Loopback DSP Target</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary font-label-telemetry-sm text-label-telemetry-sm font-semibold">HW LOOP</span>
+<button class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+</div>
+</div>
+<!-- Preset Filter & Pan -->
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="px-2.5 py-1 rounded bg-secondary/10 text-secondary font-label-telemetry-sm text-label-telemetry-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">hearing</span>
+        FPS Bass Boost / Footsteps
+      </span>
+<span class="px-2 py-1 rounded bg-surface-container-highest text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">High-Pass 80Hz</span>
+</div>
+<!-- Volume & Stereo Pan -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex items-center gap-space-md">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant w-14">Vol (85%)</span>
+<input class="flex-grow accent-secondary h-1.5 bg-surface-container-highest rounded-lg cursor-pointer" max="100" min="0" type="range" value="85"/>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold w-12 text-right">-3.5 dB</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant w-14">Pan (C)</span>
+<input class="flex-grow accent-on-surface-variant h-1 bg-surface-container-highest rounded-lg cursor-pointer" max="50" min="-50" type="range" value="0"/>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant w-12 text-right">L0 / R0</span>
+</div>
+</div>
+</div>
+<!-- Track 2: Streamer Mic -->
+<div class="p-space-base rounded-xl bg-surface-container-low flex flex-col gap-space-md shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[18px]">mic</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Streamer Mic</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Studio Voice (Cardioid USB-C)</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="px-2.5 py-1 rounded bg-surface-container font-label-telemetry-sm text-label-telemetry-sm text-on-surface hover:bg-tertiary-container hover:text-on-tertiary active:scale-95 font-bold transition-all">SOLO</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-on-surface hover:bg-error hover:text-on-error transition-all">
+<span class="material-symbols-outlined text-[16px]">mic_off</span>
+</button>
+</div>
+</div>
+<!-- Active DSP Modifiers Badges -->
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="px-2 py-1 rounded bg-primary-container/20 text-primary font-label-telemetry-sm text-label-telemetry-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+        AI De-Noise Active
+      </span>
+<span class="px-2 py-1 rounded bg-surface-container-highest text-on-surface font-label-telemetry-sm text-label-telemetry-sm font-medium">Gate -42dB</span>
+<span class="px-2 py-1 rounded bg-surface-container-highest text-on-surface font-label-telemetry-sm text-label-telemetry-sm font-medium">Compressor 3:1</span>
+</div>
+<!-- Gain slider -->
+<div class="flex items-center gap-space-md pt-space-xs">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant w-14">Gain (95%)</span>
+<input class="flex-grow accent-primary-container h-1.5 bg-surface-container-highest rounded-lg cursor-pointer" max="100" min="0" type="range" value="95"/>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-primary font-bold w-12 text-right">+2.1 dB</span>
+</div>
+</div>
+<!-- Track 3: Discord / Voice Comms -->
+<div class="p-space-base rounded-xl bg-surface-container-low flex flex-col gap-space-md shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[18px]">forum</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Discord Comms</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Party Audio • Auto-Duck Target</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-tertiary font-label-telemetry-sm text-label-telemetry-sm">TRACK 3</span>
+</div>
+<!-- Auto-Ducking Module -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[16px]">low_priority</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-medium">Smart Voice Ducking</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold">-40% ON MIC ACTIVITY</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant w-14">Level (75%)</span>
+<input class="flex-grow accent-tertiary h-1.5 bg-surface-container-highest rounded-lg cursor-pointer" max="100" min="0" type="range" value="75"/>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-bold w-12 text-right">-5.8 dB</span>
+</div>
+</div>
+<!-- Track 4: Music & Media (Protected Track) -->
+<div class="p-space-base rounded-xl bg-surface-container-low flex flex-col gap-space-md shadow-md relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">music_note</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Music / Media</span>
+<span class="material-symbols-outlined text-primary text-[14px]">gpp_good</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Spotify / Apple Music Feed</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary font-label-telemetry-sm text-label-telemetry-sm font-bold shadow-[0_0_8px_rgba(255,81,103,0.5)]">
+        LIVE ONLY
+      </span>
+</div>
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span class="material-symbols-outlined text-[14px] text-primary">block</span>
+<span>Stripped from Twitch/YouTube VOD</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">CH 6 Routed</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant w-14">Level (45%)</span>
+<input class="flex-grow accent-primary h-1.5 bg-surface-container-highest rounded-lg cursor-pointer" max="100" min="0" type="range" value="45"/>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant font-bold w-12 text-right">-12.4 dB</span>
+</div>
+</div>
+<!-- DMCA Shield Routing Matrix -->
+<div class="p-space-base rounded-xl bg-surface-container-low flex flex-col gap-space-md shadow-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">verified_user</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">DMCA Shield Matrix</h2>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/20 text-secondary-fixed font-label-telemetry-sm text-label-telemetry-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+        HARDWARE ACTIVE
+      </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+      Dual-track dynamic routing strips copyrighted audio tracks in real-time from Twitch VODs, YouTube recordings, and automatic highlight clips.
+    </p>
+<!-- Matrix Table visual -->
+<div class="flex flex-col rounded-lg bg-surface-container-lowest p-space-sm gap-2">
+<div class="grid grid-cols-5 text-center font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant pb-1">
+<span class="text-left pl-1">Destination</span>
+<span>Game</span>
+<span>Mic</span>
+<span>Voice</span>
+<span>Music</span>
+</div>
+<!-- Row 1: Live Broadcast Output -->
+<div class="grid grid-cols-5 items-center text-center p-space-xs rounded bg-surface-container-high font-label-telemetry-sm text-label-telemetry-sm">
+<div class="flex items-center gap-1 text-left pl-1 min-w-0">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-on-surface font-semibold truncate">Live Broadcast</span>
+</div>
+<span class="text-secondary font-bold">✓</span>
+<span class="text-secondary font-bold">✓</span>
+<span class="text-secondary font-bold">✓</span>
+<span class="text-secondary font-bold">✓</span>
+</div>
+<!-- Row 2: VOD Master Vault -->
+<div class="grid grid-cols-5 items-center text-center p-space-xs rounded bg-surface-container-high font-label-telemetry-sm text-label-telemetry-sm">
+<div class="flex items-center gap-1 text-left pl-1 min-w-0">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="text-on-surface font-semibold truncate">VOD / Replays</span>
+</div>
+<span class="text-secondary font-bold">✓</span>
+<span class="text-secondary font-bold">✓</span>
+<span class="text-secondary font-bold">✓</span>
+<span class="text-primary-container font-bold bg-primary-container/20 rounded py-0.5">✕ Shield</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs p-space-xs rounded bg-primary-container/10 text-primary font-label-telemetry-sm text-label-telemetry-sm">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span>Strike Protection: 100% Safe VOD storage guarantee enabled.</span>
+</div>
+</div>
+<!-- Live Sound FX & SFX Soundboard Quick Deck -->
+<div class="p-space-base rounded-xl bg-surface-container-low flex flex-col gap-space-md shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px]">grid_view</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">SFX Quick Deck</h2>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Trim</span>
+<input class="w-16 accent-tertiary h-1 bg-surface-container-highest rounded cursor-pointer" max="100" min="0" type="range" value="80"/>
+</div>
+</div>
+<!-- 6 Interactive Sound Trigger Pads -->
+<div class="grid grid-cols-3 gap-space-sm" id="sfx-deck">
+<button class="sfx-pad flex flex-col items-center justify-center p-space-sm rounded-xl bg-surface-container-high hover:bg-secondary/20 active:scale-95 transition-all text-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">celebration</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-semibold">Victory Horn</span>
+</button>
+<button class="sfx-pad flex flex-col items-center justify-center p-space-sm rounded-xl bg-surface-container-high hover:bg-primary-container/20 active:scale-95 transition-all text-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-primary-container text-[22px]">campaign</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-semibold">Airhorn</span>
+</button>
+<button class="sfx-pad flex flex-col items-center justify-center p-space-sm rounded-xl bg-surface-container-high hover:bg-tertiary/20 active:scale-95 transition-all text-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-tertiary text-[22px]">thumb_up</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-semibold">Clutch Clap</span>
+</button>
+<button class="sfx-pad flex flex-col items-center justify-center p-space-sm rounded-xl bg-surface-container-high hover:bg-error/20 active:scale-95 transition-all text-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-error text-[22px]">volume_off</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-semibold">Censor Bleep</span>
+</button>
+<button class="sfx-pad flex flex-col items-center justify-center p-space-sm rounded-xl bg-surface-container-high hover:bg-secondary/20 active:scale-95 transition-all text-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">album</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-semibold">Dram Drum</span>
+</button>
+<button class="sfx-pad flex flex-col items-center justify-center p-space-sm rounded-xl bg-surface-container-high hover:bg-tertiary/20 active:scale-95 transition-all text-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-tertiary text-[22px]">sentiment_very_satisfied</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface font-semibold">GG Sound</span>
+</button>
+</div>
+</div>
+<!-- Profile & Preset Action Bar -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<button class="flex-grow py-3 px-space-base rounded-xl bg-primary-container text-on-primary font-button-text text-button-text flex items-center justify-center gap-space-xs shadow-[0_0_16px_rgba(255,81,103,0.5)] hover:shadow-[0_0_24px_rgba(255,81,103,0.8)] active:scale-98 transition-all">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+        Apply Audio Profile
+      </button>
+<button class="py-3 px-space-md rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-container-highest active:scale-95 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">save</span>
+</button>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm px-1">
+<span>Active Preset: FPS Gamer Master</span>
+<span class="text-secondary">Low Jitter DSP Synced</span>
+</div>
+</div>
+</div>
+<script>
+  // Simple playful visual interaction for soundboard and limiter simulation
+  document.querySelectorAll('.sfx-pad').forEach(pad => {
+    pad.addEventListener('click', () => {
+      pad.classList.add('scale-95', 'bg-surface-container-highest');
+      setTimeout(() => {
+        pad.classList.remove('scale-95', 'bg-surface-container-highest');
+      }, 150);
+    });
+  });
+
+  const masterMuteBtn = document.getElementById('master-mute');
+  if (masterMuteBtn) {
+    masterMuteBtn.addEventListener('click', () => {
+      const icon = masterMuteBtn.querySelector('.material-symbols-outlined');
+      if (icon.textContent === 'volume_up') {
+        icon.textContent = 'volume_off';
+        masterMuteBtn.classList.remove('bg-surface-container-highest');
+        masterMuteBtn.classList.add('bg-error-container', 'text-on-error-container');
+      } else {
+        icon.textContent = 'volume_up';
+        masterMuteBtn.classList.add('bg-surface-container-highest');
+        masterMuteBtn.classList.remove('bg-error-container', 'text-on-error-container');
+      }
+    });
+  }
+
+  // Peak limiter flicker micro-interaction simulation
+  const clipBadge = document.getElementById('clip-indicator');
+  if (clipBadge) {
+    setInterval(() => {
+      if (Math.random() > 0.8) {
+        clipBadge.classList.remove('bg-surface-container-highest', 'text-on-surface-variant');
+        clipBadge.classList.add('bg-primary-container', 'text-on-primary');
+        setTimeout(() => {
+          clipBadge.classList.add('bg-surface-container-highest', 'text-on-surface-variant');
+          clipBadge.classList.remove('bg-primary-container', 'text-on-primary');
+        }, 300);
+      }
+    }, 2200);
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.5)]" data-active-classes="text-primary [&amp;&gt;span:first-child]:drop-shadow-[0_0_8px_rgba(255,81,103,0.6)] font-semibold"><div class="flex items-center justify-between px-space-md h-16 relative"><a class="flex flex-col items-center justify-center min-w-[56px] h-14 gap-space-xxs text-on-surface-variant hover:text-on-surface transition-all" data-path="record" href="#"><span class="material-symbols-outlined text-[24px]">videocam</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Record</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-14 gap-space-xxs text-on-surface-variant hover:text-on-surface transition-all relative" data-path="live-broadcast" href="#"><span class="material-symbols-outlined text-[24px]">sensors</span><span class="font-label-telemetry-sm text-label-telemetry-sm flex items-center gap-1">Live<span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-ping inline-block"></span></span></a><div class="relative flex items-center justify-center -top-5"><a aria-label="Quick Capture" class="w-14 h-14 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-[0_0_20px_rgba(255,45,85,0.6)] hover:shadow-[0_0_28px_rgba(255,45,85,0.9)] hover:scale-105 active:scale-95 transition-all" data-path="active-session" href="#"><span class="material-symbols-outlined text-[30px]">radio_button_checked</span></a></div><a class="flex flex-col items-center justify-center min-w-[56px] h-14 gap-space-xxs text-on-surface-variant hover:text-on-surface transition-all" data-path="timeline-editor" href="#"><span class="material-symbols-outlined text-[24px]">movie_edit</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Editor</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] h-14 gap-space-xxs transition-all text-primary [&amp;&gt;span:first-child]:drop-shadow-[0_0_8px_rgba(255,81,103,0.6)] font-semibold" data-path="studio-tools" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Tools</span></a></div></nav></body></html>

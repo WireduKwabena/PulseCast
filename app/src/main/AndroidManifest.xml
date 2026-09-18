@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Core recording permissions -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Live_streaming (Phase 3) — RTMP publishing needs actual network access. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Required specifically since Android 14 (API 34) — declaring just
+         FOREGROUND_SERVICE is no longer enough for a mediaProjection-type
+         foreground service; omitting this throws SecurityException at
+         startForeground() time on 14+, a real and common crash cause. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <!-- Required since Android 13 (API 33) to show the mandatory foreground
+         service notification at all — without it, startForeground() still
+         succeeds but the user never sees the notification. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Floating bubble controls (pause/resume/stop while recording). -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- Face-cam bubble (Phase 2). -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+
+    <!-- Touch visualization (Phase 2) — toggles the OS "Show taps" developer
+         option (Settings.System.SHOW_TOUCHES). This is a signature-level
+         permission: declaring it here does NOT grant it. There is no public
+         Android API for a third-party app to draw touch indicators over
+         OTHER apps' screens — this is the actual, documented mechanism
+         legitimate screen recorders use instead, and it only works after
+         the user (or a developer during testing) runs:
+             adb shell pm grant <applicationId> android.permission.WRITE_SECURE_SETTINGS
+         Without that grant, TouchVisualization falls back to opening
+         Developer Options so the user can flip "Show taps" on manually. -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Required since Android 14 (API 34) for the face-cam bubble's own
+         foreground service — mirrors FOREGROUND_SERVICE_MEDIA_PROJECTION's
+         requirement above, same reasoning. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+
+    <!-- NOT requesting WRITE_EXTERNAL_STORAGE: recordings are saved via the
+         MediaStore API (see SaveLocation.kt), which works correctly under
+         scoped storage on Android 10+ without needing this permission at
+         all. Requesting it unnecessarily is itself a source of the
+         permission-flow bugs and crashes users hit on other recorder apps. -->
+
+    <!-- Only needed for the legacy (pre-scoped-storage) save path on
+         Android 9 and below — see SaveLocation.kt. Capped at API 28 so it
+         has no effect at all on 29+, where MediaStore is used instead and
+         this permission is neither needed nor, in most configurations,
+         actually granted. -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <application
+        android:name=".PulseCastStudioApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PulseCast">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PulseCast"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".service.ScreenRecordService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+        <service
+            android:name=".service.OverlayControlsService"
+            android:exported="false" />
+
+        <!-- android:foregroundServiceType="camera" is what exempts this
+             service's camera access from Android 9+'s background-camera
+             restriction, since MainActivity finishes itself once recording
+             starts, leaving no visible Activity for the app. -->
+        <service
+            android:name=".service.FaceCamOverlayService"
+            android:exported="false"
+            android:foregroundServiceType="camera" />
+
+        <service
+            android:name=".service.LiveHUDOverlayService"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

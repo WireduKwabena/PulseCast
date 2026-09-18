@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>PulseCast Studio</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'primary-container': '#ff5167', 'surface-container-lowest': '#090e19', 'on-error': '#690005', 'on-tertiary-fixed': '#281900', 'secondary-fixed': '#9cf0ff', 'error': '#ffb4ab', 'surface-dim': '#0e131e', 'inverse-on-surface': '#2b303c', 'secondary-container': '#00e3fd', 'background': '#0e131e', 'surface-container-low': '#171b27', 'secondary-fixed-dim': '#00daf3', 'tertiary-fixed': '#ffdeac', 'tertiary': '#ffba38', 'on-primary-fixed': '#40000c', 'surface-tint': '#ffb3b5', 'on-surface-variant': '#e6bcbd', 'inverse-surface': '#dee2f2', 'surface-container': '#1b202b', 'on-primary-container': '#5b0015', 'surface-variant': '#303541', 'surface': '#0e131e', 'on-tertiary': '#432c00', 'on-tertiary-container': '#3a2600', 'on-secondary-fixed': '#001f24', 'error-container': '#93000a', 'on-secondary': '#00363d', 'surface-container-highest': '#303541', 'tertiary-fixed-dim': '#ffba38', 'surface-container-high': '#252a36', 'on-primary-fixed-variant': '#920027', 'on-primary': '#680019', 'inverse-primary': '#be0036', 'outline': '#ad8888', 'surface-bright': '#343945', 'on-background': '#dee2f2', 'on-error-container': '#ffdad6', 'on-tertiary-fixed-variant': '#604100', 'tertiary-container': '#c08600', 'primary-fixed': '#ffdada', 'secondary': '#bdf4ff', 'primary': '#ffb3b5', 'primary-fixed-dim': '#ffb3b5', 'on-secondary-fixed-variant': '#004f58', 'on-secondary-container': '#00616d', 'on-surface': '#dee2f2', 'outline-variant': '#5d3f40' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-2xl': '3rem', 'space-lg': '1.5rem', 'space-sm': '0.5rem', 'space-xxs': '0.125rem', 'floating-margin': '1rem', 'space-xl': '2rem', 'safe-bottom-nav': '5rem', 'space-base': '1rem', 'space-xs': '0.25rem', 'space-md': '0.75rem' }, fontFamily: { 'label-telemetry-lg': ['JetBrains Mono'], 'body-lg': ['Inter'], 'headline-lg': ['Space Grotesk'], 'label-telemetry-sm': ['JetBrains Mono'], 'headline-xl': ['Space Grotesk'], 'body-md': ['Inter'], 'headline-xl-mobile': ['Space Grotesk'], 'headline-sm': ['Space Grotesk'], 'label-telemetry-md': ['JetBrains Mono'], 'button-text': ['Inter'], 'body-sm': ['Inter'] }, fontSize: { 'label-telemetry-lg': ['18px', { lineHeight: '22px', letterSpacing: '-0.02em', fontWeight: '700' }], 'body-lg': ['16px', { lineHeight: '24px', fontWeight: '400' }], 'headline-lg': ['24px', { lineHeight: '30px', fontWeight: '600' }], 'label-telemetry-sm': ['11px', { lineHeight: '14px', letterSpacing: '0.02em', fontWeight: '500' }], 'headline-xl': ['32px', { lineHeight: '38px', fontWeight: '700' }], 'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }], 'headline-xl-mobile': ['26px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['18px', { lineHeight: '24px', fontWeight: '600' }], 'label-telemetry-md': ['13px', { lineHeight: '16px', letterSpacing: '-0.01em', fontWeight: '500' }], 'button-text': ['14px', { lineHeight: '18px', letterSpacing: '0.02em', fontWeight: '600' }], 'body-sm': ['12px', { lineHeight: '16px', fontWeight: '400' }] } } } };</script><style>@layer base { html, body { width: 100vw; min-height: 100%; margin: 0; padding: 0; } body { overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 bg-surface-dim/85 backdrop-blur-xl shadow-[0_1px_16px_rgba(0,0,0,0.4)] pt-safe"><div class="h-28 px-4 flex flex-col justify-between py-2"><div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm tracking-wide"><span class="text-on-surface font-medium">10:42</span><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px]">wifi</span><span class="font-label-telemetry-sm text-label-telemetry-sm font-bold text-secondary">5G</span><div class="flex items-center gap-0.5"><span class="font-label-telemetry-sm text-label-telemetry-sm">94%</span><span class="material-symbols-outlined text-[16px] text-primary">battery_charging_full</span></div></div></div><div class="flex items-center justify-between mt-1"><div class="flex items-center gap-2"><img alt="PulseCast Studio Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VG6yOHyqXAjzmyUWMNWuW9X7sztWfzv0qbm8sg6EdYCPt0NO3fEvMyzu3I2wXPpMIr4wBZuWkuKdk78sfv5Uc6rfaA7YLgwhaaAgaN_1sZK1QT5LgV3HT8TX0QT2DTV5BdFSeb32sFOR0L5rkWK4bCwrWw_XqhUB4mbhIDd_7Ei6CBgCYkHtVaxDA_qUHwIwHjRhvacuLQ9oGVkaMEuvRjEb8oKD6Ba-bShG5R9EdRrxT02P0Zmmic"/><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">PulseCast Studio</span><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-tertiary-container/30 text-tertiary font-label-telemetry-sm text-label-telemetry-sm"><span class="material-symbols-outlined text-[13px] mr-0.5">workspace_premium</span>PRO</span></div><div class="flex items-center gap-1 mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-pulse"></span><span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">128 GB Free • ~18h 45m</span></div></div></div><div class="flex items-center gap-2"><button aria-label="Telemetry Monitor" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary active:scale-95 transition-transform"><span class="material-symbols-outlined text-[22px]">equalizer</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-28 pb-safe-bottom-nav bg-surface overflow-x-hidden"><div class="flex flex-col w-full px-4 pt-2 pb-6 space-y-5">
+<!-- Telemetry Readiness HUD Card -->
+<section class="relative overflow-hidden rounded-xl bg-surface-container-low shadow-xl p-4">
+<div class="absolute -right-12 -top-12 w-40 h-40 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -left-10 -bottom-10 w-32 h-32 bg-secondary-container/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between pb-3">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-container"></span>
+</span>
+<span class="font-label-telemetry-md text-label-telemetry-md text-on-surface uppercase tracking-wider">CAPTURE ENGINE READY</span>
+</div>
+<div class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-high text-secondary font-label-telemetry-sm text-label-telemetry-sm">
+<span class="material-symbols-outlined text-[14px] mr-1">bolt</span>LOW LATENCY
+      </div>
+</div>
+<!-- Telemetry Ring & Spec Matrix -->
+<div class="flex items-center gap-4 py-2">
+<div class="relative flex items-center justify-center shrink-0 w-20 h-20">
+<svg class="w-20 h-20 transform -rotate-90" viewbox="0 0 72 72">
+<circle class="text-surface-container-highest" cx="36" cy="36" fill="transparent" r="30" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-secondary-fixed-dim" cx="36" cy="36" fill="transparent" r="30" stroke="currentColor" stroke-dasharray="188.4" stroke-dashoffset="48" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="absolute flex flex-col items-center justify-center text-center">
+<span class="font-label-telemetry-lg text-label-telemetry-lg text-on-surface leading-tight">74%</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant text-[9px]">STORAGE</span>
+</div>
+</div>
+<div class="flex flex-col justify-center min-w-0 flex-1 space-y-1.5">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest font-label-telemetry-sm text-label-telemetry-sm text-secondary-fixed font-bold">2K QHD</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest font-label-telemetry-sm text-label-telemetry-sm text-on-surface">60 FPS</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest font-label-telemetry-sm text-label-telemetry-sm text-tertiary">24 Mbps CBR</span>
+</div>
+<div class="flex items-center text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span class="material-symbols-outlined text-[15px] mr-1 text-secondary">database</span>
+<span>112 GB Free • <strong class="text-on-surface">18.4 hrs remaining</strong></span>
+</div>
+</div>
+</div>
+<!-- Dual Audio Input & VU Meter Strip -->
+<div class="mt-3 pt-3 bg-surface-container rounded-lg p-3 space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">headset_mic</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">Dual Stream Audio</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-[10px] font-label-telemetry-sm text-on-surface-variant">48kHz • STEREO</span>
+</div>
+<button class="px-2.5 py-1 rounded-full bg-secondary-container/20 text-secondary font-button-text text-button-text flex items-center gap-1 active:scale-95 transition-transform" id="audio-toggle-btn">
+<span class="material-symbols-outlined text-[14px]">toggle_on</span> Internal + Mic
+        </button>
+</div>
+<div class="grid grid-cols-2 gap-3 pt-1">
+<div class="flex flex-col space-y-1">
+<div class="flex justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm text-[10px]">
+<span>SYSTEM/GAME</span>
+<span class="text-secondary">-8 dB</span>
+</div>
+<div class="flex items-center gap-1 h-2 bg-surface-container-lowest rounded-full px-1 overflow-hidden">
+<div class="h-1 rounded-full bg-secondary-fixed w-[72%]"></div>
+<div class="h-1 rounded-full bg-tertiary w-[12%]"></div>
+<div class="h-1 rounded-full bg-surface-container-highest w-[16%]"></div>
+</div>
+</div>
+<div class="flex flex-col space-y-1">
+<div class="flex justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm text-[10px]">
+<span>VOICE MIC</span>
+<span class="text-primary">-3 dB</span>
+</div>
+<div class="flex items-center gap-1 h-2 bg-surface-container-lowest rounded-full px-1 overflow-hidden">
+<div class="h-1 rounded-full bg-secondary-fixed w-[60%]"></div>
+<div class="h-1 rounded-full bg-tertiary w-[22%]"></div>
+<div class="h-1 rounded-full bg-primary-container w-[8%] animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Big Recording Trigger Core -->
+<section class="flex flex-col items-center">
+<div class="relative group w-full flex flex-col items-center">
+<div class="absolute inset-0 bg-primary-container/20 rounded-2xl blur-xl transition-all group-hover:bg-primary-container/30"></div>
+<div class="relative w-full rounded-2xl bg-surface-container-high p-4 flex flex-col items-center shadow-xl space-y-3">
+<div class="flex items-center justify-between w-full px-1 text-on-surface-variant">
+<span class="font-label-telemetry-sm text-label-telemetry-sm flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-tertiary">timer</span>
+            Countdown: 3s
+          </span>
+<div class="flex items-center gap-1 bg-surface-container rounded-full px-2 py-0.5">
+<span class="material-symbols-outlined text-[14px] text-secondary">tune</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">Auto-Stop 60m</span>
+</div>
+</div>
+<!-- Master Trigger Node -->
+<button class="w-full py-4 px-6 rounded-xl bg-primary-container text-on-primary font-headline-sm text-headline-sm shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all" id="master-record-btn">
+<span class="relative flex h-4 w-4">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-surface opacity-75"></span>
+<span class="relative inline-flex rounded-full h-4 w-4 bg-surface"></span>
+</span>
+<span>Start Screen Recording</span>
+</button>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center">
+          Tap to capture high bitrate session. Overlay badge appears automatically.
+        </p>
+</div>
+</div>
+</section>
+<!-- Quick Presets Carousel Strip -->
+<section class="space-y-2">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Target Presets</h2>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">CUSTOMIZE</span>
+</div>
+<div class="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar">
+<!-- Preset 1: Gaming -->
+<button class="shrink-0 w-36 rounded-xl bg-surface-container-high p-3 flex flex-col justify-between text-left shadow-sm active:scale-95 transition-transform">
+<div class="flex items-center justify-between mb-2">
+<div class="w-8 h-8 rounded-lg bg-primary-container/20 text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">sports_esports</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+</div>
+<span class="font-button-text text-button-text text-on-surface">Pro Gaming</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant mt-0.5">1440p • 60fps • 32M</span>
+</button>
+<!-- Preset 2: Tutorial -->
+<button class="shrink-0 w-36 rounded-xl bg-surface-container p-3 flex flex-col justify-between text-left shadow-sm active:scale-95 transition-transform">
+<div class="flex items-center justify-between mb-2">
+<div class="w-8 h-8 rounded-lg bg-secondary-container/20 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">draw</span>
+</div>
+</div>
+<span class="font-button-text text-button-text text-on-surface">Tutorial Cast</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant mt-0.5">1080p • Brush • Mic</span>
+</button>
+<!-- Preset 3: Reaction -->
+<button class="shrink-0 w-36 rounded-xl bg-surface-container p-3 flex flex-col justify-between text-left shadow-sm active:scale-95 transition-transform">
+<div class="flex items-center justify-between mb-2">
+<div class="w-8 h-8 rounded-lg bg-tertiary-container/30 text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">video_camera_front</span>
+</div>
+</div>
+<span class="font-button-text text-button-text text-on-surface">Reaction PIP</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant mt-0.5">Dual Cam • Chroma</span>
+</button>
+<!-- Preset 4: Eco Battery -->
+<button class="shrink-0 w-36 rounded-xl bg-surface-container p-3 flex flex-col justify-between text-left shadow-sm active:scale-95 transition-transform">
+<div class="flex items-center justify-between mb-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">battery_saver</span>
+</div>
+</div>
+<span class="font-button-text text-button-text text-on-surface">Eco Clip</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant mt-0.5">720p • 30fps • Auto</span>
+</button>
+</div>
+</section>
+<!-- Secondary Setup Grid -->
+<section class="grid grid-cols-3 gap-2.5">
+<!-- Region Capture Toggle -->
+<div class="rounded-xl bg-surface-container-low p-3 flex flex-col justify-between shadow-sm space-y-2">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-secondary text-[20px]">crop_free</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary font-bold">FULL</span>
+</div>
+<div>
+<span class="font-button-text text-button-text text-on-surface block">Region</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Entire Screen</span>
+</div>
+</div>
+<!-- Facecam PIP Toggle -->
+<div class="rounded-xl bg-surface-container-low p-3 flex flex-col justify-between shadow-sm space-y-2">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-tertiary text-[20px]">account_box</span>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+<div>
+<span class="font-button-text text-button-text text-on-surface block">Facecam PIP</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Circle • Front</span>
+</div>
+</div>
+<!-- Floating Ball Toggle -->
+<div class="rounded-xl bg-surface-container-low p-3 flex flex-col justify-between shadow-sm space-y-2">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-primary-container text-[20px]">bubble_chart</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-primary font-bold">ON</span>
+</div>
+<div>
+<span class="font-button-text text-button-text text-on-surface block">Float Ball</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Auto Hide</span>
+</div>
+</div>
+</section>
+<!-- Floating Edge Ball Simulator Widget (Live Visual Demo) -->
+<section class="relative bg-surface-container-low rounded-xl p-3 shadow-md flex items-center justify-between overflow-hidden">
+<div class="flex items-center gap-3">
+<div class="relative w-11 h-11 rounded-full bg-surface-container-highest flex items-center justify-center shadow-lg border border-outline/20">
+<div class="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[18px]">radio_button_checked</span>
+</div>
+<span class="absolute top-0 right-0 w-3 h-3 rounded-full bg-secondary-fixed border-2 border-surface-container-highest"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Active Ball Overlay</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Docked to screen right • Tap to preview menu</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[16px]">draw</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[16px]">screenshot</span>
+</button>
+</div>
+</section>
+<!-- Recent Recordings & Studio Vault Carousel -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">video_library</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Studio Vault</h2>
+</div>
+<a class="font-label-telemetry-sm text-label-telemetry-sm text-primary flex items-center" href="#">
+        VIEW ALL (14) <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+</a>
+</div>
+<!-- Clip 1 -->
+<div class="rounded-xl bg-surface-container-low p-3 shadow-md flex flex-col space-y-3">
+<div class="flex gap-3">
+<div class="relative w-28 h-20 shrink-0 rounded-lg overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="High quality dynamic screenshot of an Android Battle Royale mobile video game action sequence featuring neon purple laser explosions, vivid smoke particles, and character combat HUD in dark cyberpunk arena" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDngzXGPSWgD0ffiuK6J4Q-7b0EQuUlrSLWUSjcH6S8QW4z7lWgcMEWznvYDJfEdF_9ugiIq3lTiwNs7poOKtywUZ7r0Y_FslaZ_EXXIW4bF0TyDFJTbrEH9CFWDICBNOQdyeXsImzurBXPNt99ptrLFPEpAp_jsQ7RrK6MhTAY51XSxl5jTpCqHKHL4hF4H1nOxJwjQ54zoXkFwXS2DMzPusvZ6Wq6MX9TsZZbRvGwMDQAhQHT7T4"/>
+<span class="absolute bottom-1 right-1 px-1.5 py-0.2 rounded bg-surface-container-lowest/80 backdrop-blur-sm text-[10px] font-label-telemetry-sm text-on-surface">08:42</span>
+<span class="absolute top-1 left-1 px-1 py-0.2 rounded bg-primary-container text-[9px] font-label-telemetry-sm text-on-primary font-bold">1080p60</span>
+</div>
+<div class="flex flex-col justify-between flex-1 min-w-0">
+<div>
+<div class="flex items-center justify-between">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-secondary font-label-telemetry-sm text-label-telemetry-sm text-[10px]">Apex Mobile</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Today, 09:15</span>
+</div>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold truncate mt-1">Final Ring Ranked Clutch</h3>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span>420 MB</span>
+<span class="text-tertiary">Stereo Audio</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Capsule Bar -->
+<div class="flex items-center justify-between pt-2 border-t border-surface-container-highest/40">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-secondary font-button-text text-button-text text-[12px] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">content_cut</span> Trim
+        </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-tertiary font-button-text text-button-text text-[12px] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">gif_box</span> GIF
+        </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary font-button-text text-button-text text-[12px] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">share</span> Share
+        </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-error font-button-text text-button-text text-[12px] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">delete_outline</span>
+</button>
+</div>
+</div>
+<!-- Clip 2 -->
+<div class="rounded-xl bg-surface-container-low p-3 shadow-md flex flex-col space-y-3">
+<div class="flex gap-3">
+<div class="relative w-28 h-20 shrink-0 rounded-lg overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Screenshot of high production mobile tutorial recording showing smartphone app interface wireframe and stylus annotations with luminous cyan brush lines on slate background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwsBfMzCYD5wwA5BT3iLVbXWFU4rXckf4g7e8SsF-qfOuOqGXNj4y1f1DiizypuQApEsRWO9PC2SPMAy6Z_F1ZilZeKDb9k9jf7jVoRpUJkxg_mpt-gAS-rPnLM4bZpf9B_IeKdcGxqX7tY8hVaFz0qyx9vOBPjtHi-M3_ib-SljijpBC8HhKgcHPM6sQklQfGoFRIGt7hVYOu1uFGFE5tzxtmXkTjLYeQgSWXP5-ui5y4rmqJAp0"/>
+<span class="absolute bottom-1 right-1 px-1.5 py-0.2 rounded bg-surface-container-lowest/80 backdrop-blur-sm text-[10px] font-label-telemetry-sm text-on-surface">14:10</span>
+<span class="absolute top-1 left-1 px-1 py-0.2 rounded bg-secondary-container/80 text-on-secondary-container text-[9px] font-label-telemetry-sm font-bold">1440p</span>
+</div>
+<div class="flex flex-col justify-between flex-1 min-w-0">
+<div>
+<div class="flex items-center justify-between">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-tertiary font-label-telemetry-sm text-label-telemetry-sm text-[10px]">App Walkthrough</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Yesterday</span>
+</div>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold truncate mt-1">Configuring OBS Multi-Stream</h3>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-telemetry-sm text-label-telemetry-sm">
+<span>890 MB</span>
+<span class="text-secondary">Mic Only</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Capsule Bar -->
+<div class="flex items-center justify-between pt-2 border-t border-surface-container-highest/40">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-secondary font-button-text text-button-text text-[12px] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">content_cut</span> Trim
+        </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-tertiary font-button-text text-button-text text-[12px] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">gif_box</span> GIF
+        </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary font-button-text text-button-text text-[12px] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">share</span> Share
+        </button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-error font-button-text text-button-text text-[12px] active:scale-95">
+<span class="material-symbols-outlined text-[16px]">delete_outline</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<script>
+  // Simple client-side micro-interactions for button feedback
+  document.getElementById('master-record-btn')?.addEventListener('click', function() {
+    const isRecording = this.getAttribute('data-recording') === 'true';
+    if (!isRecording) {
+      this.setAttribute('data-recording', 'true');
+      this.classList.remove('bg-primary-container', 'text-on-primary');
+      this.classList.add('bg-error-container', 'text-error');
+      this.innerHTML = `
+        <span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>
+        <span>Recording Active (00:01)</span>
+      `;
+    } else {
+      this.setAttribute('data-recording', 'false');
+      this.classList.remove('bg-error-container', 'text-error');
+      this.classList.add('bg-primary-container', 'text-on-primary');
+      this.innerHTML = `
+        <span class="relative flex h-4 w-4">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-surface opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-4 w-4 bg-surface"></span>
+        </span>
+        <span>Start Screen Recording</span>
+      `;
+    }
+  });
+
+  document.getElementById('audio-toggle-btn')?.addEventListener('click', function() {
+    const isMic = this.innerText.includes('Internal + Mic');
+    this.innerHTML = isMic 
+      ? '<span class="material-symbols-outlined text-[14px]">toggle_on</span> Internal Audio Only'
+      : '<span class="material-symbols-outlined text-[14px]">toggle_on</span> Internal + Mic';
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-dim/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.6)]" data-active-classes="text-primary-container font-semibold"><div class="relative flex items-center justify-around h-16 px-2"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 transition-colors text-primary-container font-semibold" data-path="capture-hub" href="#"><span class="material-symbols-outlined text-[24px]">videocam</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Record</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="live-multistream-studio" href="#"><span class="material-symbols-outlined text-[24px]">cell_tower</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Live</span></a><div class="relative -top-5 flex flex-col items-center"><button aria-label="Instant Record Action" class="relative w-14 h-14 rounded-full bg-primary-container text-on-primary shadow-[0_0_24px_rgba(255,81,103,0.55)] flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"><span class="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30 pointer-events-none"></span><span class="material-symbols-outlined text-[28px] leading-none">radio_button_checked</span></button></div><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="timeline-editor" href="#"><span class="material-symbols-outlined text-[24px]">movie_edit</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Editor</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="tools-and-floating-ball-settings" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-body-sm text-body-sm tracking-tight leading-none">Tools</span></a></div><div class="w-full flex justify-center pb-1.5"><div class="w-32 h-1 bg-surface-variant/80 rounded-full"></div></div></nav></body></html>

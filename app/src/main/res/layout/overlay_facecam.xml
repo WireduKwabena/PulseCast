@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/faceCamContainer"
+    android:layout_width="140dp"
+    android:layout_height="140dp"
+    android:background="@drawable/circle_mask"
+    android:clipToOutline="true"
+    android:elevation="8dp">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/faceCamPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Small close button in the corner, easy to hit without needing to
+         precisely tap a specific spot on a small circular bubble. -->
+    <Button
+        android:id="@+id/faceCamCloseButton"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="top|end"
+        android:text="@string/close_symbol"
+        android:textSize="10sp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:padding="0dp"
+        android:background="#CC1A1A1A"
+        android:textColor="#FFFFFF" />
+
+    <!-- Cycles through FilterPreset.values() on tap. -->
+    <Button
+        android:id="@+id/faceCamFilterButton"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="top|start"
+        android:text="@string/filter_symbol"
+        android:textSize="12sp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:padding="0dp"
+        android:background="#CC1A1A1A"
+        android:textColor="#FFFFFF" />
+
+</FrameLayout>

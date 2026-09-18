@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-slate-950 overflow-hidden" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>PulseCast Studio - In-Game HUD Overlay</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Space Grotesk & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&amp;family=Space+Grotesk:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Space Grotesk', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        },
+        colors: {
+          crimson: '#FF2D55',
+          cyan: '#00E5FF',
+          amber: '#FFB703',
+          obsidian: '#07090E',
+        }
+      }
+    }
+  }
+</script>
+<style data-purpose="hud-styles">
+  .glass-panel {
+    background: rgba(7, 9, 14, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+  }
+  .glass-pill {
+    background: rgba(11, 15, 25, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+</style>
+</head>
+<body class="h-full w-full bg-black font-sans antialiased text-white select-none overflow-hidden m-0 p-0 flex items-center justify-center">
+<!-- Mobile Viewport Container (Fixed Ratio, Zero Vertical Scroll) -->
+<main class="relative w-full h-full max-w-[430px] max-h-[932px] overflow-hidden bg-black shadow-2xl" data-purpose="in-game-recording-hud">
+<!-- 1. BACKGROUND VIEWPORT: Full-bleed gameplay -->
+<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+<img alt="Neon Battle Royale Gameplay" class="w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida/AEtjO1U_yc03Ol5pZV2UkwJSHjx5jAWow6WIQY-kuzabSaA6sM4r7zXiIP1k3poZ8eHshkyOrca47tOJVe_Qu69aRm130MJvQuG2UykVeqUtYTdJJG02zs2EtLxvgBAV2Rb38-moVZkyvXdT0mUU5qvESeXwowWu1bWQrJTZOu72oVCKEPiakP7frLK2cDaxvFvN20MqqfBWMBchQ1X_PsuuJl6F0gxP_TD18Dly29OIBZaohF90X63cCmgfMA"/>
+<!-- Subtle top and bottom HUD legibility gradients -->
+<div class="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/80 via-black/30 to-transparent pointer-events-none"></div>
+<div class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none"></div>
+</div>
+<!-- 2. TOP HUD: Telemetry Badge (Left) & Facecam PIP (Right) -->
+<header class="absolute top-2 left-2 right-2 flex justify-between items-start z-30 pointer-events-auto" data-purpose="top-hud">
+<!-- Left: Compact Telemetry Pill -->
+<div class="glass-pill px-2.5 py-1.5 rounded-2xl flex items-center gap-2.5 shadow-xl border border-white/20">
+<!-- REC & Timer -->
+<div class="flex items-center gap-1.5 pr-2 border-r border-white/15">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-crimson opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-crimson shadow-[0_0_8px_#FF2D55]"></span>
+</span>
+<span class="font-mono font-bold text-[11px] tracking-tight text-white">REC 00:14:28</span>
+</div>
+<!-- Resolution & Bitrate -->
+<div class="flex flex-col text-[9px] font-mono leading-tight pr-2 border-r border-white/15">
+<span class="text-cyan font-semibold">1080p60</span>
+<span class="text-slate-300 font-medium">18.4 Mbps</span>
+</div>
+<!-- Live Mic Audio Meter Bars -->
+<div class="flex items-center gap-1">
+<svg class="w-3 h-3 text-emerald-400 shrink-0" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" fill-rule="evenodd"></path>
+</svg>
+<div class="flex items-end gap-0.5 h-3.5 w-4">
+<div class="w-1 bg-emerald-400 h-2 rounded-xs"></div>
+<div class="w-1 bg-emerald-400 h-3 rounded-xs animate-pulse"></div>
+<div class="w-1 bg-amber h-2.5 rounded-xs"></div>
+</div>
+</div>
+</div>
+<!-- Right: Streamer Facecam PIP -->
+<div class="relative group cursor-grab active:cursor-grabbing" data-purpose="facecam-pip">
+<div class="relative w-[92px] h-[66px] rounded-xl overflow-hidden border-2 border-crimson shadow-[0_0_16px_rgba(255,45,85,0.45)] bg-slate-900">
+<img alt="Streamer Facecam" class="w-full h-full object-cover object-top" src="https://lh3.googleusercontent.com/aida/AEtjO1XcWwIoZHZ336gzd9k8R2dD5FoW9AMh4YCzEcW6BOhK7wtguGwVgXLK-zkfSw9eka__bOy1WYZKkljrWsJFDwBn5mQYAJ-O0sTAZ8NINj4bZHZfklwpsn5hwgSj8dfSdtKEtfMvUU7qb2jPpfYQGqSnZ6_4G7JFXUpnwPmRKZBXbBP5b7dYjIFdBaxpSXyKiDNjuwWfRrdz_LfjGax4TG4T5QIFZly0yYEMFvYDVqtt90XPN7bU5y0y4w"/>
+<!-- Live Watermark Overlay -->
+<div class="absolute bottom-1 right-1.5 flex items-center gap-1 bg-black/60 backdrop-blur-sm px-1 py-0.2 rounded text-[8px] font-mono text-white">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="font-bold uppercase tracking-wider text-[7px] text-emerald-300">CAM 1</span>
+</div>
+</div>
+<!-- Mic Status Pill Badge -->
+<div class="absolute -bottom-2 left-1/2 -translate-x-1/2 glass-pill px-1.5 py-0.2 rounded-full border border-white/20 flex items-center gap-1 shadow-md bg-black/85">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span class="text-[8px] font-mono text-slate-100 font-bold tracking-wider">ON-AIR</span>
+</div>
+</div>
+</header>
+<!-- 3. RIGHT EDGE FLOATING RADIAL MENU -->
+<div class="absolute right-3 top-1/2 -translate-y-1/2 z-40 pointer-events-auto flex items-center" data-purpose="radial-tool-menu">
+<!-- Curved Action Arc Blooming Inward to Left -->
+<div class="flex flex-col items-end gap-2.5 mr-2">
+<!-- Action 1: Pause (amber) -->
+<button aria-label="Pause Recording" class="w-9 h-9 rounded-full glass-panel border border-amber/60 flex items-center justify-center text-amber shadow-[0_0_12px_rgba(255,183,3,0.35)] hover:scale-110 active:scale-95 transition-transform" title="Pause Stream">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24">
+<path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"></path>
+</svg>
+</button>
+<!-- Action 2: Annotation Brush (cyan) -->
+<button aria-label="Toggle Brush" class="w-9 h-9 rounded-full glass-panel border border-cyan/60 flex items-center justify-center text-cyan shadow-[0_0_12px_rgba(0,229,255,0.4)] hover:scale-110 active:scale-95 transition-transform" title="Screen Draw Tool">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24">
+<path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Action 3: Camera Toggle (purple) -->
+<button aria-label="Toggle Camera" class="w-9 h-9 rounded-full glass-panel border border-purple-400/60 flex items-center justify-center text-purple-400 shadow-[0_0_12px_rgba(192,132,252,0.35)] hover:scale-110 active:scale-95 transition-transform" title="Toggle Facecam">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Action 4: Chat Toggle (pink badge 24) -->
+<button aria-label="Toggle Live Chat" class="relative w-9 h-9 rounded-full glass-panel border border-pink-500/60 flex items-center justify-center text-pink-400 shadow-[0_0_12px_rgba(244,114,182,0.35)] hover:scale-110 active:scale-95 transition-transform" title="Toggle Live Chat">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="absolute -top-1 -right-1 bg-pink-500 text-white font-mono font-bold text-[8px] px-1 py-0.2 rounded-full border border-black shadow">24</span>
+</button>
+<!-- Action 5: End/Stop Stream (crimson) -->
+<button aria-label="End Recording" class="w-9 h-9 rounded-full glass-panel border border-crimson/80 flex items-center justify-center text-crimson shadow-[0_0_14px_rgba(255,45,85,0.5)] hover:scale-110 active:scale-95 transition-transform" title="End Broadcast">
+<div class="w-3.5 h-3.5 rounded-xs bg-crimson"></div>
+</button>
+</div>
+<!-- Signature Floating PulseCast Ball (52px Glowing Gradient Ring) -->
+<div class="relative w-[52px] h-[52px] rounded-full p-[2.5px] bg-gradient-to-tr from-crimson via-rose-500 to-amber shadow-[0_0_22px_rgba(255,45,85,0.7)] cursor-pointer hover:scale-105 active:scale-95 transition-transform flex items-center justify-center">
+<div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center border border-white/25">
+<div class="w-5 h-5 rounded-full bg-crimson flex items-center justify-center shadow-[0_0_10px_#FF2D55]">
+<span class="w-2 h-2 rounded-full bg-white"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. BOTTOM-LEFT STREAM CHAT OVERLAY -->
+<div class="absolute bottom-20 left-3 max-w-[260px] z-30 pointer-events-none space-y-1.5" data-purpose="stream-chat-overlay">
+<!-- Super Chat Banner -->
+<div class="glass-pill p-1.5 rounded-lg border border-amber/50 bg-amber-500/15 shadow-[0_0_14px_rgba(255,183,3,0.25)] flex items-start gap-1.5">
+<div class="w-5 h-5 rounded-full bg-amber text-slate-950 font-extrabold text-[10px] flex items-center justify-center shrink-0 shadow">
+        $
+      </div>
+<div class="text-[10px] leading-snug">
+<div class="flex items-center gap-1 font-bold text-amber">
+<span>@Kira99</span>
+<span class="font-mono text-[9px] bg-amber/20 px-1 rounded text-amber-300">$10.00</span>
+</div>
+<p class="text-white font-semibold">CLUTCH THIS! 👑</p>
+</div>
+</div>
+<!-- Chat Message 1 -->
+<div class="glass-pill px-2.5 py-1.5 rounded-lg border-white/10 text-[10px] leading-tight flex items-start gap-1.5 text-white">
+<span class="font-bold text-cyan shrink-0">@NeonGamer:</span>
+<span class="text-slate-200">that flick shot was insane!! 🔥</span>
+</div>
+<!-- Chat Message 2 -->
+<div class="glass-pill px-2.5 py-1.5 rounded-lg border-white/10 text-[10px] leading-tight flex items-start gap-1.5 text-white">
+<span class="font-bold text-purple-400 shrink-0">@ViperX:</span>
+<span class="text-slate-200">dual stream crisp 60fps on mobile lets goo</span>
+</div>
+</div>
+<!-- 5. BOTTOM HUD ANNOTATION TOOLBAR -->
+<footer class="absolute bottom-3 left-3 right-3 z-30 flex items-center justify-between bg-black/80 backdrop-blur-lg rounded-2xl p-2 px-3 border border-white/15 text-white pointer-events-auto shadow-2xl" data-purpose="brush-annotation-toolbar">
+<!-- Tools: Pen, Arrow, Rectangle -->
+<div class="flex items-center gap-1 pr-2 border-r border-white/15">
+<!-- Pen Tool (Active with Cyan Glow) -->
+<button aria-label="Pen Tool" class="w-8 h-8 rounded-xl bg-cyan text-slate-950 flex items-center justify-center shadow-[0_0_12px_#00E5FF] transition active:scale-90" title="Pen Marker">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.3" viewbox="0 0 24 24">
+<path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Arrow Tool -->
+<button aria-label="Arrow Tool" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/15 text-white/80 flex items-center justify-center transition active:scale-90" title="Arrow Marker">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Rectangle Tool -->
+<button aria-label="Spotlight Tool" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/15 text-white/80 flex items-center justify-center transition active:scale-90" title="Rectangle / Spotlight">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="14" rx="2" width="16" x="4" y="5"></rect>
+</svg>
+</button>
+</div>
+<!-- Color Dots: Crimson, Cyan, Neon Yellow, White -->
+<div class="flex items-center gap-1.5 px-2">
+<!-- Crimson -->
+<button aria-label="Crimson Dot" class="w-4 h-4 rounded-full bg-crimson hover:scale-125 transition active:scale-90"></button>
+<!-- Cyan (Active selected dot) -->
+<button aria-label="Cyan Dot" class="w-5 h-5 rounded-full bg-cyan ring-2 ring-white shadow-[0_0_8px_#00E5FF] transform scale-110"></button>
+<!-- Neon Yellow / Amber -->
+<button aria-label="Amber Dot" class="w-4 h-4 rounded-full bg-amber hover:scale-125 transition active:scale-90"></button>
+<!-- White -->
+<button aria-label="White Dot" class="w-4 h-4 rounded-full bg-white hover:scale-125 transition active:scale-90"></button>
+</div>
+<!-- Undo & Trash & Minimize Chevron -->
+<div class="flex items-center gap-1 pl-2 border-l border-white/15">
+<!-- Undo -->
+<button aria-label="Undo Stroke" class="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 flex items-center justify-center active:scale-90" title="Undo">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 10h10a5 5 0 015 5v2m-15-7l4-4m-4 4l4 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Trash -->
+<button aria-label="Clear All" class="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 flex items-center justify-center active:scale-90" title="Clear Canvas">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Minimize Chevron -->
+<button aria-label="Minimize Overlay" class="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 flex items-center justify-center active:scale-90" title="Minimize Toolbar">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</footer>
+<!-- Android/iOS Home Gesture Indicator Pill -->
+<div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/30 rounded-full z-50 pointer-events-none"></div>
+</main>
+</body></html>

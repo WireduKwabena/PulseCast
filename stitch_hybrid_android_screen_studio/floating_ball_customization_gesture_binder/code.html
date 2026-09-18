@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed-dim": "#ffb3b5", "on-primary-fixed-variant": "#920027", "on-secondary-fixed": "#001f24", "on-tertiary-container": "#3a2600", "outline-variant": "#5d3f40", "on-primary-fixed": "#40000c", "error": "#ffb4ab", "background": "#0e131e", "surface-tint": "#ffb3b5", "inverse-surface": "#dee2f2", "inverse-primary": "#be0036", "tertiary": "#ffba38", "on-secondary": "#00363d", "secondary-fixed-dim": "#00daf3", "primary-container": "#ff5167", "surface-bright": "#343945", "surface-container-lowest": "#090e19", "on-surface": "#dee2f2", "on-background": "#dee2f2", "on-surface-variant": "#e6bcbd", "on-secondary-container": "#00616d", "surface-container-high": "#252a36", "secondary-container": "#00e3fd", "on-error": "#690005", "secondary": "#bdf4ff", "secondary-fixed": "#9cf0ff", "error-container": "#93000a", "surface-container-low": "#171b27", "tertiary-fixed-dim": "#ffba38", "tertiary-container": "#c08600", "on-primary": "#680019", "inverse-on-surface": "#2b303c", "surface-container": "#1b202b", "surface-container-highest": "#303541", "on-tertiary-fixed": "#281900", "tertiary-fixed": "#ffdeac", "primary-fixed": "#ffdada", "on-error-container": "#ffdad6", "on-tertiary-fixed-variant": "#604100", "on-tertiary": "#432c00", "surface-variant": "#303541", "surface": "#0e131e", "on-secondary-fixed-variant": "#004f58", "surface-dim": "#0e131e", "primary": "#ffb3b5", "outline": "#ad8888", "on-primary-container": "#5b0015" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-2xl": "3rem", "space-sm": "0.5rem", "space-base": "1rem", "floating-margin": "1rem", "space-md": "0.75rem", "space-xl": "2rem", "safe-bottom-nav": "5rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-xxs": "0.125rem" }, "fontFamily": { "body-lg": ["Inter"], "label-telemetry-sm": ["JetBrains Mono"], "body-sm": ["Inter"], "headline-sm": ["Space Grotesk"], "body-md": ["Inter"], "label-telemetry-lg": ["JetBrains Mono"], "label-telemetry-md": ["JetBrains Mono"], "button-text": ["Inter"], "headline-xl-mobile": ["Space Grotesk"], "headline-lg": ["Space Grotesk"], "headline-xl": ["Space Grotesk"] }, "fontSize": { "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "label-telemetry-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-telemetry-lg": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-telemetry-md": ["13px", { "lineHeight": "16px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "button-text": ["14px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600" }], "headline-xl-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }], "headline-lg": ["24px", { "lineHeight": "30px", "fontWeight": "600" }], "headline-xl": ["32px", { "lineHeight": "38px", "fontWeight": "700" }] } } } }</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#0e131e;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-surface font-body-md text-body-md text-on-surface min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/80 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)] pt-safe"><div class="h-16 px-space-base flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-primary-container text-[20px]">radio_button_checked</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">PULSE<span class="text-primary-container">CAST</span></span><span class="font-label-telemetry-sm text-label-telemetry-sm bg-primary-container/20 text-primary-container px-1 py-0.5 rounded">PRO</span></div><span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant truncate max-w-[130px]">Tools</span></div></div><div class="flex items-center gap-space-md"><div class="hidden xs:flex items-center gap-space-xs bg-surface-container-high/60 px-space-xs py-0.5 rounded-full"><span class="material-symbols-outlined text-secondary text-[14px]">wifi_tethering</span><span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">60fps</span><span class="font-label-telemetry-sm text-label-telemetry-sm text-outline-variant">|</span><span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary">48GB</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen px-space-base"><div class="flex flex-col w-full space-y-space-lg pb-safe">
+<!-- Modal Header -->
+<div class="flex items-start justify-between bg-surface-container-low rounded-xl p-space-base shadow-lg">
+<div class="flex flex-col gap-space-xxs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">adjust</span>
+<h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Floating Orb Customization</h1>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gesture triggers, docking physics &amp; visual skins</p>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-xs py-1 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant hover:text-on-surface font-label-telemetry-sm text-label-telemetry-sm flex items-center gap-1" id="btn-reset" type="button">
+<span class="material-symbols-outlined text-[14px]">restart_alt</span>
+<span>Reset</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<!-- Interactive Orb Preview Simulator -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-base shadow-xl space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">screen_rotation</span>
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Live Physics Simulator</span>
+</div>
+<div class="flex items-center gap-space-xs px-2 py-0.5 rounded-full bg-surface-container-highest">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary">SNAP: AUTO-EDGE</span>
+</div>
+</div>
+<!-- Phone Screen Mockup Simulator Area -->
+<div class="relative w-full h-44 rounded-xl bg-surface-container-lowest overflow-hidden flex items-center justify-center select-none shadow-inner">
+<!-- Simulated in-game graphics backdrop -->
+<div class="absolute inset-0 bg-cover bg-center opacity-30" data-alt="High-intensity esports tactical mobile shooter action scene featuring futuristic neon cyber arenas, dark purple and electric crimson weapon muzzle flare, laser particle effects, immersive high-tier competitive mobile tournament aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBn-nmIW5Xow9GmYuTnVYAS_XFHjbg1IGZ-3_k5Mfo7CUCEh-_P4d56Hg59oyWMFaJB6rOsILjvXkkDFpY27Nj9A65ZQYighVN4oNbzhG-9Nc0952ONR1-ipexbfGvHXoWtEj1Sbn-qK84FkYMJ3owJHqau6bEEgvrY4EecUaMoQ0lfkJYFGsgVTy5TnYA-zZ-6hqLYxwh3DwY6EaxfT7UliBHtzxhY_uO7j9ZKqkw9kN6engNCoeQ')"></div>
+<!-- Safe zone boundary guidelines -->
+<div class="absolute inset-2 rounded-lg border-dashed border-outline-variant/30 pointer-events-none flex flex-col justify-between p-2">
+<div class="flex justify-between items-center opacity-40">
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant">HUD SAFE ZONE 24PX</span>
+<span class="font-label-telemetry-sm text-[9px] text-secondary">60.2 FPS</span>
+</div>
+<div class="flex justify-between items-center opacity-40">
+<span class="font-label-telemetry-sm text-[9px] text-on-surface-variant">REC 00:14:32</span>
+<span class="font-label-telemetry-sm text-[9px] text-tertiary">4.8 KBPS</span>
+</div>
+</div>
+<!-- Docked Assist Ball Element (Interactive Demo Target) -->
+<div class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center transition-all duration-300 cursor-pointer" id="simulated-orb" style="opacity: 0.85;">
+<!-- Glowing aura for Neon theme -->
+<div class="relative flex items-center justify-center w-12 h-12 rounded-full bg-surface-container-high shadow-[0_0_18px_rgba(255,81,103,0.55)]">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary-container to-secondary-container p-0.5 flex items-center justify-center shadow-lg">
+<div class="w-full h-full rounded-full bg-surface-container-lowest flex items-center justify-center relative">
+<span class="material-symbols-outlined text-primary text-[20px]">adjust</span>
+<span class="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_#ff5167]"></span>
+</div>
+</div>
+<!-- Edge magnetic dock pill indicator -->
+<div class="w-1.5 h-6 rounded-l-full bg-secondary-container/80 ml-1"></div>
+</div>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant/60 pointer-events-none tracking-wider">TAP ORB IN PREVIEW TO TEST HUD</span>
+</div>
+<!-- Sliders & Physics controls -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md pt-space-xs">
+<div class="flex flex-col gap-1.5 bg-surface-container p-space-sm rounded-lg">
+<div class="flex justify-between items-center">
+<label class="font-label-telemetry-md text-label-telemetry-md text-on-surface flex items-center gap-1" for="idle-opacity">
+<span class="material-symbols-outlined text-secondary text-[16px]">opacity</span>
+<span>Idle Opacity</span>
+</label>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary" id="idle-opacity-val">35%</span>
+</div>
+<input class="w-full accent-primary-container bg-surface-container-highest rounded-lg h-1.5 cursor-pointer" id="idle-opacity" max="100" min="10" type="range" value="35"/>
+</div>
+<div class="flex flex-col gap-1.5 bg-surface-container p-space-sm rounded-lg">
+<div class="flex justify-between items-center">
+<label class="font-label-telemetry-md text-label-telemetry-md text-on-surface flex items-center gap-1" for="active-opacity">
+<span class="material-symbols-outlined text-primary text-[16px]">wb_incandescent</span>
+<span>Active Opacity</span>
+</label>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-primary" id="active-opacity-val">100%</span>
+</div>
+<input class="w-full accent-primary bg-surface-container-highest rounded-lg h-1.5 cursor-pointer" id="active-opacity" max="100" min="50" type="range" value="100"/>
+</div>
+</div>
+<!-- Auto-hide & Docking Toggles -->
+<div class="flex flex-col gap-space-sm pt-space-xxs">
+<div class="flex items-center justify-between bg-surface-container p-space-sm rounded-lg">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-[18px]">timer</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">Auto-hide Inactivity Timeout</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Fades down to idle opacity during full screen play</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-telemetry-md text-label-telemetry-md text-tertiary bg-tertiary-container/30 px-2 py-0.5 rounded">3.0s</span>
+<button class="w-10 h-6 bg-primary-container rounded-full p-0.5 flex items-center justify-end transition-colors shadow-sm" type="button">
+<div class="w-5 h-5 bg-on-primary-container rounded-full shadow-md"></div>
+</button>
+</div>
+</div>
+<!-- Docking Physics Mode -->
+<div class="flex flex-col gap-1.5 bg-surface-container p-space-sm rounded-lg">
+<span class="font-label-telemetry-md text-label-telemetry-md text-on-surface-variant">SNAP-TO-EDGE DOCKING PRESET</span>
+<div class="grid grid-cols-3 gap-space-xs pt-1">
+<button class="dock-btn active-dock flex flex-col items-center py-2 px-1 rounded-lg bg-surface-container-highest text-on-surface shadow-md" type="button">
+<span class="material-symbols-outlined text-primary-container text-[18px]">qr_code_2</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm font-semibold mt-1">Magnetic</span>
+</button>
+<button class="dock-btn flex flex-col items-center py-2 px-1 rounded-lg bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">pan_tool</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm font-semibold mt-1">Free Float</span>
+</button>
+<button class="dock-btn flex flex-col items-center py-2 px-1 rounded-lg bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">vertical_align_center</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm font-semibold mt-1">Half-Pill</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Deep Gesture Action Binder -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-base shadow-xl space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">touch_app</span>
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Gesture Action Binder</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary bg-secondary-container/20 px-2 py-0.5 rounded">ULTRA FAST &lt;16MS</span>
+</div>
+<div class="flex flex-col space-y-space-xs">
+<!-- Single Tap -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container rounded-lg">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-[18px]">ads_click</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Single Tap</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Default primary trigger</span>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-1.5 rounded-lg shrink-0">
+<span class="font-label-telemetry-md text-label-telemetry-md text-secondary truncate max-w-[130px]">Radial Menu</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">arrow_drop_down</span>
+</div>
+</div>
+<!-- Double Tap -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container rounded-lg">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary-container text-[18px]">auto_awesome</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Double Tap</span>
+<span class="font-label-telemetry-sm text-[10px] bg-primary-container/20 text-primary-container px-1 py-0.2 rounded font-bold">AI CLIP</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Buffer last 30s replay</span>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-1.5 rounded-lg shrink-0">
+<span class="font-label-telemetry-md text-label-telemetry-md text-primary truncate max-w-[130px]">Instant 30s Clip</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">arrow_drop_down</span>
+</div>
+</div>
+<!-- Long Press -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container rounded-lg">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary text-[18px]">mic_off</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Long Press (0.8s)</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Tactile haptic confirm</span>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-1.5 rounded-lg shrink-0">
+<span class="font-label-telemetry-md text-label-telemetry-md text-tertiary truncate max-w-[130px]">Mic Mute Toggle</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">arrow_drop_down</span>
+</div>
+</div>
+<!-- Swipe Inward -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container rounded-lg">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-[18px]">forum</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Swipe Inward</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">Edge flick motion</span>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-1.5 rounded-lg shrink-0">
+<span class="font-label-telemetry-md text-label-telemetry-md text-secondary truncate max-w-[130px]">Live Chat Drawer</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">arrow_drop_down</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Radial Quick-Menu Slots (6 Customizable Nodes) -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-base shadow-xl space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Radial Quick-Menu Slots</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Active modules pinned to 360° orb fan-out</span>
+</div>
+<button class="flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary font-button-text text-button-text transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">edit_attributes</span>
+<span>Edit Slots</span>
+</button>
+</div>
+<!-- Interactive Radial Layout Graphic -->
+<div class="relative w-full h-72 flex items-center justify-center bg-surface-container-lowest rounded-xl overflow-hidden shadow-inner">
+<!-- Background subtle radar coordinate rings -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-25" viewbox="0 0 320 288">
+<circle cx="160" cy="144" fill="none" r="110" stroke="#5d3f40" stroke-dasharray="4 4" stroke-width="1"></circle>
+<circle cx="160" cy="144" fill="none" opacity="0.4" r="70" stroke="#00daf3" stroke-width="0.8"></circle>
+<line stroke="#5d3f40" stroke-dasharray="2 4" stroke-width="0.5" x1="160" x2="160" y1="14" y2="274"></line>
+<line stroke="#5d3f40" stroke-dasharray="2 4" stroke-width="0.5" x1="30" x2="290" y1="144" y2="144"></line>
+</svg>
+<!-- Center Orb Anchor -->
+<div class="z-20 w-16 h-16 rounded-full bg-surface-container-high flex flex-col items-center justify-center shadow-[0_0_24px_rgba(255,81,103,0.5)] cursor-pointer">
+<span class="material-symbols-outlined text-primary-container text-[24px]">radio_button_checked</span>
+<span class="font-label-telemetry-sm text-[9px] text-primary-fixed-dim font-bold">CORE</span>
+</div>
+<!-- 6 Radial Orbiting Slots arranged around the circle -->
+<!-- Slot 1: 12 o'clock (Record/Pause) -->
+<div class="radial-node absolute -translate-x-1/2 -translate-y-1/2 z-10" style="top: 18%; left: 50%;">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">pause_circle</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface mt-1 bg-surface-container-high/80 px-1.5 py-0.5 rounded">1. Rec/Pause</span>
+</div>
+</div>
+<!-- Slot 2: 2 o'clock (Screenshot) -->
+<div class="radial-node absolute -translate-x-1/2 -translate-y-1/2 z-10" style="top: 32%; left: 82%;">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-secondary flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">photo_camera</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant mt-1 bg-surface-container-high/80 px-1.5 py-0.5 rounded">2. Screen</span>
+</div>
+</div>
+<!-- Slot 3: 4 o'clock (Facecam PIP) -->
+<div class="radial-node absolute -translate-x-1/2 -translate-y-1/2 z-10" style="top: 70%; left: 82%;">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-tertiary flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">branding_watermark</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant mt-1 bg-surface-container-high/80 px-1.5 py-0.5 rounded">3. Facecam</span>
+</div>
+</div>
+<!-- Slot 4: 6 o'clock (In-Game Brush) -->
+<div class="radial-node absolute -translate-x-1/2 -translate-y-1/2 z-10" style="top: 82%; left: 50%;">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">draw</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant mt-1 bg-surface-container-high/80 px-1.5 py-0.5 rounded">4. Doodle</span>
+</div>
+</div>
+<!-- Slot 5: 8 o'clock (Soundboard SFX) -->
+<div class="radial-node absolute -translate-x-1/2 -translate-y-1/2 z-10" style="top: 70%; left: 18%;">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-secondary flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">graphic_eq</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant mt-1 bg-surface-container-high/80 px-1.5 py-0.5 rounded">5. SFX Pad</span>
+</div>
+</div>
+<!-- Slot 6: 10 o'clock (Stream Diagnostics) -->
+<div class="radial-node absolute -translate-x-1/2 -translate-y-1/2 z-10" style="top: 32%; left: 18%;">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-tertiary flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">monitor_heart</span>
+</div>
+<span class="font-label-telemetry-sm text-[10px] text-on-surface-variant mt-1 bg-surface-container-high/80 px-1.5 py-0.5 rounded">6. Health HUD</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Orb Skin Packs & Visual Themes -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-base shadow-xl space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px]">palette</span>
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Orb Visual Skins</span>
+</div>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant">4 STYLES</span>
+</div>
+<!-- Skin Carousel Strip -->
+<div class="flex items-center gap-space-md overflow-x-auto pb-2 scrollbar-none">
+<!-- Skin 1: Neon Cyber Red (Active) -->
+<div class="skin-card flex flex-col shrink-0 w-36 bg-surface-container p-space-sm rounded-xl items-center text-center shadow-lg relative cursor-pointer ring-2 ring-primary-container">
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-[0_0_16px_rgba(255,81,103,0.6)] my-2">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary-container to-secondary-container p-0.5 flex items-center justify-center">
+<div class="w-full h-full rounded-full bg-surface-container-low flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px]">adjust</span>
+</div>
+</div>
+</div>
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate w-full">Cyber Red</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-primary mt-0.5">CURRENT</span>
+</div>
+<!-- Skin 2: Obsidian Stealth -->
+<div class="skin-card flex flex-col shrink-0 w-36 bg-surface-container-lowest p-space-sm rounded-xl items-center text-center shadow-md relative cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center shadow-inner my-2">
+<div class="w-10 h-10 rounded-full bg-surface-bright flex items-center justify-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate w-full">Stealth Carbon</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-on-surface-variant mt-0.5">MATTE FINISH</span>
+</div>
+<!-- Skin 3: Apex Champion Gold (PRO) -->
+<div class="skin-card flex flex-col shrink-0 w-36 bg-surface-container-lowest p-space-sm rounded-xl items-center text-center shadow-md relative cursor-pointer hover:bg-surface-container transition-colors">
+<div class="absolute top-2 right-2">
+<span class="font-label-telemetry-sm text-[9px] bg-tertiary-container text-on-tertiary-container px-1 py-0.5 rounded font-bold">PRO</span>
+</div>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-[0_0_12px_rgba(255,186,56,0.5)] my-2">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-tertiary to-tertiary-fixed-dim p-0.5 flex items-center justify-center">
+<div class="w-full h-full rounded-full bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-[20px]">military_tech</span>
+</div>
+</div>
+</div>
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate w-full">Apex Gold</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-tertiary mt-0.5">METALLIC</span>
+</div>
+<!-- Skin 4: Electric Cyan Tron (PRO) -->
+<div class="skin-card flex flex-col shrink-0 w-36 bg-surface-container-lowest p-space-sm rounded-xl items-center text-center shadow-md relative cursor-pointer hover:bg-surface-container transition-colors">
+<div class="absolute top-2 right-2">
+<span class="font-label-telemetry-sm text-[9px] bg-secondary-container text-on-secondary-container px-1 py-0.5 rounded font-bold">PRO</span>
+</div>
+<div class="w-14 h-14 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-[0_0_12px_rgba(0,218,243,0.5)] my-2">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-secondary to-secondary-fixed-dim p-0.5 flex items-center justify-center">
+<div class="w-full h-full rounded-full bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-[20px]">grid_4x4</span>
+</div>
+</div>
+</div>
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate w-full">Cyan Tron</span>
+<span class="font-label-telemetry-sm text-label-telemetry-sm text-secondary mt-0.5">HOLO GRID</span>
+</div>
+</div>
+</div>
+<!-- Bottom CTA Action Bar -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<button class="w-full py-3.5 px-space-lg rounded-xl bg-primary-container text-on-primary-container font-button-text text-button-text flex items-center justify-center gap-space-xs shadow-[0_0_20px_rgba(255,81,103,0.45)] active:scale-[0.99] transition-transform hover:brightness-110" type="button">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+<span>Apply Orb Configuration</span>
+</button>
+<button class="w-full py-2.5 px-space-lg rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-button-text text-button-text flex items-center justify-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-secondary text-[18px]">bookmark_add</span>
+<span>Save as Gamer Preset</span>
+</button>
+</div>
+</div>
+<script>
+  (function initOrbCustomizer() {
+    const idleSlider = document.getElementById('idle-opacity');
+    const idleVal = document.getElementById('idle-opacity-val');
+    const simulatedOrb = document.getElementById('simulated-orb');
+    const activeSlider = document.getElementById('active-opacity');
+    const activeVal = document.getElementById('active-opacity-val');
+
+    if (idleSlider && simulatedOrb && idleVal) {
+      idleSlider.addEventListener('input', (e) => {
+        idleVal.textContent = e.target.value + '%';
+        simulatedOrb.style.opacity = (e.target.value / 100).toString();
+      });
+    }
+
+    if (activeSlider && activeVal) {
+      activeSlider.addEventListener('input', (e) => {
+        activeVal.textContent = e.target.value + '%';
+      });
+    }
+
+    // Docking buttons toggle
+    const dockButtons = document.querySelectorAll('.dock-btn');
+    dockButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        dockButtons.forEach(b => {
+          b.classList.remove('bg-surface-container-highest', 'text-on-surface', 'shadow-md');
+          b.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+        });
+        btn.classList.add('bg-surface-container-highest', 'text-on-surface', 'shadow-md');
+        btn.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+      });
+    });
+
+    // Reset button interaction
+    const resetBtn = document.getElementById('btn-reset');
+    if (resetBtn && idleSlider && simulatedOrb) {
+      resetBtn.addEventListener('click', () => {
+        idleSlider.value = '35';
+        idleVal.textContent = '35%';
+        simulatedOrb.style.opacity = '0.35';
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/85 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.5)]" data-active-classes="text-primary-container font-semibold"><div class="flex items-center justify-around h-16 px-space-xs"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="record" href="#"><span class="material-symbols-outlined text-[22px]">fiber_manual_record</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Record</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="live-studio" href="#"><span class="material-symbols-outlined text-[22px]">sensors</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Live</span></a><div class="flex items-center justify-center min-h-[44px] px-1"><a class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-[0_0_16px_rgba(255,81,103,0.4)] active:scale-95 transition-transform hover:brightness-110" data-path="quick-trigger" href="#"><span class="material-symbols-outlined text-[26px]">bolt</span></a></div><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="editor" href="#"><span class="material-symbols-outlined text-[22px]">movie_edit</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Editor</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] transition-colors text-primary-container font-semibold" data-path="tools" href="#"><span class="material-symbols-outlined text-[22px]">tune</span><span class="font-label-telemetry-sm text-label-telemetry-sm">Tools</span></a></div></nav></body></html>
