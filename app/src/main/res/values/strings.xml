@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PulseCast</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="close_symbol">X</string>
+    <string name="filter_symbol">F</string>
 </resources>
