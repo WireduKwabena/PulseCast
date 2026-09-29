@@ -23,7 +23,12 @@ interface RawRtmpPublisher {
     fun connect(url: String, onConnected: () -> Unit, onDisconnected: (String) -> Unit)
     fun sendVideoConfig(sps: ByteArray, pps: ByteArray)
     fun sendVideoFrame(data: ByteBuffer, presentationTimeUs: Long, isKeyFrame: Boolean)
-    fun sendAudioConfig(config: ByteArray)
+    fun sendAudioConfig(config: ByteArray, sampleRate: Int, channelCount: Int)
     fun sendAudioFrame(data: ByteBuffer, presentationTimeUs: Long)
     fun disconnect()
+}
+
+/** Receives codec metadata needed to configure an encoded-audio RTMP track. */
+interface AudioFormatAwareSink {
+    fun setAudioConfig(config: ByteArray, sampleRate: Int, channelCount: Int)
 }

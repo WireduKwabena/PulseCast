@@ -1,6 +1,14 @@
 package com.masterminds.pulsecast.streaming
 
 import com.masterminds.pulsecast.core.TrackType
+import com.masterminds.pulsecast.core.CaptureSessionStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * One RTMP destination as an EncodedSampleSink — slots into
@@ -18,43 +26,90 @@ import com.masterminds.pulsecast.core.TrackType
 class RtmpDestinationSink(
     val connection: DestinationConnection,
     private val publisher: RawRtmpPublisher,
-) : EncodedSampleSink {
+) : EncodedSampleSink, AudioFormatAwareSink {
 
     private var videoConfigSent = false
     private var audioConfigSent = false
     private var pendingAudioConfig: ByteArray? = null
+    private var pendingAudioSampleRate: Int = 44_100
+    private var pendingAudioChannelCount: Int = 1
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private var retryJob: Job? = null
+    @Volatile private var stopped = false
 
     fun start() {
+        stopped = false
         connection.connect()
+        publishState()
+        connectPublisher()
+    }
+
+    private fun connectPublisher() {
         try {
             publisher.connect(
                 connection.destination.rtmpUrl,
-                onConnected = { connection.onConnected() },
-                onDisconnected = { reason -> connection.onDisconnected(reason) }
+                onConnected = {
+                    if (!stopped) {
+                        runCatching { connection.onConnected() }
+                        publishState()
+                    }
+                },
+                onDisconnected = ::handleDisconnected
             )
-        } catch (t: Throwable) {
-            // Catching Throwable, not just Exception, deliberately — this
-            // is a boundary to an external/unverified library implementation
-            // (see RootEncoderRtmpPublisher's TODO()s, which throw
-            // NotImplementedError, an Error subtype that a plain
-            // `catch (e: Exception)` would NOT catch). One destination's
-            // publisher misbehaving in any way must never crash the whole
-            // recording pipeline that other destinations and local saving
-            // both depend on.
-            connection.onDisconnected(t.message ?: "Failed to start connection")
+        } catch (error: Exception) {
+            // Isolate expected library/transport failures from local recording
+            // without swallowing fatal VM errors such as OutOfMemoryError.
+            handleDisconnected(error.message ?: "Failed to start connection")
         }
     }
 
+    private fun handleDisconnected(reason: String) {
+        if (stopped) return
+        val previous = connection.state
+        if (previous !is ConnectionState.Connecting && previous !is ConnectionState.Live) return
+        runCatching { connection.onDisconnected(reason) }
+        publishState()
+        val reconnecting = connection.state as? ConnectionState.Reconnecting ?: return
+        retryJob?.cancel()
+        retryJob = scope.launch {
+            delay(reconnecting.delayMs)
+            if (stopped) return@launch
+            runCatching { publisher.disconnect() }
+            if (stopped || connection.state !is ConnectionState.Reconnecting) return@launch
+            videoConfigSent = false
+            audioConfigSent = false
+            runCatching {
+                connection.retryNow()
+                publishState()
+                connectPublisher()
+            }.onFailure { handleDisconnected(it.message ?: "Reconnect failed") }
+        }
+    }
+
+    private fun publishState() {
+        BroadcastDestinationStore.setConnectionState(connection.destination.id, connection.state)
+        CaptureSessionStore.setBroadcasting(
+            BroadcastDestinationStore.connectionStates.value.values.any { it is ConnectionState.Live }
+        )
+    }
+
     fun stop() {
+        stopped = true
+        retryJob?.cancel()
+        retryJob = null
         publisher.disconnect()
         connection.stop()
+        publishState()
+        scope.cancel()
         videoConfigSent = false
         audioConfigSent = false
     }
 
     /** Call once, before any audio samples arrive, with the AAC config bytes (MediaFormat's csd-0). */
-    fun setAudioConfig(config: ByteArray) {
+    override fun setAudioConfig(config: ByteArray, sampleRate: Int, channelCount: Int) {
         pendingAudioConfig = config
+        pendingAudioSampleRate = sampleRate
+        pendingAudioChannelCount = channelCount
     }
 
     override fun onSample(sample: EncodedSample) {
@@ -89,7 +144,7 @@ class RtmpDestinationSink(
     private fun handleAudioSample(sample: EncodedSample) {
         if (!audioConfigSent) {
             pendingAudioConfig?.let {
-                publisher.sendAudioConfig(it)
+                publisher.sendAudioConfig(it, pendingAudioSampleRate, pendingAudioChannelCount)
                 audioConfigSent = true
             }
         }

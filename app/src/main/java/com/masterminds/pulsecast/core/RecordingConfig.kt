@@ -54,3 +54,15 @@ object ResolutionScaler {
 
     private fun evenify(value: Int): Int = if (value % 2 == 0) value else value - 1
 }
+
+enum class AudioMode {
+    MIC_ONLY,           // Standard AudioRecord mic
+    INTERNAL_ONLY,      // AudioPlaybackCaptureConfiguration (API 29+ only)
+    INTERNAL_AND_MIC    // Dual-bus: mix internal loopback + mic PCM
+}
+
+data class AudioCaptureConfig(
+    val mode: AudioMode = AudioMode.MIC_ONLY,
+    val sampleRate: Int = 44_100,
+    val bitrate: Int = 128_000
+)

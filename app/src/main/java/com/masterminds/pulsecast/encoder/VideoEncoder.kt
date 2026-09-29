@@ -3,6 +3,7 @@ package com.masterminds.pulsecast.encoder
 import android.media.MediaCodec
 import android.media.MediaCodecInfo
 import android.media.MediaFormat
+import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.view.Surface
@@ -95,6 +96,17 @@ class VideoEncoder(
     }
 
     fun start() = codec.start()
+
+    /**
+     * Dynamically updates the encoder bitrate on the fly without stopping the stream.
+     * Used by the Adaptive Bitrate (ABR) auto-optimizer during network congestion or thermal throttling.
+     */
+    fun setBitrate(newBitRate: Int) {
+        val params = Bundle().apply {
+            putInt(MediaCodec.PARAMETER_KEY_VIDEO_BITRATE, newBitRate)
+        }
+        codec.setParameters(params)
+    }
 
     fun stop() {
         codec.stop()

@@ -19,6 +19,8 @@ import android.view.WindowManager
 import androidx.core.app.NotificationCompat
 import com.masterminds.pulsecast.MainActivity
 import com.masterminds.pulsecast.core.*
+import com.masterminds.pulsecast.core.AudioMode
+import com.masterminds.pulsecast.core.AudioCaptureConfig
 import com.masterminds.pulsecast.encoder.AudioEncoder
 import com.masterminds.pulsecast.encoder.MuxerSink
 import com.masterminds.pulsecast.encoder.MuxerWrapper
@@ -31,6 +33,7 @@ import com.masterminds.pulsecast.streaming.StreamDestination
 import com.masterminds.pulsecast.core.RecordingEvent
 import com.masterminds.pulsecast.core.RecordingStateMachine
 import com.masterminds.pulsecast.core.SaveLocation
+import com.masterminds.pulsecast.core.CaptureSessionStore
 
 class ScreenRecordService : Service() {
 
@@ -45,7 +48,12 @@ class ScreenRecordService : Service() {
         // StreamDestination itself free of any Android dependency, so it
         // stays usable from the pure-Kotlin streaming/ test suite.
         const val EXTRA_STREAM_LABELS = "streamLabels"
+        const val EXTRA_STREAM_IDS = "streamIds"
         const val EXTRA_STREAM_URLS = "streamUrls"
+        const val EXTRA_STREAM_BITRATE_KBPS = "streamBitrateKbps"
+        const val EXTRA_RESOLUTION = "resolution"
+        const val EXTRA_FPS = "fps"
+        const val EXTRA_AUDIO_MODE = "audioMode"
 
         private const val NOTIFICATION_CHANNEL_ID = "recording"
         private const val NOTIFICATION_ID = 1
@@ -62,6 +70,7 @@ class ScreenRecordService : Service() {
     private var muxer: MuxerWrapper? = null
     private var saveLocation: SaveLocation? = null
     private var streamSinks: List<RtmpDestinationSink> = emptyList()
+    private var startupSucceeded = false
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -71,11 +80,17 @@ class ScreenRecordService : Service() {
             ACTION_PAUSE -> handlePause()
             ACTION_RESUME -> handleResume()
             ACTION_STOP -> handleStop()
+            LiveHUDOverlayService.ACTION_MIC_MUTED -> audioEncoder?.setMicrophoneMuted(true)
+            LiveHUDOverlayService.ACTION_MIC_UNMUTED -> audioEncoder?.setMicrophoneMuted(false)
         }
         return START_NOT_STICKY
     }
 
     private fun handleStart(intent: Intent) {
+        if (stateMachine.current() != RecordingState.IDLE) {
+            Log.w(TAG, "Ignoring duplicate start while recorder is ${stateMachine.current()}")
+            return
+        }
         val resultCode = intent.getIntExtra(EXTRA_RESULT_CODE, 0)
         @Suppress("DEPRECATION")
         val resultData = intent.getParcelableExtra<Intent>(EXTRA_RESULT_DATA) ?: run {
@@ -84,13 +99,19 @@ class ScreenRecordService : Service() {
             return
         }
 
-        startForeground(NOTIFICATION_ID, buildNotification(), foregroundServiceTypeForStart())
+        val requestedAudioMode = intent.getStringExtra(EXTRA_AUDIO_MODE) ?: AudioMode.MIC_ONLY.name
+        val audioMode = runCatching { AudioMode.valueOf(requestedAudioMode) }.getOrDefault(AudioMode.MIC_ONLY)
+        startForeground(NOTIFICATION_ID, buildNotification(), foregroundServiceTypeForStart(audioMode))
 
         stateMachine.transition(RecordingEvent.Start)
 
+        try {
         val projectionManager = getSystemService(MediaProjectionManager::class.java)
         val projection = projectionManager.getMediaProjection(resultCode, resultData) ?: run {
             Log.e(TAG, "Failed to get MediaProjection — cannot start recording")
+            stateMachine.transition(RecordingEvent.PermissionDenied)
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            CaptureSessionStore.setRecording(false)
             stopSelf()
             return
         }
@@ -105,9 +126,23 @@ class ScreenRecordService : Service() {
 
         val windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         val metrics = DisplayMetrics().also { windowManager.defaultDisplay.getRealMetrics(it) }
-        val resolution = ResolutionScaler.scaleToTier(metrics.widthPixels, metrics.heightPixels, Quality.MEDIUM)
-        val frameRate = 30
-        val bitRate = BitrateCalculator.calculate(resolution, frameRate, Quality.MEDIUM)
+
+        val resolutionLabel = intent.getStringExtra(EXTRA_RESOLUTION) ?: "1080p"
+        val fpsValue = intent.getIntExtra(EXTRA_FPS, 60)
+        val quality = when (resolutionLabel) {
+            "2K", "1440p" -> Quality.HIGH
+            "4K" -> Quality.ORIGINAL
+            "720p" -> Quality.LOW
+            else -> Quality.MEDIUM // 1080p
+        }
+        val frameRate = fpsValue
+
+        val resolution = ResolutionScaler.scaleToTier(metrics.widthPixels, metrics.heightPixels, quality)
+        val requestedStreamBitrateKbps = intent.getIntExtra(EXTRA_STREAM_BITRATE_KBPS, 0)
+        val bitRate = requestedStreamBitrateKbps
+            .takeIf { it in 500..50_000 }
+            ?.times(1_000)
+            ?: BitrateCalculator.calculate(resolution, frameRate, quality)
 
         stateMachine.transition(RecordingEvent.PermissionGranted)
 
@@ -116,24 +151,33 @@ class ScreenRecordService : Service() {
         muxer = MuxerWrapper(saveLocation!!.fileDescriptor, expectedTracks)
         val muxerSink = MuxerSink(muxer!!)
 
-        // Phase 3: build one RtmpDestinationSink per requested stream
-        // target, and start each connecting immediately. Each is
-        // independent — see DestinationConnection's own isolation
-        // guarantee — so one destination failing to connect (very likely
-        // right now, since RootEncoderRtmpPublisher isn't fully wired to
-        // the real library yet) never blocks local recording or any other
-        // destination.
+        // V1 supports one RTMP target. A connection failure must not block
+        // the local recording sink, so publishing remains an isolated sink.
+        val ids = intent.getStringArrayExtra(EXTRA_STREAM_IDS) ?: emptyArray()
         val labels = intent.getStringArrayExtra(EXTRA_STREAM_LABELS) ?: emptyArray()
         val urls = intent.getStringArrayExtra(EXTRA_STREAM_URLS) ?: emptyArray()
-        streamSinks = labels.indices.map { i ->
-            val destination = StreamDestination(id = "dest_$i", label = labels[i], rtmpUrl = urls[i])
+        if (labels.size != urls.size || (ids.isNotEmpty() && ids.size != labels.size)) Log.w(TAG, "Ignoring malformed stream destinations: arrays differ in count")
+        streamSinks = (0 until minOf(labels.size, urls.size)).map { i ->
+            val destination = StreamDestination(
+                id = ids.getOrNull(i) ?: "dest_$i",
+                label = labels[i],
+                rtmpUrl = urls[i],
+                bitrateKbps = requestedStreamBitrateKbps.takeIf { it > 0 }
+            )
             RtmpDestinationSink(DestinationConnection(destination), RootEncoderRtmpPublisher()).also { it.start() }
         }
 
         val allSinks: List<EncodedSampleSink> = listOf(muxerSink) + streamSinks
 
         videoEncoder = VideoEncoder(resolution, frameRate, bitRate, muxer!!, allSinks, ptsAdjuster).also { it.start() }
-        audioEncoder = AudioEncoder(muxer!!, allSinks, ptsAdjuster).also { it.start() }
+        val audioCaptureConfig = AudioCaptureConfig(mode = audioMode)
+        audioEncoder = AudioEncoder(
+            muxer = muxer!!,
+            sinks = allSinks,
+            ptsAdjuster = ptsAdjuster,
+            config = audioCaptureConfig,
+            mediaProjection = projection.takeIf { audioMode != AudioMode.MIC_ONLY }
+        ).also { it.start() }
 
         virtualDisplay = projection.createVirtualDisplay(
             "ScreenRecorder",
@@ -144,12 +188,34 @@ class ScreenRecordService : Service() {
             videoEncoder!!.inputSurface,
             null,
             null
-        )
+        ) ?: throw IllegalStateException("Android did not create the screen capture display")
+        startupSucceeded = true
+        CaptureSessionStore.setRecording(true)
+        CaptureSessionStore.setBroadcasting(streamSinks.any { it.connection.isLive() })
+        } catch (error: Exception) {
+            Log.e(TAG, "Capture pipeline failed during startup", error)
+            if (stateMachine.canStop()) {
+                handleStop()
+            } else if (stateMachine.current() == RecordingState.PERMISSION_REQUESTED) {
+                stateMachine.transition(RecordingEvent.PermissionDenied)
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                runCatching { mediaProjection?.stop() }
+                mediaProjection = null
+                CaptureSessionStore.setRecording(false)
+                stopSelf()
+            }
+        }
     }
 
-    private fun foregroundServiceTypeForStart(): Int =
+    private fun foregroundServiceTypeForStart(audioMode: AudioMode): Int =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
+            val includesMicrophone = audioMode == AudioMode.MIC_ONLY || audioMode == AudioMode.INTERNAL_AND_MIC
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION or
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && includesMicrophone) {
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
+                } else {
+                    0
+                }
         } else {
             0
         }
@@ -157,12 +223,16 @@ class ScreenRecordService : Service() {
     private fun handlePause() {
         if (!stateMachine.canPause()) return
         stateMachine.transition(RecordingEvent.Pause)
+        virtualDisplay?.setSurface(null)
+        audioEncoder?.pauseCapture()
         ptsAdjuster.onPause(System.nanoTime() / 1000)
     }
 
     private fun handleResume() {
         if (!stateMachine.canResume()) return
         ptsAdjuster.onResume(System.nanoTime() / 1000)
+        audioEncoder?.resumeCapture()
+        virtualDisplay?.setSurface(videoEncoder?.inputSurface)
         stateMachine.transition(RecordingEvent.Resume)
     }
 
@@ -173,15 +243,31 @@ class ScreenRecordService : Service() {
         }
         stateMachine.transition(RecordingEvent.Stop)
 
-        virtualDisplay?.release()
-        videoEncoder?.stop()
-        audioEncoder?.stop()
-        muxer?.release()
-        streamSinks.forEach { it.stop() }
-        mediaProjection?.stop()
-        saveLocation?.finalize()
+        runCatching { virtualDisplay?.release() }.onFailure { Log.w(TAG, "Virtual display cleanup failed", it) }
+        runCatching { videoEncoder?.stop() }.onFailure { Log.w(TAG, "Video encoder cleanup failed", it) }
+        runCatching { audioEncoder?.stop() }.onFailure { Log.w(TAG, "Audio encoder cleanup failed", it) }
+        val muxerStarted = muxer?.isStarted == true
+        val muxerReleased = runCatching { muxer?.release(); true }
+            .onFailure { Log.w(TAG, "Muxer cleanup failed", it) }
+            .getOrDefault(false)
+        streamSinks.forEach { sink -> runCatching { sink.stop() }.onFailure { Log.w(TAG, "Stream sink cleanup failed", it) } }
+        runCatching { mediaProjection?.stop() }.onFailure { Log.w(TAG, "Projection cleanup failed", it) }
+        val completed = startupSucceeded && muxerStarted && muxerReleased
+        if (completed) {
+            runCatching { saveLocation?.complete() }
+                .onFailure { error ->
+                    Log.e(TAG, "Recording publication failed", error)
+                    runCatching { saveLocation?.abort() }
+                }
+        } else {
+            runCatching { saveLocation?.abort() }
+                .onFailure { Log.w(TAG, "Incomplete recording cleanup failed", it) }
+        }
+        startupSucceeded = false
 
         stateMachine.transition(RecordingEvent.Finished)
+        CaptureSessionStore.setRecording(false)
+        CaptureSessionStore.setBroadcasting(false)
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
     }

@@ -6,13 +6,17 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.view.Gravity
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +35,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
@@ -44,9 +51,15 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.masterminds.pulsecast.ui.live_stream_chat_unified_moderation_drawer.LiveChatDrawer
 import com.masterminds.pulsecast.ui.theme.*
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStateRegistryOwner {
+
+    companion object {
+        const val ACTION_MIC_MUTED = "com.masterminds.pulsecast.ACTION_MIC_MUTED"
+        const val ACTION_MIC_UNMUTED = "com.masterminds.pulsecast.ACTION_MIC_UNMUTED"
+    }
 
     private var composeView: ComposeView? = null
     private lateinit var windowManager: WindowManager
@@ -100,6 +113,42 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
         var isRadialOpen by remember { mutableStateOf(false) }
         var isChatOpen by remember { mutableStateOf(false) }
         var isBrushActive by remember { mutableStateOf(false) }
+        var isSfxOpen by remember { mutableStateOf(false) }
+        var isMicMuted by remember { mutableStateOf(false) }
+        var isCapturePaused by remember { mutableStateOf(false) }
+
+        val context = LocalContext.current
+        val configuration = LocalConfiguration.current
+        val density = LocalDensity.current
+
+        val screenWidthPx = with(density) { configuration.screenWidthDp.dp.toPx() }
+        val screenHeightPx = with(density) { configuration.screenHeightDp.dp.toPx() }
+        val orbSizePx = with(density) { 52.dp.toPx() }
+
+        var orbX by remember { mutableFloatStateOf(screenWidthPx - orbSizePx - with(density) { 12.dp.toPx() }) }
+        var orbY by remember { mutableFloatStateOf(screenHeightPx / 2f - orbSizePx / 2f) }
+
+        val coroutineScope = rememberCoroutineScope()
+        val snapAnim = remember { Animatable(orbX) }
+
+        fun snapToEdge() {
+            coroutineScope.launch {
+                snapAnim.snapTo(orbX)
+                val target = if (orbX < screenWidthPx / 2) 0f else (screenWidthPx - orbSizePx)
+                snapAnim.animateTo(
+                    targetValue = target,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                ) {
+                    orbX = value
+                }
+            }
+        }
+
+        val handler = remember { Handler(Looper.getMainLooper()) }
+        var lastTapTime by remember { mutableLongStateOf(0L) }
 
         Box(modifier = Modifier.fillMaxSize()) {
             // 1. TOP HUD: Telemetry Badge & Facecam PIP
@@ -112,7 +161,7 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                 verticalAlignment = Alignment.Top
             ) {
                 // Left: Compact Telemetry Pill
-                CompactTelemetryPill()
+                CompactTelemetryPill(isMicMuted = isMicMuted)
                 
                 // Right: Draggable Facecam PIP
                 LivePIP()
@@ -131,45 +180,138 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                 ChatBubbleHUD("@ViperX:", "dual stream crisp 60fps on mobile", Color(0xFF9C27B0))
             }
 
-            // 3. RIGHT EDGE: Floating Radial Menu
+            // 3. DRAGGABLE ORB & FLOATING MENUS
             Box(
                 modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 12.dp),
-                contentAlignment = Alignment.CenterEnd
+                    .offset { IntOffset(orbX.roundToInt(), orbY.roundToInt()) }
+                    .size(52.dp)
             ) {
-                if (isRadialOpen) {
-                    Column(
-                        horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.padding(end = 60.dp)
-                    ) {
-                        HUDActionCircle("Pause", Icons.Default.Pause, NeonAmber) { sendServiceAction(ScreenRecordService.ACTION_PAUSE) }
-                        HUDActionCircle("Brush", Icons.Default.Brush, CyberCyan) { 
-                            isBrushActive = !isBrushActive
-                            isRadialOpen = false 
-                        }
-                        HUDActionCircle("Cam", Icons.Default.Face, Secondary) { /* toggle */ }
-                        HUDActionCircle("Stop", Icons.Default.Stop, ElectricRuby) { 
-                            sendServiceAction(ScreenRecordService.ACTION_STOP)
-                            stopSelf()
-                        }
-                    }
-                }
-
                 // Signature PulseCast Ball
                 Box(
                     modifier = Modifier
-                        .size(52.dp)
+                        .fillMaxSize()
                         .clip(CircleShape)
                         .background(Brush.linearGradient(listOf(ElectricRuby, NeonAmber)))
                         .padding(2.5.dp)
-                        .clickable { isRadialOpen = !isRadialOpen },
+                        .pointerInput(Unit) {
+                            var dragStartX = 0f
+                            detectDragGestures(
+                                onDragStart = { dragStartX = orbX },
+                                onDragEnd = {
+                                    if (dragStartX > screenWidthPx / 2 && orbX < dragStartX - 100f) {
+                                        isChatOpen = true
+                                    }
+                                    snapToEdge()
+                                }
+                            ) { change, drag ->
+                                change.consume()
+                                orbX += drag.x
+                                orbY += drag.y
+                            }
+                        }
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    val now = System.currentTimeMillis()
+                                    if (now - lastTapTime < 300L) {
+                                        // Double tap
+                                        handler.removeCallbacksAndMessages(null)
+                                        lastTapTime = 0L
+                                        Toast.makeText(context, "AI Clip Saved", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        // Single tap
+                                        lastTapTime = now
+                                        handler.postDelayed({
+                                            isRadialOpen = !isRadialOpen
+                                            if (!isRadialOpen) isSfxOpen = false
+                                        }, 300L)
+                                    }
+                                },
+                                onLongPress = {
+                                    isMicMuted = !isMicMuted
+                                    val action = if (isMicMuted) ACTION_MIC_MUTED else ACTION_MIC_UNMUTED
+                                    sendServiceAction(action)
+                                }
+                            )
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     Box(modifier = Modifier.fillMaxSize().clip(CircleShape).background(Color(0xFF07090E)).border(1.dp, Color.White.copy(alpha = 0.25f), CircleShape), contentAlignment = Alignment.Center) {
                         Box(modifier = Modifier.size(20.dp).clip(CircleShape).background(ElectricRuby).shadow(10.dp, spotColor = ElectricRuby), contentAlignment = Alignment.Center) {
                             Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(Color.White))
+                        }
+                    }
+                }
+
+                // Radial Menu (positioned relative to orb)
+                if (isRadialOpen) {
+                    val isOnRight = orbX > screenWidthPx / 2
+                    Box(
+                        modifier = Modifier
+                            .offset(
+                                x = if (isOnRight) (-80).dp else 80.dp,
+                                y = (-60).dp
+                            )
+                    ) {
+                        Column(
+                            horizontalAlignment = if (isOnRight) Alignment.End else Alignment.Start,
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            HUDActionCircle(
+                                if (isCapturePaused) "Resume" else "Pause",
+                                if (isCapturePaused) Icons.Default.PlayArrow else Icons.Default.Pause,
+                                NeonAmber
+                            ) {
+                                isCapturePaused = !isCapturePaused
+                                sendServiceAction(if (isCapturePaused) ScreenRecordService.ACTION_PAUSE else ScreenRecordService.ACTION_RESUME)
+                            }
+                            HUDActionCircle("Shot", Icons.Default.CameraAlt, CyberCyan) {
+                                Toast.makeText(context, "Screenshot saved", Toast.LENGTH_SHORT).show()
+                                isRadialOpen = false
+                            }
+                            HUDActionCircle("Cam", Icons.Default.Face, Secondary) { /* toggle */ }
+                            HUDActionCircle("Brush", Icons.Default.Brush, CyberCyan) { 
+                                isBrushActive = !isBrushActive
+                                isRadialOpen = false 
+                            }
+                            HUDActionCircle("SFX", Icons.Default.MusicNote, NeonAmber) {
+                                isSfxOpen = !isSfxOpen
+                            }
+                            HUDActionCircle("Stop", Icons.Default.Stop, ElectricRuby) { 
+                                sendServiceAction(ScreenRecordService.ACTION_STOP)
+                                stopSelf()
+                            }
+                        }
+                    }
+                }
+                
+                // SFX Mini Panel
+                if (isSfxOpen && isRadialOpen) {
+                    val isOnRight = orbX > screenWidthPx / 2
+                    Box(
+                        modifier = Modifier
+                            .offset(
+                                x = if (isOnRight) (-240).dp else 80.dp,
+                                y = 140.dp
+                            )
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            modifier = Modifier
+                                .background(Color.Black.copy(alpha = 0.85f), RoundedCornerShape(12.dp))
+                                .border(1.dp, NeonAmber.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
+                                .padding(8.dp)
+                        ) {
+                            listOf("Airhorn", "GG", "Clutch", "LOL").forEach { sfxName ->
+                                Button(
+                                    onClick = { Toast.makeText(context, "SFX: $sfxName", Toast.LENGTH_SHORT).show() },
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
+                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+                                    modifier = Modifier.height(32.dp)
+                                ) {
+                                    Text(sfxName, fontSize = 10.sp, color = Color.White)
+                                }
+                            }
                         }
                     }
                 }
@@ -198,7 +340,7 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
     }
 
     @Composable
-    private fun CompactTelemetryPill() {
+    private fun CompactTelemetryPill(isMicMuted: Boolean) {
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(20.dp))
@@ -218,6 +360,19 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                 Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(ElectricRuby).graphicsLayer { this.alpha = alpha })
                 Text("REC 00:14:28", style = MaterialTheme.typography.labelSmall, color = Color.White, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace, fontSize = 11.sp)
             }
+            
+            // Mic Mute Indicator
+            AnimatedVisibility(
+                visible = isMicMuted,
+                enter = fadeIn() + expandHorizontally(),
+                exit = fadeOut() + shrinkHorizontally()
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Box(modifier = Modifier.height(14.dp).width(1.dp).background(Color.White.copy(alpha = 0.15f)))
+                    Icon(Icons.Default.MicOff, contentDescription = "Mic Muted", tint = ElectricRuby, modifier = Modifier.size(14.dp))
+                }
+            }
+            
             Box(modifier = Modifier.height(14.dp).width(1.dp).background(Color.White.copy(alpha = 0.15f)))
             // Stats
             Column {
@@ -227,9 +382,9 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
             Box(modifier = Modifier.height(14.dp).width(1.dp).background(Color.White.copy(alpha = 0.15f)))
             // Audio VU
             Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                Box(modifier = Modifier.size(4.dp, 8.dp).background(SignalGreen))
-                Box(modifier = Modifier.size(4.dp, 12.dp).background(SignalGreen))
-                Box(modifier = Modifier.size(4.dp, 10.dp).background(NeonAmber))
+                Box(modifier = Modifier.size(4.dp, 8.dp).background(if (isMicMuted) Color.Gray else SignalGreen))
+                Box(modifier = Modifier.size(4.dp, 12.dp).background(if (isMicMuted) Color.Gray else SignalGreen))
+                Box(modifier = Modifier.size(4.dp, 10.dp).background(if (isMicMuted) Color.Gray else NeonAmber))
             }
         }
     }

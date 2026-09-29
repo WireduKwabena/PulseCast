@@ -9,6 +9,7 @@ data class StreamDestination(
     val id: String,
     val label: String,
     val rtmpUrl: String,
+    val bitrateKbps: Int? = null,
 )
 
 /**

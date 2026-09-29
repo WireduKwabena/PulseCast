@@ -16,37 +16,16 @@ import java.nio.ByteBuffer
  * author's own guidance for exactly this use case:
  * https://github.com/pedroSG94/RootEncoder/discussions/1287
  *
- * Method signatures below are a mix of two confidence levels — noted
- * per-method, since this was the one file in the project I genuinely
- * couldn't fully verify by compiling against the real dependency in this
- * environment:
- *
- *  - VERIFIED against a real, recent (2.6.6) migration code sample from
- *    the library's own issue tracker: setVideoInfo(sps, pps, vps) and
- *    sendVideo(buffer, info) — see
- *    https://github.com/pedroSG94/RootEncoder/issues/1991
- *  - VERIFIED that RtmpClient.connect(...) exists and ConnectChecker is
- *    the current unified callback interface, via a real stack trace
- *    (com.pedro.rtmp.rtmp.RtmpClient.connect$lambda-0) and a real usage
- *    site (`class ShareScreenService : Service(), ConnectChecker`) — see
- *    https://github.com/pedroSG94/RootEncoder/issues/971 and
- *    https://github.com/pedroSG94/RootEncoder/issues/2014
- *  - INFERRED by direct symmetry with the verified video methods, not
- *    independently confirmed: setAudioInfo(sampleRate, isStereo) and
- *    sendAudio(buffer, info). GenericStream's prepareAudio(sampleRate,
- *    isStereo, bitrate) at the higher level strongly suggests this shape,
- *    but double-check these two specifically first if something doesn't
- *    compile.
+ * The adapter is compiled against the project's resolved RootEncoder
+ * 2.8.1 dependency. RTMP receives the app's already-encoded H.264/AAC
+ * samples directly, avoiding a second capture/encode pipeline. RootEncoder
+ * constructs the AAC sequence header from the actual codec sample rate and
+ * channel layout; csd-0 is still required to confirm MediaCodec initialized
+ * the AAC format before any audio packets are sent.
  */
 class RootEncoderRtmpPublisher : RawRtmpPublisher {
 
-    companion object {
-        private const val TAG = "RootEncoderRtmpPublisher"
-        // AAC-LC mono at 44.1kHz to match AudioEncoder's actual output —
-        // update both together if AudioEncoder's config ever changes.
-        private const val AUDIO_SAMPLE_RATE = 44_100
-        private const val AUDIO_IS_STEREO = false
-    }
+    companion object { private const val TAG = "RootEncoderRtmpPublisher" }
 
     private var client: RtmpClient? = null
 
@@ -107,12 +86,13 @@ class RootEncoderRtmpPublisher : RawRtmpPublisher {
         client?.sendVideo(data, info)
     }
 
-    override fun sendAudioConfig(config: ByteArray) {
-        // INFERRED signature — see class doc comment. config (MediaFormat's
-        // csd-0 for AAC) isn't actually used in this guessed call shape;
-        // if the real API wants the raw AAC config bytes instead of
-        // sampleRate/isStereo, this is the line to fix.
-        client?.setAudioInfo(AUDIO_SAMPLE_RATE, AUDIO_IS_STEREO)
+    override fun sendAudioConfig(config: ByteArray, sampleRate: Int, channelCount: Int) {
+        require(config.isNotEmpty()) { "AAC encoder did not provide codec-specific data" }
+        require(sampleRate > 0 && channelCount > 0) { "AAC output format is invalid" }
+        // RootEncoder builds the RTMP AAC sequence header from sample rate
+        // and channel layout; csd-0 is validated here as proof the codec
+        // format event arrived before audio packets are sent.
+        client?.setAudioInfo(sampleRate, channelCount > 1)
     }
 
     override fun sendAudioFrame(data: ByteBuffer, presentationTimeUs: Long) {

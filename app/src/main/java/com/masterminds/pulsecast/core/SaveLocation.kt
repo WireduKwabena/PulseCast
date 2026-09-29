@@ -5,9 +5,12 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import java.io.File
 import java.io.FileDescriptor
+import java.io.Closeable
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -33,19 +36,42 @@ class SaveLocation private constructor(
     val displayName: String,
     private val mediaStoreUri: Uri?,
     private val context: Context,
+    private val descriptorOwner: Closeable,
+    private val legacyFile: File? = null,
 ) {
+    private var closed = false
+
     fun generateName(): String = displayName
 
-    /** Call after the muxer has released the file, so it shows up in gallery apps immediately. */
-    fun finalize() {
+    /** Close the owned descriptor and publish the completed recording to other apps. */
+    @Synchronized
+    fun complete() {
+        check(!closed) { "Save location is already closed" }
+        descriptorOwner.close()
         if (mediaStoreUri != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val values = ContentValues().apply { put(MediaStore.Video.Media.IS_PENDING, 0) }
-            context.contentResolver.update(mediaStoreUri, values, null, null)
+            val updatedRows = context.contentResolver.update(mediaStoreUri, values, null, null)
+            check(updatedRows == 1) { "Could not publish recording $displayName" }
         }
+        closed = true
+    }
+
+    /** Remove an incomplete output after startup or muxing failure. Safe to call more than once. */
+    @Synchronized
+    fun abort() {
+        if (closed) return
+        runCatching { descriptorOwner.close() }
+        val uri = mediaStoreUri
+        if (uri != null) {
+            runCatching { context.contentResolver.delete(uri, null, null) }
+        } else {
+            runCatching { legacyFile?.delete() }
+        }
+        closed = true
     }
 
     companion object {
-        private val nameFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
+        private val nameFormat = SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US)
 
         fun create(context: Context): SaveLocation {
             val displayName = "Recording_${nameFormat.format(Date())}.mp4"
@@ -59,16 +85,21 @@ class SaveLocation private constructor(
                 }
                 val uri = context.contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values)
                     ?: error("MediaStore rejected the insert — device storage may be full or unavailable")
-                val pfd = context.contentResolver.openFileDescriptor(uri, "w")
-                    ?: error("Could not open a file descriptor for $uri")
-                SaveLocation(pfd.fileDescriptor, displayName, uri, context)
+                try {
+                    val pfd: ParcelFileDescriptor = context.contentResolver.openFileDescriptor(uri, "w")
+                        ?: error("Could not open a file descriptor for $uri")
+                    SaveLocation(pfd.fileDescriptor, displayName, uri, context, pfd)
+                } catch (error: Throwable) {
+                    runCatching { context.contentResolver.delete(uri, null, null) }
+                    throw error
+                }
             } else {
                 @Suppress("DEPRECATION")
                 val dir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "ScreenRecorder")
-                if (!dir.exists()) dir.mkdirs()
+                check(dir.exists() || dir.mkdirs()) { "Could not create recording directory ${dir.absolutePath}" }
                 val file = File(dir, displayName)
-                val stream = java.io.FileOutputStream(file)
-                SaveLocation(stream.fd, displayName, null, context)
+                val stream = FileOutputStream(file)
+                SaveLocation(stream.fd, displayName, null, context, stream, file)
             }
         }
     }

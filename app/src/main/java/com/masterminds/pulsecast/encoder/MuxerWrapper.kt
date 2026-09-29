@@ -36,6 +36,9 @@ class MuxerWrapper(fd: FileDescriptor, private val expectedTrackCount: Int) {
     private val trackIndices = mutableMapOf<TrackType, Int>()
     private val pendingSamples = mutableListOf<PendingSample>()
 
+    val isStarted: Boolean
+        @Synchronized get() = started
+
     private data class PendingSample(
         val type: TrackType,
         val buffer: ByteBuffer,
@@ -69,13 +72,16 @@ class MuxerWrapper(fd: FileDescriptor, private val expectedTrackCount: Int) {
             // Copy the buffer — the caller will reuse/release the original
             // MediaCodec buffer right after this call returns.
             val copy = ByteBuffer.allocate(info.size)
-            val originalPosition = buffer.position()
-            buffer.position(info.offset)
-            buffer.limit(info.offset + info.size)
-            copy.put(buffer)
+            val source = buffer.duplicate().apply {
+                position(info.offset)
+                limit(info.offset + info.size)
+            }
+            copy.put(source)
             copy.flip()
-            buffer.position(originalPosition)
-            pendingSamples.add(PendingSample(type, copy, info))
+            val copiedInfo = MediaCodec.BufferInfo().apply {
+                set(0, info.size, info.presentationTimeUs, info.flags)
+            }
+            pendingSamples.add(PendingSample(type, copy, copiedInfo))
         }
     }
 

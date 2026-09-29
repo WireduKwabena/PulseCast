@@ -31,14 +31,18 @@ val CyanGlow = Color(0x7300E5FF)
 
 // Material 3 Mappings
 val Primary = ElectricRuby
-val OnPrimary = OnSurface
+val OnPrimary = Color(0xFF680019) // Dark red/black per DESIGN.md
+val PrimaryContainer = Color(0xFFFF5167)
 val Secondary = CyberCyan
 val OnSecondary = BgBase
+val SecondaryContainer = Color(0xFF00E3FD)
+val SecondaryFixedDim = Color(0xFF00DAF3)
 val Tertiary = NeonAmber
 val OnTertiary = BgBase
 val SurfaceVariant = SurfaceMid
 val OnSurfaceVariant = OnSurfaceMuted
 val Error = ElectricRuby
 val OnError = BgBase
+val ErrorContainer = Color(0xFF93000A)
 val Outline = Color(0xFFAD8888)
 val OutlineVariant = Color(0xFF5D3F40)

@@ -1,5 +1,6 @@
 package com.masterminds.pulsecast.ui.navigation
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,29 +8,56 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.masterminds.pulsecast.ui.CaptureViewModel
+import com.masterminds.pulsecast.ui.broadcast_setup_RTMP_studio.BroadcastSetupRTMPStudioScreen
+import com.masterminds.pulsecast.ui.capture_hub.CaptureHubScreen
+import com.masterminds.pulsecast.ui.creator_profile_connected_channels_hub.CreatorProfile_and_ConnectedChannels_HubScreen
+import com.masterminds.pulsecast.ui.custom_RTMP_SRT_ingest_node_modal.CustomIngestNodeModalScreen
+import com.masterminds.pulsecast.ui.custom_RTMP_SRT_ingest_node_modal.IngestNodeViewModel
+import com.masterminds.pulsecast.ui.facecam_chroma_key_studio.FacecamChromaKeyStudioScreen
+import com.masterminds.pulsecast.ui.floating_ball_and_settings.FloatingBallSettingsScreen
+import com.masterminds.pulsecast.ui.floating_ball_customization_gesture_binder.FloatingBallCustomizationScreen
+import com.masterminds.pulsecast.ui.instant_clip_highlight_export_flow.InstantClipHighlightExportFlowScreen
+import com.masterminds.pulsecast.ui.live_in_game_hud_overlay.LiveInGameHUDOverlayScreen
+import com.masterminds.pulsecast.ui.live_multistream_studio.LiveMultiStreamStudioScreen
+import com.masterminds.pulsecast.ui.live_stream_chat_unified_moderation_drawer.LiveChatDrawer
+import com.masterminds.pulsecast.ui.performance_stream_diagnostics_analytics.DiagnosticsViewModel
+import com.masterminds.pulsecast.ui.performance_stream_diagnostics_analytics.PerformanceStreamDiagnosticAnalyticsScreen
+import com.masterminds.pulsecast.ui.pre_stream_go_live_safety_checklist.PreFlightChecklistScreen
+import com.masterminds.pulsecast.ui.pro_multi_track_audio_mixer_DMCA_shield.AudioMixerViewModel
+import com.masterminds.pulsecast.ui.pro_multi_track_audio_mixer_DMCA_shield.ProMultiTrackAudioMixerScreen
+import com.masterminds.pulsecast.ui.stream_alert_widget_overlay_studio.StreamAlertWidgetOverlayStudioScreen
+import com.masterminds.pulsecast.ui.studio_vault_media_library.StudioVaultScreen
+import com.masterminds.pulsecast.ui.timeline_video_editor.TimelineVideoEditorScreen
 import com.masterminds.pulsecast.ui.theme.BgBase
 import com.masterminds.pulsecast.ui.theme.CyberCyan
 import com.masterminds.pulsecast.ui.theme.ElectricRuby
@@ -37,9 +65,12 @@ import com.masterminds.pulsecast.ui.theme.NeonAmber
 import com.masterminds.pulsecast.ui.theme.SignalGreen
 import com.masterminds.pulsecast.ui.theme.SurfaceHigh
 import com.masterminds.pulsecast.ui.theme.SurfaceLow
+import com.masterminds.pulsecast.ui.ui_library.BottomNavRoute
 import com.masterminds.pulsecast.ui.ui_library.PulseCastAppBar
+import com.masterminds.pulsecast.ui.ui_library.PulseCastBottomNavigation
+import kotlinx.coroutines.launch
+import java.net.URI
 
-/** Routes are named after the Stitch specification so source and design stay traceable. */
 object PulseCastRoute {
     const val CaptureHub = "capture_hub"
     const val LiveStudio = "live_multistream_studio"
@@ -60,64 +91,167 @@ object PulseCastRoute {
     const val CustomIngest = "custom_ingest"
 
     val primary = setOf(CaptureHub, LiveStudio, TimelineEditor, FloatingSettings)
+
+    @Composable
+    fun getPrimaryRoutes() = listOf(
+        BottomNavRoute(CaptureHub, "Record", Icons.Default.Videocam),
+        BottomNavRoute(LiveStudio, "Live", Icons.Default.Sensors),
+        BottomNavRoute(TimelineEditor, "Editor", Icons.Default.Movie),
+        BottomNavRoute(FloatingSettings, "Tools", Icons.Default.Tune)
+    )
 }
 
 @Composable
 fun PulseCastNavigation(
     isRecording: Boolean,
+    isBroadcasting: Boolean,
     onRecord: () -> Unit,
+    onStartBroadcast: () -> Boolean,
+    onStopCapture: () -> Unit,
+    captureViewModel: CaptureViewModel,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
     val route = navController.currentBackStackEntryAsState().value?.destination?.route
+    val isIndependentScreen = route == PulseCastRoute.LiveHud
+
+    LaunchedEffect(isBroadcasting) {
+        if (isBroadcasting && navController.currentDestination?.route != PulseCastRoute.LiveHud) {
+            navController.navigate(PulseCastRoute.LiveHud) { launchSingleTop = true }
+        } else if (!isBroadcasting && navController.currentDestination?.route == PulseCastRoute.LiveHud) {
+            navController.popBackStack()
+        }
+    }
+    
+    var showOrbCustomization by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = modifier,
         containerColor = BgBase,
         topBar = {
-            PulseCastAppBar(
-                onHome = { navController.navigateRoot(PulseCastRoute.CaptureHub) },
-                onVault = { navController.navigate(PulseCastRoute.Vault) },
-                onDiagnostics = { navController.navigate(PulseCastRoute.Diagnostics) },
-                onProfile = { navController.navigate(PulseCastRoute.CreatorHub) }
-            )
+            if (!isIndependentScreen) {
+                PulseCastAppBar(
+                    onHome = { navController.navigateRoot(PulseCastRoute.CaptureHub) },
+                    onVault = { navController.navigate(PulseCastRoute.Vault) },
+                    onDiagnostics = { navController.navigate(PulseCastRoute.Diagnostics) },
+                    onProfile = { navController.navigate(PulseCastRoute.CreatorHub) }
+                )
+            }
         },
         bottomBar = {
-            if (route in PulseCastRoute.primary) {
-                PulseCastBottomNavigation(route) { navController.navigateRoot(it) }
+            if (!isIndependentScreen && route in PulseCastRoute.primary) {
+                PulseCastBottomNavigation(
+                    currentRoute = route,
+                    onNavigate = { navController.navigateRoot(it) },
+                    onQuickOrb = { showOrbCustomization = true },
+                    routes = PulseCastRoute.getPrimaryRoutes()
+                )
             }
         }
     ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = PulseCastRoute.CaptureHub,
-            modifier = Modifier.padding(padding)
-        ) {
-            composable(PulseCastRoute.CaptureHub) { CaptureHubDestination(isRecording, onRecord) }
-            composable(PulseCastRoute.LiveStudio) {
-                LiveStudioDestination(
-                    onOpenFacecam = { navController.navigate(PulseCastRoute.FacecamChroma) },
-                    onOpenMixer = { navController.navigate(PulseCastRoute.AudioMixer) },
-                    onOpenOverlays = { navController.navigate(PulseCastRoute.OverlayStudio) },
-                    onOpenSettings = { navController.navigate(PulseCastRoute.BroadcastSetup) },
-                    onAddIngest = { navController.navigate(PulseCastRoute.CustomIngest) },
-                    onGoLive = { navController.navigate(PulseCastRoute.SafetyChecklist) }
+        Box(Modifier.fillMaxSize()) {
+            NavHost(
+                navController = navController,
+                startDestination = PulseCastRoute.CaptureHub,
+                modifier = if (isIndependentScreen) Modifier.fillMaxSize() else Modifier.padding(padding)
+            ) {
+                composable(PulseCastRoute.CaptureHub) {
+                    CaptureHubDestination(
+                        isRecording = isRecording,
+                        onRecord = onRecord,
+                        viewModel = captureViewModel,
+                        onNavigateToVault = { navController.navigate(PulseCastRoute.Vault) },
+                        onNavigateToPresets = { showOrbCustomization = true }
+                    )
+                }
+                composable(PulseCastRoute.LiveStudio) {
+                    LiveStudioDestination(
+                        isBroadcasting = isBroadcasting,
+                        onOpenFacecam = { navController.navigate(PulseCastRoute.FacecamChroma) },
+                        onOpenMixer = { navController.navigate(PulseCastRoute.AudioMixer) },
+                        onOpenOverlays = { navController.navigate(PulseCastRoute.OverlayStudio) },
+                        onOpenSettings = { navController.navigate(PulseCastRoute.BroadcastSetup) },
+                        onAddIngest = { navController.navigate(PulseCastRoute.CustomIngest) },
+                        onGoLive = { onStartBroadcast() },
+                        onStopBroadcast = onStopCapture
+                    )
+                }
+                composable(PulseCastRoute.TimelineEditor) { 
+                    TimelineVideoEditorScreen(
+                        onBack = { navController.popBackStack() },
+                        onExport = { navController.navigate(PulseCastRoute.ClipExport) }
+                    )
+                }
+                composable(PulseCastRoute.FloatingSettings) { 
+                    FloatingBallSettingsScreen(
+                        onCustomizeOrb = { showOrbCustomization = true }
+                    )
+                }
+                composable(PulseCastRoute.Vault) { 
+                    StudioVaultScreen(onBack = { navController.popBackStack() })
+                }
+                composable(PulseCastRoute.Diagnostics) { 
+                    PerformanceStreamDiagnosticAnalyticsScreen(
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+                composable(PulseCastRoute.CreatorHub) { 
+                    CreatorProfile_and_ConnectedChannels_HubScreen(
+                        onBack = { navController.popBackStack() },
+                        onAddIngest = { navController.navigate(PulseCastRoute.CustomIngest) },
+                        onCustomizeOrb = { showOrbCustomization = true }
+                    )
+                }
+                composable(PulseCastRoute.AudioMixer) { 
+                    ProMultiTrackAudioMixerScreen(
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+                composable(PulseCastRoute.OverlayStudio) { 
+                    StreamAlertWidgetOverlayStudioScreen(
+                        onBack = { navController.popBackStack() },
+                        onPublish = { navController.popBackStack() }
+                    )
+                }
+                composable(PulseCastRoute.BroadcastSetup) { 
+                    BroadcastSetupRTMPStudioScreen(
+                        onBack = { navController.popBackStack() },
+                        onSaveAndLaunch = { navController.navigate(PulseCastRoute.LiveHud) }
+                    )
+                }
+                composable(PulseCastRoute.FacecamChroma) { 
+                    FacecamChromaKeyStudioScreen(
+                        onBack = { navController.popBackStack() },
+                        onApply = { navController.popBackStack() }
+                    )
+                }
+                composable(PulseCastRoute.LiveHud) {
+                    LiveInGameHUDOverlayScreen(
+                        onStopRecording = {
+                            onStopCapture()
+                            navController.popBackStack()
+                        }
+                    )
+                }
+                composable(PulseCastRoute.ClipExport) { 
+                    InstantClipHighlightExportFlowScreen(
+                        onBack = { navController.popBackStack() },
+                        onSaveToVault = { navController.popBackStack() }
+                    )
+                }
+                composable(PulseCastRoute.CustomIngest) { 
+                    CustomIngestNodeModalScreen(
+                        onDismiss = { navController.popBackStack() },
+                        onConnect = { navController.popBackStack() }
+                    )
+                }
+            }
+
+            if (showOrbCustomization) {
+                FloatingBallCustomizationScreen(
+                    onClose = { showOrbCustomization = false }
                 )
             }
-            composable(PulseCastRoute.TimelineEditor) { DestinationPlaceholder("Timeline Video Editor", "SCREEN_29") }
-            composable(PulseCastRoute.FloatingSettings) { DestinationPlaceholder("Floating Ball & Settings", "SCREEN_31") }
-            composable(PulseCastRoute.OrbCustomization) { OrbCustomizationDestination() }
-            composable(PulseCastRoute.Vault) { DestinationPlaceholder("Studio Vault & Media Library", "SCREEN_24") }
-            composable(PulseCastRoute.Diagnostics) { DestinationPlaceholder("Performance & Stream Diagnostics", "SCREEN_17") }
-            composable(PulseCastRoute.CreatorHub) { DestinationPlaceholder("Creator Profile & Connected Channels", "SCREEN_15") }
-            composable(PulseCastRoute.AudioMixer) { AudioMixerDestination() }
-            composable(PulseCastRoute.OverlayStudio) { OverlayStudioDestination() }
-            composable(PulseCastRoute.BroadcastSetup) { BroadcastSetupDestination() }
-            composable(PulseCastRoute.FacecamChroma) { FacecamDestination() }
-            composable(PulseCastRoute.LiveHud) { DestinationPlaceholder("Live In-Game HUD", "SCREEN_18") }
-            composable(PulseCastRoute.LiveChat) { DestinationPlaceholder("Live Chat & Moderation", "SCREEN_6") }
-            composable(PulseCastRoute.ClipExport) { DestinationPlaceholder("Instant Clip & Highlight Export", "SCREEN_9") }
-            composable(PulseCastRoute.SafetyChecklist) { SafetyChecklistDestination(onDismiss = { navController.popBackStack() }, onLaunch = { navController.navigate(PulseCastRoute.LiveHud) }) }
-            composable(PulseCastRoute.CustomIngest) { CustomIngestDestination(onDismiss = { navController.popBackStack() }, onConnect = { navController.popBackStack() }) }
         }
     }
 }
@@ -129,187 +263,108 @@ private fun NavHostController.navigateRoot(route: String) = navigate(route) {
 }
 
 @Composable
-private fun PulseCastBottomNavigation(currentRoute: String?, onNavigate: (String) -> Unit) {
-    Box {
-        NavigationBar(containerColor = SurfaceLow) {
-            NavigationBarItem(currentRoute == PulseCastRoute.CaptureHub, { onNavigate(PulseCastRoute.CaptureHub) }, { Icon(Icons.Default.Videocam, null) }, label = { Text("Record") })
-            NavigationBarItem(currentRoute == PulseCastRoute.LiveStudio, { onNavigate(PulseCastRoute.LiveStudio) }, { Icon(Icons.Default.Settings, null) }, label = { Text("Live") })
-            Spacer(Modifier.weight(1f))
-            NavigationBarItem(currentRoute == PulseCastRoute.TimelineEditor, { onNavigate(PulseCastRoute.TimelineEditor) }, { Icon(Icons.Default.Edit, null) }, label = { Text("Editor") })
-            NavigationBarItem(currentRoute == PulseCastRoute.FloatingSettings, { onNavigate(PulseCastRoute.FloatingSettings) }, { Icon(Icons.Default.Settings, null) }, label = { Text("Tools") })
-        }
-        FloatingActionButton(
-            onClick = { onNavigate(PulseCastRoute.OrbCustomization) },
-            modifier = Modifier.align(Alignment.TopCenter).offset(y = (-18).dp),
-            containerColor = ElectricRuby
-        ) { Icon(Icons.Default.Settings, "Customize floating orb") }
-    }
-}
+private fun CaptureHubDestination(
+    isRecording: Boolean,
+    onRecord: () -> Unit,
+    viewModel: CaptureViewModel,
+    onNavigateToVault: () -> Unit,
+    onNavigateToPresets: () -> Unit
+) {
+    val storagePercentage by viewModel.storagePercentage.collectAsState()
+    val freeSpaceText by viewModel.freeSpaceText.collectAsState()
+    val systemAudioLevel by viewModel.systemAudioLevel.collectAsState()
+    val micAudioLevel by viewModel.micAudioLevel.collectAsState()
+    val resolution by viewModel.resolution.collectAsState()
+    val fps by viewModel.fps.collectAsState()
+    val audioMode by viewModel.audioMode.collectAsState()
 
-@Composable
-private fun CaptureHubDestination(isRecording: Boolean, onRecord: () -> Unit) {
-    var preset by remember { mutableStateOf("Pro Gaming") }
-    var floatingBall by remember { mutableStateOf(true) }
-    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        StudioPanel {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Column { Text("CAPTURE ENGINE READY", color = CyberCyan, style = MaterialTheme.typography.labelMedium); Text("Low latency • 112 GB free", color = Color.LightGray) }
-                Text("74%", style = MaterialTheme.typography.headlineMedium, color = CyberCyan)
-            }
-            Spacer(Modifier.height(14.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TelemetryChip("2K QHD", CyberCyan); TelemetryChip("60 FPS", Color.White); TelemetryChip("24 Mbps", NeonAmber)
-            }
-            Spacer(Modifier.height(16.dp))
-            Text("DUAL STREAM AUDIO", style = MaterialTheme.typography.labelMedium, color = Color.LightGray)
-            Spacer(Modifier.height(6.dp))
-            AudioMeter("SYSTEM / GAME", .76f, CyberCyan)
-            AudioMeter("VOICE MIC", .64f, ElectricRuby)
-        }
-        StudioPanel(container = SurfaceLow) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Countdown: 3s", color = Color.LightGray); Text("Auto-Stop 60m", color = CyberCyan)
-            }
-            Spacer(Modifier.height(12.dp))
-            Button(onClick = onRecord, modifier = Modifier.fillMaxWidth().height(58.dp), colors = ButtonDefaults.buttonColors(containerColor = ElectricRuby), shape = RoundedCornerShape(14.dp)) {
-                Text(if (isRecording) "■ Stop Screen Recording" else "● Start Screen Recording", fontWeight = FontWeight.Bold)
-            }
-            Text("Overlay badge appears automatically.", Modifier.fillMaxWidth().padding(top = 8.dp), textAlign = TextAlign.Center, color = Color.LightGray, style = MaterialTheme.typography.bodySmall)
-        }
-        Text("Target Presets", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            items(listOf("Pro Gaming" to "1440p • 60fps", "Tutorial Cast" to "1080p • Brush", "Reaction PIP" to "Dual Cam", "Eco Clip" to "720p • 30fps")) { (name, detail) ->
-                Card(onClick = { preset = name }, colors = CardDefaults.cardColors(containerColor = if (preset == name) SurfaceHigh else SurfaceLow), modifier = Modifier.width(148.dp)) {
-                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) { Text(name, fontWeight = FontWeight.Bold); Text(detail, color = CyberCyan, style = MaterialTheme.typography.labelSmall) }
-                }
-            }
-        }
-        StudioPanel {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) { Text("Floating Ball", fontWeight = FontWeight.Bold); Text("Auto-hide while recording", color = Color.LightGray, style = MaterialTheme.typography.bodySmall) }
-                Switch(floatingBall, { floatingBall = it })
-            }
-        }
-    }
+    CaptureHubScreen(
+        isRecording = isRecording,
+        onRecordClick = onRecord,
+        storagePercentage = storagePercentage,
+        freeSpaceText = freeSpaceText,
+        systemAudioLevel = systemAudioLevel,
+        micAudioLevel = micAudioLevel,
+        resolution = resolution,
+        fps = fps,
+        audioMode = audioMode,
+        onResolutionChange = viewModel::setResolution,
+        onFpsChange = viewModel::setFps,
+        onAudioModeChange = viewModel::setAudioMode,
+        onNavigateToVault = onNavigateToVault,
+        onNavigateToPresets = onNavigateToPresets
+    )
 }
 
 @Composable
 private fun LiveStudioDestination(
+    isBroadcasting: Boolean,
     onOpenFacecam: () -> Unit, onOpenMixer: () -> Unit, onOpenOverlays: () -> Unit,
-    onOpenSettings: () -> Unit, onAddIngest: () -> Unit, onGoLive: () -> Unit
+    onOpenSettings: () -> Unit, onAddIngest: () -> Unit, onGoLive: () -> Unit,
+    onStopBroadcast: () -> Unit
 ) {
-    val platforms = remember { mutableStateListOf("YouTube", "Twitch") }
-    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("Live Multistream Studio", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-        StudioPanel {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("DESTINATIONS", color = CyberCyan, style = MaterialTheme.typography.labelMedium); Text("2 ARMED", color = SignalGreen, style = MaterialTheme.typography.labelMedium) }
-            Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                listOf("YouTube", "Twitch", "Kick", "TikTok").forEach { platform ->
-                    FilterChip(selected = platform in platforms, onClick = { if (platform in platforms) platforms.remove(platform) else platforms.add(platform) }, label = { Text(platform) })
-                }
-            }
-            TextButton(onClick = onAddIngest) { Text("+ Add Custom RTMP / SRT", color = CyberCyan) }
-        }
-        StudioPanel(container = SurfaceLow) {
-            Text("CAMERA PIP", color = Color.LightGray, style = MaterialTheme.typography.labelMedium)
-            Spacer(Modifier.height(10.dp))
-            Box(Modifier.fillMaxWidth().height(112.dp).background(SurfaceHigh, RoundedCornerShape(12.dp)).clickable(onClick = onOpenFacecam), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) { Icon(Icons.Default.Videocam, null, tint = CyberCyan); Text("Tap to configure Facecam + Chroma", color = Color.LightGray) }
-            }
-        }
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            ActionTile("Overlays", onOpenOverlays, Modifier.weight(1f)); ActionTile("Mixer", onOpenMixer, Modifier.weight(1f)); ActionTile("Encoder", onOpenSettings, Modifier.weight(1f))
-        }
-        Spacer(Modifier.weight(1f))
-        Button(onClick = onGoLive, modifier = Modifier.fillMaxWidth().height(60.dp), colors = ButtonDefaults.buttonColors(containerColor = ElectricRuby), shape = RoundedCornerShape(16.dp)) { Text("GO LIVE", fontWeight = FontWeight.Black) }
-        Text("A pre-stream safety check runs before broadcast.", Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = Color.LightGray, style = MaterialTheme.typography.bodySmall)
-    }
-}
-
-@Composable
-private fun OrbCustomizationDestination() {
-    var idleOpacity by remember { mutableFloatStateOf(.35f) }
-    var activeOpacity by remember { mutableFloatStateOf(.92f) }
-    var docking by remember { mutableStateOf("Magnetic") }
-    var skin by remember { mutableStateOf("Cyber Red") }
-    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("Floating Ball Customization", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-        StudioPanel {
-            Text("LIVE SIMULATOR", color = CyberCyan, style = MaterialTheme.typography.labelMedium)
-            Box(Modifier.fillMaxWidth().height(96.dp), contentAlignment = Alignment.CenterEnd) {
-                Surface(shape = RoundedCornerShape(99.dp), color = ElectricRuby.copy(alpha = idleOpacity), modifier = Modifier.size(62.dp)) { Box(contentAlignment = Alignment.Center) { Text("◉", color = Color.White, style = MaterialTheme.typography.headlineMedium) } }
-            }
-            LabeledSlider("Idle opacity", idleOpacity, { idleOpacity = it }); LabeledSlider("Active opacity", activeOpacity, { activeOpacity = it })
-        }
-        StudioPanel {
-            Text("DOCKING MODE", color = CyberCyan, style = MaterialTheme.typography.labelMedium)
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) { listOf("Magnetic", "Free Float", "Half-Pill").forEach { mode -> FilterChip(mode == docking, { docking = mode }, { Text(mode) }) } }
-        }
-        StudioPanel {
-            Text("GESTURE ACTION BINDER", color = CyberCyan, style = MaterialTheme.typography.labelMedium)
-            GestureRow("Single Tap", "Radial Menu", CyberCyan); GestureRow("Double Tap", "Instant 30s Clip", ElectricRuby); GestureRow("Long Press (0.8s)", "Mic Mute Toggle", NeonAmber); GestureRow("Swipe Inward", "Live Chat Drawer", CyberCyan)
-        }
-        StudioPanel {
-            Text("ORB VISUAL SKINS", color = CyberCyan, style = MaterialTheme.typography.labelMedium)
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) { listOf("Cyber Red", "Stealth", "Apex Gold").forEach { option -> FilterChip(option == skin, { skin = option }, { Text(option) }) } }
-        }
-        Button(onClick = { }, modifier = Modifier.fillMaxWidth().height(54.dp), colors = ButtonDefaults.buttonColors(containerColor = ElectricRuby)) { Text("✓ Apply Orb Configuration", fontWeight = FontWeight.Bold) }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SafetyChecklistDestination(onDismiss: () -> Unit, onLaunch: () -> Unit) {
-    var dndEnabled by remember { mutableStateOf(false) }
-    var title by remember { mutableStateOf("Ranked grind to Diamond") }
-    val checks = remember { mutableStateListOf(true, true, true, false) }
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-    Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("Pre-Stream Safety Checklist", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-        Text("Verify your broadcast before going public.", color = Color.LightGray)
-        StudioPanel {
-            Text("BROADCAST METADATA", color = CyberCyan, style = MaterialTheme.typography.labelMedium)
-            OutlinedTextField(title, { title = it }, Modifier.fillMaxWidth().padding(top = 8.dp), label = { Text("Stream title") }, singleLine = true)
-        }
-        StudioPanel {
-            listOf("Encoder and network stable", "Mic input detected", "Overlay profile armed", "Do Not Disturb shield enabled").forEachIndexed { index, label ->
-                Row(Modifier.fillMaxWidth().clickable { checks[index] = !checks[index] }, verticalAlignment = Alignment.CenterVertically) { Checkbox(checks[index], { checks[index] = it }); Text(label) }
-            }
-            Button(onClick = { dndEnabled = !dndEnabled }, colors = ButtonDefaults.buttonColors(containerColor = if (dndEnabled) SignalGreen else SurfaceHigh), modifier = Modifier.fillMaxWidth().padding(top = 6.dp)) { Text(if (dndEnabled) "DND ARMED" else "Enable DND Shield Now") }
-        }
-        Spacer(Modifier.weight(1f))
-        OutlinedButton(onClick = { }, modifier = Modifier.fillMaxWidth()) { Text("Test Rehearsal (Unlisted)") }
-        Button(onClick = onLaunch, modifier = Modifier.fillMaxWidth().height(58.dp), colors = ButtonDefaults.buttonColors(containerColor = ElectricRuby)) { Text("LAUNCH LIVE MULTISTREAM", fontWeight = FontWeight.Black) }
-    }
-    }
+    LiveMultiStreamStudioScreen(
+        isBroadcasting = isBroadcasting,
+        onGoLive = onGoLive,
+        onStopBroadcast = onStopBroadcast,
+        onAddCustomRTMP = onAddIngest,
+        onOpenFacecam = onOpenFacecam,
+        onOpenMixer = onOpenMixer,
+        onOpenOverlays = onOpenOverlays,
+        onOpenSettings = onOpenSettings
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CustomIngestDestination(onDismiss: () -> Unit, onConnect: () -> Unit) {
+    val viewModel: IngestNodeViewModel = viewModel()
+    val coroutineScope = rememberCoroutineScope()
+    val nodes by viewModel.nodes.collectAsState()
+    val pingResult by viewModel.pingResult.collectAsState()
+    val validationMessage by viewModel.validationMessage.collectAsState()
     var transport by remember { mutableStateOf("RTMP(S)") }
     var endpoint by remember { mutableStateOf("rtmps://live.example.com/app") }
     var streamKey by remember { mutableStateOf("") }
     var bitrate by remember { mutableFloatStateOf(8_500f) }
+
     ModalBottomSheet(onDismissRequest = onDismiss) {
-    Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("Custom RTMP & SRT Ingest", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) { listOf("RTMP(S)", "SRT Caller", "RTSP").forEach { FilterChip(transport == it, { transport = it }, { Text(it) }) } }
-        StudioPanel {
-            Text("INGEST ENDPOINT", color = CyberCyan, style = MaterialTheme.typography.labelMedium)
-            OutlinedTextField(endpoint, { endpoint = it }, Modifier.fillMaxWidth().padding(top = 8.dp), label = { Text("Server URL") }, singleLine = true)
-            OutlinedTextField(streamKey, { streamKey = it }, Modifier.fillMaxWidth().padding(top = 8.dp), label = { Text("Stream key") }, singleLine = true, visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation())
+        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Text("Custom RTMP & SRT Ingest", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            if (nodes.isNotEmpty()) {
+                Text("Armed Destinations", color = CyberCyan)
+                nodes.forEach { node -> Text("• ${node.label} (${node.protocol})") }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) { listOf("RTMP(S)", "SRT Caller", "RTSP").forEach { FilterChip(transport == it, { transport = it }, { Text(it) }) } }
+            StudioPanel {
+                Text("INGEST ENDPOINT", color = CyberCyan, style = MaterialTheme.typography.labelMedium)
+                OutlinedTextField(endpoint, { endpoint = it }, Modifier.fillMaxWidth().padding(top = 8.dp), label = { Text("Server URL") }, singleLine = true)
+                OutlinedTextField(streamKey, { streamKey = it }, Modifier.fillMaxWidth().padding(top = 8.dp), label = { Text("Stream key") }, singleLine = true, visualTransformation = PasswordVisualTransformation())
+            }
+            StudioPanel {
+                Text("Target bitrate ${(bitrate / 1_000).toString().take(3)} Mbps", color = Color.LightGray)
+                Slider(bitrate, { bitrate = it }, valueRange = 2_500f..15_000f)
+                Text("Uplink utilization: 68% • expected jitter: 0.8 ms", color = CyberCyan, style = MaterialTheme.typography.bodySmall)
+            }
+            Spacer(Modifier.weight(1f))
+            if (pingResult.isNotEmpty()) Text(pingResult, color = CyberCyan)
+            if (validationMessage.isNotEmpty()) Text(validationMessage, color = ElectricRuby, style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = {
+                val uri = try { URI(endpoint) } catch (e: Exception) { null }
+                val host = uri?.host
+                if (transport != "RTMP(S)") {
+                    viewModel.testHandshake("", -1)
+                } else if (!host.isNullOrBlank()) {
+                    val defaultPort = if (uri.scheme.equals("rtmps", ignoreCase = true)) 443 else 1935
+                    viewModel.testHandshake(host, uri.port.takeIf { it > 0 } ?: defaultPort)
+                }
+            }, modifier = Modifier.fillMaxWidth()) { Text("Test Handshake & Ping") }
+            Button(onClick = {
+                coroutineScope.launch {
+                    if (viewModel.addNode(endpoint, streamKey, transport, bitrate.toInt(), "Node ${nodes.size + 1}")) onConnect()
+                }
+            }, modifier = Modifier.fillMaxWidth().height(56.dp), colors = ButtonDefaults.buttonColors(containerColor = SignalGreen)) { Text("Connect & Arm Node", fontWeight = FontWeight.Bold) }
         }
-        StudioPanel {
-            Text("Target bitrate ${(bitrate / 1_000).toString().take(3)} Mbps", color = Color.LightGray)
-            Slider(bitrate, { bitrate = it }, valueRange = 2_500f..15_000f)
-            Text("Uplink utilization: 68% • expected jitter: 0.8 ms", color = CyberCyan, style = MaterialTheme.typography.bodySmall)
-        }
-        Spacer(Modifier.weight(1f))
-        OutlinedButton(onClick = { }, modifier = Modifier.fillMaxWidth()) { Text("Test Handshake & Ping") }
-        Button(onClick = onConnect, modifier = Modifier.fillMaxWidth().height(56.dp), colors = ButtonDefaults.buttonColors(containerColor = SignalGreen)) { Text("Connect & Arm Node", fontWeight = FontWeight.Bold) }
-    }
     }
 }
 
@@ -349,13 +404,72 @@ private fun OverlayStudioDestination() {
 
 @Composable
 private fun AudioMixerDestination() {
-    val channels = listOf("Game" to CyberCyan, "Mic" to ElectricRuby, "Discord" to SignalGreen, "Music" to NeonAmber)
-    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("Pro Multi-Track Audio Mixer", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-        StudioPanel { Text("MASTER BROADCAST  -4 dB", color = CyberCyan); Slider(.72f, {}) }
-        channels.forEach { (name, color) -> StudioPanel { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(name, fontWeight = FontWeight.Bold); Text("-8 dB", color = color) }; LinearProgressIndicator(.7f, Modifier.fillMaxWidth().padding(top = 8.dp), color = color, trackColor = SurfaceHigh) } }
-        StudioPanel { Text("DMCA SHIELD", color = CyberCyan); Text("Exclude music from VOD audio while preserving live mix.", color = Color.LightGray, style = MaterialTheme.typography.bodySmall); Switch(true, {}) }
-        Button(onClick = { }, modifier = Modifier.fillMaxWidth()) { Text("Apply Audio Profile") }
+    val viewModel: AudioMixerViewModel = viewModel()
+    val channels by viewModel.channels.collectAsState()
+    val masterGain by viewModel.masterGainDb.collectAsState()
+    val dmcaEnabled by viewModel.dmcaShieldEnabled.collectAsState()
+    val duckingEnabled by viewModel.smartDuckingEnabled.collectAsState()
+    val duckingThreshold by viewModel.smartDuckingThreshold.collectAsState()
+    
+    val snackbarHostState = remember { SnackbarHostState() }
+    
+    LaunchedEffect(Unit) {
+        viewModel.profileApplied.collect {
+            snackbarHostState.showSnackbar("Audio Profile Applied")
+        }
+    }
+
+    Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->
+        Column(Modifier.fillMaxSize().padding(padding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Text("Pro Multi-Track Audio Mixer", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            StudioPanel { 
+                Text("MASTER BROADCAST ${masterGain} dB", color = CyberCyan)
+                Slider(masterGain / 20f + 0.5f, { viewModel.setMasterGain((it - 0.5f) * 20f) })
+            }
+            channels.forEachIndexed { index, channel -> 
+                StudioPanel { 
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { 
+                        Text(channel.name, fontWeight = FontWeight.Bold)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("${channel.gainDb} dB", color = Color(channel.color))
+                            IconButton(onClick = { viewModel.toggleChannelMute(index) }) {
+                                Icon(if (channel.muted) Icons.Default.MicOff else Icons.Default.Mic, "Mute")
+                            }
+                        }
+                    }
+                    Slider(channel.gainDb / 20f + 0.5f, { viewModel.setChannelGain(index, (it - 0.5f) * 20f) }) 
+                } 
+            }
+            StudioPanel { 
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Column {
+                        Text("DMCA SHIELD", color = CyberCyan)
+                        Text("Exclude music from VOD.", color = Color.LightGray, style = MaterialTheme.typography.bodySmall)
+                    }
+                    Switch(dmcaEnabled, { viewModel.toggleDmcaShield() })
+                }
+            }
+            StudioPanel {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Column {
+                        Text("SMART DUCKING", color = SignalGreen)
+                        Text("Auto-lower volume on mic input.", color = Color.LightGray, style = MaterialTheme.typography.bodySmall)
+                    }
+                    Switch(duckingEnabled, { viewModel.toggleSmartDucking() })
+                }
+                if (duckingEnabled) {
+                    Slider(duckingThreshold, { viewModel.setDuckingThreshold(it) })
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf("Airhorn", "Clutch Clap", "GG Wave", "Crowd Cheer", "Air Horn 2", "Subscribe").forEach { sfx ->
+                    Box(Modifier.size(48.dp).background(SurfaceHigh, RoundedCornerShape(8.dp)).clickable { }, contentAlignment = Alignment.Center) {
+                        Text(sfx.take(1), fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+            Button(onClick = { viewModel.applyProfile() }, modifier = Modifier.fillMaxWidth()) { Text("Apply Audio Profile") }
+        }
     }
 }
 
@@ -373,24 +487,179 @@ private fun BroadcastSetupDestination() {
     }
 }
 
-@Composable private fun StudioPanel(container: Color = SurfaceLow, content: @Composable ColumnScope.() -> Unit) = Surface(color = container, shape = RoundedCornerShape(16.dp)) { Column(Modifier.fillMaxWidth().padding(16.dp), content = content) }
-@Composable private fun TelemetryChip(text: String, color: Color) = Surface(color = SurfaceHigh, shape = RoundedCornerShape(6.dp)) { Text(text, Modifier.padding(horizontal = 8.dp, vertical = 4.dp), color = color, style = MaterialTheme.typography.labelSmall) }
-@Composable private fun AudioMeter(name: String, value: Float, color: Color) { Column(Modifier.padding(vertical = 4.dp)) { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(name, style = MaterialTheme.typography.labelSmall); Text("-${(value * 10).toInt()} dB", color = color, style = MaterialTheme.typography.labelSmall) }; LinearProgressIndicator(progress = value, modifier = Modifier.fillMaxWidth().height(6.dp), color = color, trackColor = SurfaceHigh) } }
-@Composable private fun ActionTile(label: String, onClick: () -> Unit, modifier: Modifier = Modifier) = Card(onClick = onClick, modifier = modifier, colors = CardDefaults.cardColors(containerColor = SurfaceLow)) { Text(label, Modifier.fillMaxWidth().padding(vertical = 18.dp), textAlign = TextAlign.Center, color = CyberCyan, fontWeight = FontWeight.Bold) }
-@Composable private fun LabeledSlider(label: String, value: Float, onValueChange: (Float) -> Unit) { Text("$label ${(value * 100).toInt()}%", color = Color.LightGray, style = MaterialTheme.typography.bodySmall); Slider(value, onValueChange) }
-@Composable private fun GestureRow(gesture: String, action: String, color: Color) { Row(Modifier.fillMaxWidth().padding(top = 10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { Text(gesture, fontWeight = FontWeight.Medium); Text(action, color = color, style = MaterialTheme.typography.labelMedium) } }
-
 @Composable
-private fun DestinationPlaceholder(title: String, screenId: String) {
-    Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
-        Column(
-            Modifier.fillMaxWidth().background(SurfaceLow, RoundedCornerShape(20.dp)).padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(screenId, color = CyberCyan, style = MaterialTheme.typography.labelMedium)
-            Text(title, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
-            Text("Route is ready. The Stitch screen implementation will replace this surface in the next pass.", color = Color.LightGray, textAlign = TextAlign.Center)
+private fun DiagnosticsScreen() {
+    val viewModel: DiagnosticsViewModel = viewModel()
+    val fps by viewModel.fps.collectAsState()
+    val bitrate by viewModel.bitrateMbps.collectAsState()
+    val temp by viewModel.socTempC.collectAsState()
+    val battery by viewModel.batteryPct.collectAsState()
+    val fpsHistory by viewModel.fpsHistory.collectAsState()
+    val bitrateHistory by viewModel.bitrateHistory.collectAsState()
+    
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(Unit) {
+        viewModel.startMonitoring()
+        viewModel.optimizeEvent.collect { msg ->
+            snackbarHostState.showSnackbar(msg)
+        }
+    }
+    Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->
+        Column(Modifier.fillMaxSize().padding(padding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Text("Performance & Stream Diagnostics", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                listOf("Live", "1m", "5m", "15m").forEach { FilterChip(it == "Live", {}, { Text(it) }) }
+            }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                StudioPanel { Text("FPS", color = Color.Gray); Text("${fps.toInt()}", style = MaterialTheme.typography.headlineMedium, color = CyberCyan) }
+                StudioPanel { Text("Uplink", color = Color.Gray); Text(String.format("%.1f", bitrate), style = MaterialTheme.typography.headlineMedium, color = ElectricRuby) }
+            }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                StudioPanel { Text("Temp", color = Color.Gray); Text("${temp.toInt()}°C", style = MaterialTheme.typography.headlineMedium, color = NeonAmber) }
+                StudioPanel { Text("Battery", color = Color.Gray); Text("$battery%", style = MaterialTheme.typography.headlineMedium, color = SignalGreen) }
+            }
+            Box(Modifier.fillMaxWidth().height(200.dp).background(SurfaceHigh, RoundedCornerShape(16.dp)).padding(16.dp)) {
+                Canvas(Modifier.fillMaxSize()) {
+                    if (fpsHistory.isEmpty()) return@Canvas
+                    val maxFps = 120f
+                    val maxBitrate = 15f
+                    val stepX = size.width / 60f
+                    val fpsPath = Path()
+                    val bitratePath = Path()
+                    fpsHistory.forEachIndexed { index, v ->
+                        val x = index * stepX
+                        val y = size.height - (v / maxFps * size.height)
+                        if (index == 0) fpsPath.moveTo(x, y) else fpsPath.lineTo(x, y)
+                    }
+                    bitrateHistory.forEachIndexed { index, v ->
+                        val x = index * stepX
+                        val y = size.height - (v / maxBitrate * size.height)
+                        if (index == 0) bitratePath.moveTo(x, y) else bitratePath.lineTo(x, y)
+                    }
+                    drawPath(fpsPath, Color.Cyan, style = Stroke(3f))
+                    drawPath(bitratePath, Color.Red, style = Stroke(3f))
+                }
+            }
+            Spacer(Modifier.weight(1f))
+            Button(onClick = { viewModel.autoOptimize() }, modifier = Modifier.fillMaxWidth()) { Text("Auto-Optimize Encoder") }
         }
     }
 }
+
+@Composable
+private fun CreatorHubScreen() {
+    var autoSync by remember { mutableStateOf(true) }
+    var wifiOnly by remember { mutableStateOf(true) }
+    var showLogout by remember { mutableStateOf(false) }
+    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Text("Creator Profile", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Box(Modifier.size(64.dp).background(Color.Gray, RoundedCornerShape(32.dp)))
+            Column { Text("Streamer Avatar Placeholder", fontWeight = FontWeight.Bold); Text("Live on 3 platforms", color = CyberCyan) }
+        }
+        Surface(color = SurfaceLow, shape = RoundedCornerShape(16.dp)) {
+            Text("Pro Studio Active", Modifier.padding(16.dp), color = SignalGreen, fontWeight = FontWeight.Bold)
+        }
+        listOf("YouTube" to "1.2K", "Twitch" to "8.5K", "TikTok" to "45K").forEach { (platform, followers) ->
+            StudioPanel {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Column { Text(platform, fontWeight = FontWeight.Bold); Text("$followers followers", color = Color.LightGray) }
+                    Button(onClick = {}) { Text("Manage") }
+                }
+            }
+        }
+        StudioPanel {
+            Text("Cloud Vault Storage", fontWeight = FontWeight.Bold)
+            LinearProgressIndicator(0.75f, Modifier.fillMaxWidth().padding(vertical = 8.dp), color = CyberCyan)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Auto-sync", color = Color.LightGray)
+                Checkbox(autoSync, { autoSync = it })
+            }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Wi-Fi only", color = Color.LightGray)
+                Checkbox(wifiOnly, { wifiOnly = it })
+            }
+        }
+        Spacer(Modifier.weight(1f))
+        Button(onClick = { showLogout = true }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = ElectricRuby)) { Text("Disconnect / Log Out") }
+    }
+    if (showLogout) {
+        AlertDialog(onDismissRequest = { showLogout = false }, confirmButton = { Button(onClick = { showLogout = false }) { Text("Log Out") } }, dismissButton = { TextButton(onClick = { showLogout = false }) { Text("Cancel") } }, title = { Text("Log Out?") }, text = { Text("Are you sure you want to disconnect your accounts?") })
+    }
+}
+
+@Composable
+private fun ClipExportScreen() {
+    var ratio by remember { mutableStateOf("9:16") }
+    var start by remember { mutableFloatStateOf(0.1f) }
+    var end by remember { mutableFloatStateOf(0.9f) }
+    var rendering by remember { mutableStateOf(false) }
+    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Text("Instant Clip Export", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            listOf("9:16", "16:9", "1:1").forEach { FilterChip(ratio == it, { ratio = it }, { Text(it) }) }
+        }
+        Box(Modifier.fillMaxWidth().height(300.dp).background(SurfaceHigh, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
+            Text("Preview Placeholder", color = CyberCyan)
+        }
+        StudioPanel {
+            Text("Trim Timeline", color = Color.LightGray)
+            Row {
+                Slider(start, { if (it < end) start = it }, Modifier.weight(1f))
+                Slider(end, { if (it > start) end = it }, Modifier.weight(1f))
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            listOf("TikTok", "YT Shorts", "Reels", "Discord").forEach { FilterChip(false, {}, { Text(it) }) }
+        }
+        Spacer(Modifier.weight(1f))
+        Button(onClick = { rendering = true }, modifier = Modifier.fillMaxWidth()) { Text("Render & Export $ratio Clip") }
+        OutlinedButton(onClick = { }, modifier = Modifier.fillMaxWidth()) { Text("Save to PulseCast Vault") }
+    }
+    if (rendering) {
+        AlertDialog(onDismissRequest = {}, confirmButton = {}, title = { Text("Rendering...") }, text = { CircularProgressIndicator() })
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TimelineEditorScreen() {
+    var playhead by remember { mutableFloatStateOf(0.5f) }
+    var audioVol by remember { mutableFloatStateOf(0.8f) }
+    var showExport by remember { mutableStateOf(false) }
+    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Text("Timeline Editor", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Box(Modifier.fillMaxWidth().height(200.dp).background(SurfaceHigh, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
+            Text("Video Preview Placeholder", color = CyberCyan)
+        }
+        Slider(playhead, { playhead = it })
+        StudioPanel {
+            Text("Video Track", color = Color.LightGray)
+            Box(Modifier.fillMaxWidth().height(40.dp).background(Color.Blue.copy(alpha=0.3f)))
+            Spacer(Modifier.height(8.dp))
+            Text("Audio Track", color = Color.LightGray)
+            Box(Modifier.fillMaxWidth().height(40.dp).background(Color.Green.copy(alpha=0.3f)))
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = {}) { Icon(Icons.Default.ContentCut, null); Text("Split") }
+            Button(onClick = {}) { Icon(Icons.Default.Speed, null); Text("Speed") }
+        }
+        StudioPanel {
+            Text("Audio Fader", color = Color.LightGray)
+            Slider(audioVol, { audioVol = it })
+        }
+        Spacer(Modifier.weight(1f))
+        Button(onClick = { showExport = true }, modifier = Modifier.fillMaxWidth()) { Text("Export") }
+    }
+    if (showExport) {
+        ModalBottomSheet(onDismissRequest = { showExport = false }) {
+            Column(Modifier.padding(16.dp)) {
+                Text("Export Resolution")
+                Button(onClick = { showExport = false }) { Text("1080p") }
+                Button(onClick = { showExport = false }) { Text("4K") }
+            }
+        }
+    }
+}
+
+@Composable private fun StudioPanel(modifier: Modifier = Modifier, container: Color = SurfaceLow, content: @Composable ColumnScope.() -> Unit) = Surface(modifier = modifier, color = container, shape = RoundedCornerShape(16.dp)) { Column(Modifier.fillMaxWidth().padding(16.dp), content = content) }
