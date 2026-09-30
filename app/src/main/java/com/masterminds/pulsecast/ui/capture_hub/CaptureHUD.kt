@@ -1,5 +1,7 @@
 package com.masterminds.pulsecast.ui.capture_hub
 
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -36,6 +38,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -48,6 +51,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.masterminds.pulsecast.ui.CaptureViewModel
 import com.masterminds.pulsecast.core.AudioMode
+import com.masterminds.pulsecast.core.MediaStoreMediaRepository
+import com.masterminds.pulsecast.core.VaultMediaItem
 import com.masterminds.pulsecast.ui.theme.*
 import com.masterminds.pulsecast.ui.ui_library.*
 import kotlinx.coroutines.delay
@@ -599,6 +604,14 @@ private fun FloatingBallSimulator() {
 
 @Composable
 private fun StudioVaultPreview(onViewAll: () -> Unit) {
+    val context = LocalContext.current
+    var mediaItems by remember { mutableStateOf<List<VaultMediaItem>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        val repo = MediaStoreMediaRepository(context)
+        mediaItems = repo.queryStudioMedia().take(3)
+    }
+
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -611,31 +624,43 @@ private fun StudioVaultPreview(onViewAll: () -> Unit) {
                 Text("Studio Vault", style = PulseCastType.headlineSm)
             }
             TextButton(onClick = onViewAll) {
-                Text("VIEW ALL (14)", style = PulseCastType.labelTelemetrySm, color = PrimaryContainer)
+                Text("VIEW ALL (${mediaItems.size})", style = PulseCastType.labelTelemetrySm, color = PrimaryContainer)
                 Icon(Icons.Default.ChevronRight, null, Modifier.size(14.dp), PrimaryContainer)
             }
         }
-        
-        VaultClipCard(
-            title = "Final Ring Ranked Clutch",
-            category = "Apex Mobile",
-            time = "Today, 09:15",
-            size = "420 MB",
-            audio = "Stereo Audio",
-            duration = "08:42",
-            res = "1080p60"
-        )
-        
-        VaultClipCard(
-            title = "Configuring OBS Multi-Stream",
-            category = "App Walkthrough",
-            time = "Yesterday",
-            size = "890 MB",
-            audio = "Mic Only",
-            duration = "14:10",
-            res = "1440p",
-            resColor = SecondaryContainer
-        )
+
+        if (mediaItems.isEmpty()) {
+            PulseCard(
+                modifier = Modifier.fillMaxWidth(),
+                backgroundColor = SurfaceLow,
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("No recorded videos found yet. Tap 'Start Screen Recording' to record your first video!", style = PulseCastType.bodySm, color = OnSurfaceMuted, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(12.dp))
+            }
+        } else {
+            mediaItems.forEach { item ->
+                VaultClipCard(
+                    title = item.title,
+                    category = item.mimeType,
+                    time = item.formattedDate,
+                    size = item.formattedSize,
+                    audio = "Audio Muxed",
+                    duration = item.formattedDuration,
+                    res = item.resolution,
+                    onClick = {
+                        try {
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                setDataAndType(item.contentUri, "video/*")
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                            context.startActivity(Intent.createChooser(intent, "Play Video"))
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "Could not play video", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                )
+            }
+        }
     }
 }
 
@@ -648,10 +673,11 @@ private fun VaultClipCard(
     audio: String,
     duration: String,
     res: String,
-    resColor: Color = PrimaryContainer
+    resColor: Color = PrimaryContainer,
+    onClick: () -> Unit = {}
 ) {
     PulseCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
         backgroundColor = SurfaceLow,
         shape = RoundedCornerShape(12.dp)
     ) {

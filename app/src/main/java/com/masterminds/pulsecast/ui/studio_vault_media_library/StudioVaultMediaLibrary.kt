@@ -1,6 +1,9 @@
 package com.masterminds.pulsecast.ui.studio_vault_media_library
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -21,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,8 +40,11 @@ import java.util.Locale
 @Composable
 fun StudioVaultScreen(
     viewModel: StudioVaultViewModel = viewModel(),
-    onBack: () -> Unit = {}
+    onBack: () -> Unit = {},
+    onNavigateToEditor: () -> Unit = {},
+    onNavigateToClipExport: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     val mediaItems by viewModel.mediaItems.collectAsState()
     val telemetry by viewModel.telemetry.collectAsState()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
@@ -46,6 +53,10 @@ fun StudioVaultScreen(
 
     var isBatchActive by remember { mutableStateOf(false) }
     var isSearchTrayVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshMedia()
+    }
 
     val filteredItems = remember(mediaItems, selectedCategory, searchQuery) {
         mediaItems.filter { item ->
@@ -115,7 +126,15 @@ fun StudioVaultScreen(
                             item = item,
                             isSelected = isSelected,
                             isBatchActive = isBatchActive,
-                            onToggleSelect = { viewModel.toggleSelection(item.contentUri) }
+                            onToggleSelect = { viewModel.toggleSelection(item.contentUri) },
+                            onPlay = { playVideo(context, item.contentUri) },
+                            onShare = { shareVideo(context, item.contentUri) },
+                            onTrimCut = onNavigateToEditor,
+                            onMakeGif = onNavigateToClipExport,
+                            onDelete = {
+                                viewModel.toggleSelection(item.contentUri)
+                                viewModel.deleteSelectedDirect()
+                            }
                         )
                     }
                 }
@@ -135,6 +154,31 @@ fun StudioVaultScreen(
                 onCancel = { viewModel.clearSelection() }
             )
         }
+    }
+}
+
+private fun playVideo(context: Context, contentUri: Uri) {
+    try {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(contentUri, "video/*")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        context.startActivity(Intent.createChooser(intent, "Play Video"))
+    } catch (e: Exception) {
+        Toast.makeText(context, "Could not play video", Toast.LENGTH_SHORT).show()
+    }
+}
+
+private fun shareVideo(context: Context, contentUri: Uri) {
+    try {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "video/*"
+            putExtra(Intent.EXTRA_STREAM, contentUri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        context.startActivity(Intent.createChooser(intent, "Share Video Clip"))
+    } catch (e: Exception) {
+        Toast.makeText(context, "Could not share video", Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -289,11 +333,25 @@ private fun MediaCard(
     item: VaultMediaItem,
     isSelected: Boolean,
     isBatchActive: Boolean,
-    onToggleSelect: () -> Unit
+    onToggleSelect: () -> Unit,
+    onPlay: () -> Unit,
+    onShare: () -> Unit,
+    onTrimCut: () -> Unit,
+    onMakeGif: () -> Unit,
+    onDelete: () -> Unit
 ) {
+    var showMenu by remember { mutableStateOf(false) }
+
     Surface(color = SurfaceLow, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Box(Modifier.fillMaxWidth().aspectRatio(16/9f).clip(RoundedCornerShape(12.dp)).background(SurfaceMid)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(16/9f)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(SurfaceMid)
+                    .clickable { onPlay() }
+            ) {
                 Icon(Icons.Default.VideoLibrary, null, Modifier.size(48.dp).align(Alignment.Center), OnSurfaceMuted.copy(alpha = 0.2f))
                 
                 // Overlay Badges
@@ -320,7 +378,11 @@ private fun MediaCard(
                 }
                 
                 // Play Button
-                Surface(color = Color.Black.copy(alpha = 0.6f), shape = CircleShape, modifier = Modifier.align(Alignment.Center).size(48.dp)) {
+                Surface(
+                    color = Color.Black.copy(alpha = 0.6f),
+                    shape = CircleShape,
+                    modifier = Modifier.align(Alignment.Center).size(48.dp).clickable { onPlay() }
+                ) {
                     Box(contentAlignment = Alignment.Center) {
                         Icon(Icons.Default.PlayArrow, null, Modifier.size(32.dp), Color.White)
                     }
@@ -337,7 +399,31 @@ private fun MediaCard(
             Column {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
                     Text(item.title, style = PulseCastType.headlineSm, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Icon(Icons.Default.MoreVert, null, Modifier.size(20.dp), OnSurfaceMuted)
+                    Box {
+                        IconButton(onClick = { showMenu = !showMenu }, modifier = Modifier.size(20.dp)) {
+                            Icon(Icons.Default.MoreVert, null, tint = OnSurfaceMuted)
+                        }
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Play Video") },
+                                onClick = { showMenu = false; onPlay() },
+                                leadingIcon = { Icon(Icons.Default.PlayArrow, null) }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Share Clip") },
+                                onClick = { showMenu = false; onShare() },
+                                leadingIcon = { Icon(Icons.Default.Share, null) }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Delete File") },
+                                onClick = { showMenu = false; onDelete() },
+                                leadingIcon = { Icon(Icons.Default.Delete, null, tint = ElectricRuby) }
+                            )
+                        }
+                    }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(item.mimeType, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
@@ -347,10 +433,17 @@ private fun MediaCard(
             }
             
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("Trim / Cut", "Make GIF", "Share", "Upload").forEach { action ->
-                    Surface(color = SurfaceHigh, shape = RoundedCornerShape(8.dp), modifier = Modifier.weight(1f).clickable { }) {
-                        Text(action, modifier = Modifier.padding(vertical = 8.dp), textAlign = TextAlign.Center, style = PulseCastType.buttonText, fontSize = 10.sp, color = OnSurfaceMuted)
-                    }
+                Surface(color = SurfaceHigh, shape = RoundedCornerShape(8.dp), modifier = Modifier.weight(1f).clickable { onTrimCut() }) {
+                    Text("Trim / Cut", modifier = Modifier.padding(vertical = 8.dp), textAlign = TextAlign.Center, style = PulseCastType.buttonText, fontSize = 10.sp, color = OnSurface)
+                }
+                Surface(color = SurfaceHigh, shape = RoundedCornerShape(8.dp), modifier = Modifier.weight(1f).clickable { onMakeGif() }) {
+                    Text("Make GIF", modifier = Modifier.padding(vertical = 8.dp), textAlign = TextAlign.Center, style = PulseCastType.buttonText, fontSize = 10.sp, color = OnSurface)
+                }
+                Surface(color = SurfaceHigh, shape = RoundedCornerShape(8.dp), modifier = Modifier.weight(1f).clickable { onShare() }) {
+                    Text("Share", modifier = Modifier.padding(vertical = 8.dp), textAlign = TextAlign.Center, style = PulseCastType.buttonText, fontSize = 10.sp, color = SecondaryFixedDim, fontWeight = FontWeight.Bold)
+                }
+                Surface(color = SurfaceHigh, shape = RoundedCornerShape(8.dp), modifier = Modifier.weight(1f).clickable { onShare() }) {
+                    Text("Upload", modifier = Modifier.padding(vertical = 8.dp), textAlign = TextAlign.Center, style = PulseCastType.buttonText, fontSize = 10.sp, color = PrimaryContainer, fontWeight = FontWeight.Bold)
                 }
             }
         }
