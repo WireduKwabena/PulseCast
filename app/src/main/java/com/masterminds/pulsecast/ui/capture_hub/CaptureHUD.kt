@@ -34,6 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
@@ -122,7 +124,6 @@ fun CaptureHubScreen(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TelemetryReadinessCard(
     storagePercentage: Float,
@@ -136,169 +137,227 @@ private fun TelemetryReadinessCard(
     onFpsChange: (Int) -> Unit,
     onAudioModeChange: (AudioMode) -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(SurfaceLow)
-            .border(1.dp, StrokeSubtle, RoundedCornerShape(12.dp))
+    Surface(
+        color = SurfaceLow,
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Box(
-            modifier = Modifier
-                .size(120.dp)
-                .background(PrimaryContainer.copy(alpha = 0.08f), CircleShape)
-                .blur(40.dp)
-        )
-        
         Column(
             modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            // Header
+            // Header Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     Box(
                         modifier = Modifier
-                            .size(8.dp)
+                            .size(10.dp)
                             .clip(CircleShape)
-                            .background(SignalGreen)
+                            .background(PrimaryContainer)
                     )
-                    Spacer(Modifier.width(8.dp))
                     Text(
-                        "CAPTURE READINESS",
-                        style = PulseCastType.labelTelemetrySm,
-                        color = OnSurfaceMuted
+                        "CAPTURE ENGINE READY",
+                        style = PulseCastType.labelTelemetryMd,
+                        color = OnSurface,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
                     )
                 }
-                
+
                 Surface(
-                    shape = CircleShape,
-                    color = SurfaceHigh
+                    color = SurfaceHigh,
+                    shape = CircleShape
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Icon(
-                            Icons.Default.SdCard,
-                            contentDescription = null,
-                            tint = SecondaryFixedDim,
-                            modifier = Modifier.size(12.dp)
-                        )
-                        Spacer(Modifier.width(4.dp))
-                        Text(
-                            freeSpaceText,
-                            style = PulseCastType.labelTelemetrySm.copy(fontSize = 10.sp),
-                            color = SecondaryFixedDim
-                        )
+                        Icon(Icons.Default.Bolt, contentDescription = null, tint = SecondaryFixedDim, modifier = Modifier.size(14.dp))
+                        Text("LOW LATENCY", style = PulseCastType.labelTelemetrySm, color = SecondaryFixedDim, fontSize = 9.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
 
-            // Storage Meter
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("Internal Storage Load", style = PulseCastType.bodySm, color = OnSurface)
-                    Text(
-                        "${(storagePercentage * 100).toInt()}% Used",
-                        style = PulseCastType.labelTelemetrySm,
-                        color = if (storagePercentage > 0.90f) ElectricRuby else OnSurfaceMuted
-                    )
-                }
-                LinearProgressIndicator(
-                    progress = { storagePercentage },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(6.dp)
-                        .clip(CircleShape),
-                    color = if (storagePercentage > 0.90f) ElectricRuby else PrimaryContainer,
-                    trackColor = SurfaceHigh
-                )
-            }
-
-            // Hardware Controls
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Resolution Selector
-                val resolutions = listOf("720p", "1080p", "2K", "4K")
-                resolutions.forEach { res ->
-                    val isSelected = resolution == res
-                    FilterChip(
-                        selected = isSelected,
-                        onClick = { onResolutionChange(res) },
-                        label = { Text(res) },
-                        colors = FilterChipDefaults.filterChipColors(
-                            containerColor = if (isSelected) PrimaryContainer else SurfaceHigh,
-                            labelColor = if (isSelected) Color.Black else OnSurface
-                        )
-                    )
-                }
-
-                // FPS Selector
-                val fpsList = listOf(30, 60, 120)
-                fpsList.forEach { f ->
-                    val isSelected = fps == f
-                    FilterChip(
-                        selected = isSelected,
-                        onClick = { onFpsChange(f) },
-                        label = { Text("${f}FPS") },
-                        colors = FilterChipDefaults.filterChipColors(
-                            containerColor = if (isSelected) SecondaryFixedDim else SurfaceHigh,
-                            labelColor = if (isSelected) Color.Black else OnSurface
-                        )
-                    )
-                }
-            }
-
-            // Audio Source
+            // Telemetry Ring & Spec Matrix
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Mic, null, Modifier.size(16.dp), CyberCyan)
-                    Spacer(Modifier.width(6.dp))
-                    Text("Audio Source:", style = PulseCastType.bodySm, color = OnSurfaceMuted)
-                    Spacer(Modifier.width(4.dp))
-                    Text(
-                        when(audioMode) {
-                            AudioMode.INTERNAL_ONLY -> "Internal Only"
-                            AudioMode.MIC_ONLY -> "Mic Only"
-                            AudioMode.INTERNAL_AND_MIC -> "Internal + Mic"
-                        },
-                        style = PulseCastType.buttonText,
-                        color = OnSurface
-                    )
+                // Storage Circular Ring Gauge
+                Box(
+                    modifier = Modifier.size(72.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        val strokeWidth = 6.dp.toPx()
+                        // Track
+                        drawCircle(
+                            color = Color(0xFF303541),
+                            style = Stroke(width = strokeWidth)
+                        )
+                        // Progress Arc
+                        drawArc(
+                            color = SecondaryFixedDim,
+                            startAngle = -90f,
+                            sweepAngle = storagePercentage * 360f,
+                            useCenter = false,
+                            style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+                        )
+                    }
+
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("${(storagePercentage * 100).toInt()}%", style = PulseCastType.labelTelemetryLg, color = OnSurface, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                        Text("STORAGE", style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted, fontSize = 8.sp)
+                    }
                 }
 
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    AudioMode.entries.forEach { mode ->
-                        val isSelected = audioMode == mode
+                // Spec Matrix Column
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         Surface(
-                            shape = CircleShape,
-                            color = if (isSelected) CyberCyan else SurfaceHigh,
-                            modifier = Modifier.clickable { onAudioModeChange(mode) }
+                            color = SurfaceHigh,
+                            shape = RoundedCornerShape(4.dp),
+                            modifier = Modifier.clickable {
+                                val nextRes = when (resolution) {
+                                    "1080p" -> "2K"
+                                    "2K" -> "4K"
+                                    "4K" -> "720p"
+                                    else -> "1080p"
+                                }
+                                onResolutionChange(nextRes)
+                            }
                         ) {
-                            Text(
-                                when(mode) {
-                                    AudioMode.INTERNAL_ONLY -> "Sys"
-                                    AudioMode.MIC_ONLY -> "Mic"
-                                    AudioMode.INTERNAL_AND_MIC -> "Both"
-                                },
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                style = PulseCastType.labelTelemetrySm,
-                                color = if (isSelected) Color.Black else OnSurfaceMuted
+                            Text(resolution, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), style = PulseCastType.labelTelemetrySm, color = SecondaryFixedDim, fontWeight = FontWeight.Bold, fontSize = 9.sp)
+                        }
+
+                        Surface(
+                            color = SurfaceHigh,
+                            shape = RoundedCornerShape(4.dp),
+                            modifier = Modifier.clickable {
+                                val nextFps = if (fps == 60) 120 else if (fps == 120) 30 else 60
+                                onFpsChange(nextFps)
+                            }
+                        ) {
+                            Text("${fps} FPS", modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), style = PulseCastType.labelTelemetrySm, color = OnSurface, fontSize = 9.sp)
+                        }
+
+                        Surface(color = SurfaceHigh, shape = RoundedCornerShape(4.dp)) {
+                            val bitrateText = when (resolution) {
+                                "2K" -> "24 Mbps"
+                                "4K" -> "45 Mbps"
+                                "720p" -> "6 Mbps"
+                                else -> "12 Mbps"
+                            }
+                            Text(bitrateText, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp), style = PulseCastType.labelTelemetrySm, color = NeonAmber, fontSize = 9.sp)
+                        }
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(Icons.Default.Storage, contentDescription = null, tint = SecondaryFixedDim, modifier = Modifier.size(14.dp))
+                        Text(freeSpaceText, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted, fontSize = 9.sp)
+                    }
+                }
+            }
+
+            // Dual Audio Input & VU Meter Strip
+            Surface(
+                color = SurfaceMid,
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Icon(Icons.Default.HeadsetMic, contentDescription = null, tint = SecondaryFixedDim, modifier = Modifier.size(16.dp))
+                            Text("Dual Stream Audio", style = PulseCastType.buttonText, color = OnSurface, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            Surface(color = SurfaceHigh, shape = RoundedCornerShape(4.dp)) {
+                                Text("48kHz • STEREO", modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp), style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted, fontSize = 7.sp)
+                            }
+                        }
+
+                        Surface(
+                            color = SecondaryFixedDim.copy(alpha = 0.2f),
+                            shape = CircleShape,
+                            modifier = Modifier.clickable {
+                                val nextMode = when (audioMode) {
+                                    AudioMode.INTERNAL_AND_MIC -> AudioMode.MIC_ONLY
+                                    AudioMode.MIC_ONLY -> AudioMode.INTERNAL_ONLY
+                                    AudioMode.INTERNAL_ONLY -> AudioMode.INTERNAL_AND_MIC
+                                }
+                                onAudioModeChange(nextMode)
+                            }
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Icon(Icons.Default.ToggleOn, contentDescription = null, tint = SecondaryFixedDim, modifier = Modifier.size(14.dp))
+                                Text(
+                                    when (audioMode) {
+                                        AudioMode.INTERNAL_AND_MIC -> "Internal + Mic"
+                                        AudioMode.MIC_ONLY -> "Mic Only"
+                                        AudioMode.INTERNAL_ONLY -> "Internal Only"
+                                    },
+                                    style = PulseCastType.buttonText,
+                                    color = SecondaryFixedDim,
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+
+                    // Dual VU Meter Bars
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text("SYSTEM/GAME", style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted, fontSize = 8.sp)
+                                Text("-8 dB", style = PulseCastType.labelTelemetrySm, color = SecondaryFixedDim, fontSize = 8.sp)
+                            }
+                            LinearProgressIndicator(
+                                progress = { systemAudioLevel },
+                                modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
+                                color = SecondaryFixedDim,
+                                trackColor = Color(0xFF090E19)
+                            )
+                        }
+
+                        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text("VOICE MIC", style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted, fontSize = 8.sp)
+                                Text("-3 dB", style = PulseCastType.labelTelemetrySm, color = PrimaryContainer, fontSize = 8.sp)
+                            }
+                            LinearProgressIndicator(
+                                progress = { micAudioLevel },
+                                modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
+                                color = PrimaryContainer,
+                                trackColor = Color(0xFF090E19)
                             )
                         }
                     }

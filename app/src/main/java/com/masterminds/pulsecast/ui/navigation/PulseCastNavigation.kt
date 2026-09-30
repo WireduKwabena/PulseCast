@@ -161,7 +161,7 @@ fun PulseCastNavigation(
                         onRecord = onRecord,
                         viewModel = captureViewModel,
                         onNavigateToVault = { navController.navigate(PulseCastRoute.Vault) },
-                        onNavigateToPresets = { navController.navigate(PulseCastRoute.BroadcastSetup) },
+                        onNavigateToPresets = { navController.navigate(PulseCastRoute.FloatingSettings) },
                         onNavigateToFacecam = { navController.navigate(PulseCastRoute.FacecamChroma) },
                         onNavigateToFloatingSettings = { navController.navigate(PulseCastRoute.FloatingSettings) }
                     )
