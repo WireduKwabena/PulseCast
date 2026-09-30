@@ -194,6 +194,7 @@ class AudioEncoder(
             val playbackConfig = AudioPlaybackCaptureConfiguration.Builder(mediaProjection!!)
                 .addMatchingUsage(AudioAttributes.USAGE_GAME)
                 .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
+                .addMatchingUsage(AudioAttributes.USAGE_UNKNOWN)
                 .build()
 
             val format = AudioFormat.Builder()
@@ -204,7 +205,7 @@ class AudioEncoder(
 
             AudioRecord.Builder()
                 .setAudioFormat(format)
-                .setBufferSizeInBytes(minBufferSize * 2)
+                .setBufferSizeInBytes(minBufferSize * 4)
                 .setAudioPlaybackCaptureConfig(playbackConfig)
                 .build()
         } catch (e: Exception) {

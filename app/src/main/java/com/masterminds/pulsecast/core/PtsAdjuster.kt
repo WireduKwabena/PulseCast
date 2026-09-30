@@ -1,31 +1,47 @@
 package com.masterminds.pulsecast.core
 
 /**
- * Tracks accumulated paused duration so encoder frame timestamps can be
- * corrected before muxing. Without this, pausing for 30 seconds bakes a
- * 30-second frozen gap into the output file's timeline — one of the most
- * common visible bugs in recorders that claim to "support" pause/resume.
- *
- * Pure logic, no MediaCodec/Android dependency — directly unit-testable
- * with fake timestamps.
+ * Tracks accumulated paused duration and normalizes raw Surface/MediaCodec
+ * timestamps (which start at system uptime ~15+ hours) down to 0-based time.
+ * This guarantees the output MP4 container header (mvhd atom) records the
+ * exact real duration (e.g. 00:55) in Android Gallery, Photos, VLC, and YouTube.
  */
 class PtsAdjuster {
-    private var totalPausedDurationUs: Long = 0
-    private var pausedAtUs: Long? = null
+    @Volatile private var basePtsUs: Long = -1L
+    @Volatile private var totalPausedDurationUs: Long = 0L
+    @Volatile private var pausedAtUs: Long? = null
 
-    fun onPause(nowUs: Long) {
-        check(pausedAtUs == null) { "onPause() called while already paused" }
-        pausedAtUs = nowUs
+    @Synchronized
+    fun adjust(rawTimestampUs: Long): Long {
+        if (basePtsUs == -1L) {
+            basePtsUs = rawTimestampUs
+        }
+        val relativePts = rawTimestampUs - basePtsUs
+        return (relativePts - totalPausedDurationUs).coerceAtLeast(0L)
     }
 
+    @Synchronized
+    fun onPause(nowUs: Long) {
+        if (pausedAtUs == null) {
+            pausedAtUs = nowUs
+        }
+    }
+
+    @Synchronized
     fun onResume(nowUs: Long) {
-        val pausedAt = checkNotNull(pausedAtUs) { "onResume() called while not paused" }
-        totalPausedDurationUs += (nowUs - pausedAt)
+        val pausedAt = pausedAtUs
+        if (pausedAt != null) {
+            totalPausedDurationUs += (nowUs - pausedAt)
+            pausedAtUs = null
+        }
+    }
+
+    @Synchronized
+    fun reset() {
+        basePtsUs = -1L
+        totalPausedDurationUs = 0L
         pausedAtUs = null
     }
-
-    /** Maps a raw encoder timestamp onto the corrected, gap-free output timeline. */
-    fun adjust(rawTimestampUs: Long): Long = rawTimestampUs - totalPausedDurationUs
 
     fun isPaused(): Boolean = pausedAtUs != null
 }
