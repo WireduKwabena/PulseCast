@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -52,6 +53,7 @@ import com.masterminds.pulsecast.core.MediaStoreMediaRepository
 import com.masterminds.pulsecast.core.VaultMediaItem
 import com.masterminds.pulsecast.ui.theme.*
 import com.masterminds.pulsecast.ui.ui_library.*
+import kotlinx.coroutines.MainScope
 
 @Composable
 fun CaptureHubScreen(
@@ -701,6 +703,7 @@ private fun FloatingBallSimulator(
 @Composable
 private fun StudioVaultPreview(onViewAll: () -> Unit) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var mediaItems by remember { mutableStateOf<List<VaultMediaItem>>(emptyList()) }
 
     LaunchedEffect(Unit) {
@@ -736,13 +739,7 @@ private fun StudioVaultPreview(onViewAll: () -> Unit) {
         } else {
             mediaItems.forEach { item ->
                 VaultClipCard(
-                    title = item.title,
-                    category = item.mimeType,
-                    time = item.formattedDate,
-                    size = item.formattedSize,
-                    audio = "Audio Muxed",
-                    duration = item.formattedDuration,
-                    res = item.resolution,
+                    item = item,
                     onClick = {
                         try {
                             val intent = Intent(Intent.ACTION_VIEW).apply {
@@ -753,6 +750,27 @@ private fun StudioVaultPreview(onViewAll: () -> Unit) {
                         } catch (e: Exception) {
                             Toast.makeText(context, "Could not play video", Toast.LENGTH_SHORT).show()
                         }
+                    },
+                    onTrim = onViewAll,
+                    onGif = onViewAll,
+                    onShare = {
+                        try {
+                            val intent = Intent(Intent.ACTION_SEND).apply {
+                                type = "video/*"
+                                putExtra(Intent.EXTRA_STREAM, item.contentUri)
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                            context.startActivity(Intent.createChooser(intent, "Share Video Clip"))
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "Could not share video", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    onDelete = {
+                        val repo = MediaStoreMediaRepository(context)
+                        scope.launch {
+                            repo.deleteDirect(item.contentUri)
+                            mediaItems = repo.queryStudioMedia().take(3)
+                        }
                     }
                 )
             }
@@ -762,23 +780,21 @@ private fun StudioVaultPreview(onViewAll: () -> Unit) {
 
 @Composable
 private fun VaultClipCard(
-    title: String,
-    category: String,
-    time: String,
-    size: String,
-    audio: String,
-    duration: String,
-    res: String,
-    resColor: Color = PrimaryContainer,
-    onClick: () -> Unit = {}
+    item: VaultMediaItem,
+    onClick: () -> Unit = {},
+    onTrim: () -> Unit = {},
+    onGif: () -> Unit = {},
+    onShare: () -> Unit = {},
+    onDelete: () -> Unit = {}
 ) {
     PulseCard(
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
         backgroundColor = SurfaceLow,
         shape = RoundedCornerShape(12.dp)
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                // Left-side Thumbnail Box
                 Box(
                     modifier = Modifier
                         .size(112.dp, 80.dp)
@@ -786,8 +802,25 @@ private fun VaultClipCard(
                         .background(Color(0xFF303541)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.PlayCircle, null, Modifier.size(32.dp), OnSurfaceMuted.copy(alpha = 0.3f))
-                    
+                    Icon(Icons.Default.PlayCircle, contentDescription = null, tint = OnSurfaceMuted.copy(alpha = 0.4f), modifier = Modifier.size(32.dp))
+
+                    // Resolution Badge
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .padding(4.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(if (item.isClip) NeonAmber else PrimaryContainer)
+                            .padding(horizontal = 5.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = item.resolution,
+                            style = PulseCastType.labelTelemetrySm.copy(fontSize = 8.sp, fontWeight = FontWeight.Bold),
+                            color = Color.Black
+                        )
+                    }
+
+                    // Duration Badge
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
@@ -796,25 +829,11 @@ private fun VaultClipCard(
                             .background(Color.Black.copy(alpha = 0.8f))
                             .padding(horizontal = 5.dp, vertical = 2.dp)
                     ) {
-                        Text(duration, style = PulseCastType.labelTelemetrySm.copy(fontSize = 9.sp), color = OnSurface)
-                    }
-                    
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.TopStart)
-                            .padding(4.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(resColor)
-                            .padding(horizontal = 5.dp, vertical = 2.dp)
-                    ) {
-                        Text(
-                            text = res,
-                            style = PulseCastType.labelTelemetrySm.copy(fontSize = 8.sp, fontWeight = FontWeight.Bold),
-                            color = if (resColor == PrimaryContainer) Color.Black else OnSurface
-                        )
+                        Text(item.formattedDuration, style = PulseCastType.labelTelemetrySm.copy(fontSize = 9.sp), color = OnSurface)
                     }
                 }
-                
+
+                // Right-side Info Area
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.SpaceBetween
@@ -825,25 +844,68 @@ private fun VaultClipCard(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            PulsePill(text = category, containerColor = CyberCyan.copy(alpha = 0.2f), contentColor = CyberCyan)
-                            Text(size, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
+                            PulsePill(text = if (item.isClip) "Clip" else "Recording", containerColor = CyberCyan.copy(alpha = 0.2f), contentColor = CyberCyan)
+                            Text(item.formattedSize, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
                         }
                         Text(
-                            title,
+                            item.title,
                             style = PulseCastType.headlineSm.copy(fontSize = 14.sp),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-                    
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(time, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
-                        Text(audio, style = PulseCastType.labelTelemetrySm, color = SecondaryFixedDim)
+                        Text(item.formattedDate, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
+                        Text("Stereo Audio", style = PulseCastType.labelTelemetrySm, color = SecondaryFixedDim)
                     }
+                }
+            }
+
+            HorizontalDivider(color = SurfaceHigh, thickness = 1.dp)
+
+            // Quick Action Capsule Bar
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(top = 2.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier.clickable { onTrim() },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(Icons.Default.ContentCut, contentDescription = null, tint = SecondaryFixedDim, modifier = Modifier.size(16.dp))
+                    Text("Trim", style = PulseCastType.buttonText, color = OnSurfaceMuted, fontSize = 11.sp)
+                }
+
+                Row(
+                    modifier = Modifier.clickable { onGif() },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(Icons.Default.GifBox, contentDescription = null, tint = NeonAmber, modifier = Modifier.size(16.dp))
+                    Text("GIF", style = PulseCastType.buttonText, color = OnSurfaceMuted, fontSize = 11.sp)
+                }
+
+                Row(
+                    modifier = Modifier.clickable { onShare() },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(Icons.Default.Share, contentDescription = null, tint = PrimaryContainer, modifier = Modifier.size(16.dp))
+                    Text("Share", style = PulseCastType.buttonText, color = OnSurfaceMuted, fontSize = 11.sp)
+                }
+
+                IconButton(
+                    onClick = onDelete,
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(Icons.Default.DeleteOutline, contentDescription = "Delete", tint = ElectricRuby, modifier = Modifier.size(16.dp))
                 }
             }
         }
