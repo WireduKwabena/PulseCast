@@ -23,7 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.masterminds.pulsecast.core.MediaStoreMediaRepository
 import com.masterminds.pulsecast.core.StorageTelemetry
 import com.masterminds.pulsecast.core.VaultMediaItem
 import com.masterminds.pulsecast.ui.theme.*
@@ -341,6 +344,13 @@ private fun MediaCard(
     onDelete: () -> Unit
 ) {
     var showMenu by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    var thumbnailBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+
+    LaunchedEffect(item.contentUri) {
+        val repo = MediaStoreMediaRepository(context)
+        thumbnailBitmap = repo.loadThumbnail(item.contentUri)
+    }
 
     Surface(color = SurfaceLow, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -352,7 +362,16 @@ private fun MediaCard(
                     .background(SurfaceMid)
                     .clickable { onPlay() }
             ) {
-                Icon(Icons.Default.VideoLibrary, null, Modifier.size(48.dp).align(Alignment.Center), OnSurfaceMuted.copy(alpha = 0.2f))
+                if (thumbnailBitmap != null) {
+                    Image(
+                        bitmap = thumbnailBitmap!!,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    Icon(Icons.Default.VideoLibrary, null, Modifier.size(48.dp).align(Alignment.Center), OnSurfaceMuted.copy(alpha = 0.2f))
+                }
                 
                 // Overlay Badges
                 Row(Modifier.align(Alignment.TopStart).padding(8.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {

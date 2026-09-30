@@ -34,9 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
 import androidx.compose.ui.text.SpanStyle
@@ -787,6 +789,14 @@ private fun VaultClipCard(
     onShare: () -> Unit = {},
     onDelete: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+    var thumbnailBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+
+    LaunchedEffect(item.contentUri) {
+        val repo = MediaStoreMediaRepository(context)
+        thumbnailBitmap = repo.loadThumbnail(item.contentUri)
+    }
+
     PulseCard(
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
         backgroundColor = SurfaceLow,
@@ -802,7 +812,16 @@ private fun VaultClipCard(
                         .background(Color(0xFF303541)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.PlayCircle, contentDescription = null, tint = OnSurfaceMuted.copy(alpha = 0.4f), modifier = Modifier.size(32.dp))
+                    if (thumbnailBitmap != null) {
+                        Image(
+                            bitmap = thumbnailBitmap!!,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Icon(Icons.Default.PlayCircle, contentDescription = null, tint = OnSurfaceMuted.copy(alpha = 0.4f), modifier = Modifier.size(32.dp))
+                    }
 
                     // Resolution Badge
                     Box(
