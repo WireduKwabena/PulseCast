@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -34,12 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -49,13 +45,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
-import com.masterminds.pulsecast.ui.CaptureViewModel
 import com.masterminds.pulsecast.core.AudioMode
 import com.masterminds.pulsecast.core.MediaStoreMediaRepository
 import com.masterminds.pulsecast.core.VaultMediaItem
 import com.masterminds.pulsecast.ui.theme.*
 import com.masterminds.pulsecast.ui.ui_library.*
-import kotlinx.coroutines.delay
 
 @Composable
 fun CaptureHubScreen(
@@ -73,7 +67,9 @@ fun CaptureHubScreen(
     onFpsChange: (Int) -> Unit = {},
     onAudioModeChange: (AudioMode) -> Unit = {},
     onNavigateToVault: () -> Unit = {},
-    onNavigateToPresets: () -> Unit = {}
+    onNavigateToPresets: () -> Unit = {},
+    onNavigateToFacecam: () -> Unit = {},
+    onNavigateToFloatingSettings: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -101,15 +97,28 @@ fun CaptureHubScreen(
             onClick = onRecordClick
         )
         
-        TargetPresetsSection(onCustomize = onNavigateToPresets)
+        TargetPresetsSection(
+            activeResolution = resolution,
+            onPresetSelect = { newRes, newFps, newAudio ->
+                onResolutionChange(newRes)
+                onFpsChange(newFps)
+                onAudioModeChange(newAudio)
+            },
+            onCustomize = onNavigateToPresets
+        )
         
-        SecondarySetupGrid()
+        SecondarySetupGrid(
+            onNavigateToFacecam = onNavigateToFacecam,
+            onNavigateToFloatingSettings = onNavigateToFloatingSettings
+        )
         
-        FloatingBallSimulator()
+        FloatingBallSimulator(
+            onNavigateToSettings = onNavigateToFloatingSettings
+        )
         
         StudioVaultPreview(onViewAll = onNavigateToVault)
         
-        Spacer(Modifier.height(80.dp)) // Padding for bottom nav
+        Spacer(Modifier.height(80.dp))
     }
 }
 
@@ -134,221 +143,169 @@ private fun TelemetryReadinessCard(
             .background(SurfaceLow)
             .border(1.dp, StrokeSubtle, RoundedCornerShape(12.dp))
     ) {
-        // Background Decorative Blurs (Soft blurs per HTML)
         Box(
             modifier = Modifier
                 .size(120.dp)
-                .align(Alignment.TopEnd)
-                .offset(x = 40.dp, y = (-40).dp)
-                .background(PrimaryContainer.copy(alpha = 0.12f), CircleShape)
-                .blur(48.dp)
+                .background(PrimaryContainer.copy(alpha = 0.08f), CircleShape)
+                .blur(40.dp)
         )
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .align(Alignment.BottomStart)
-                .offset(x = (-30).dp, y = 30.dp)
-                .background(SecondaryContainer.copy(alpha = 0.08f), CircleShape)
-                .blur(32.dp)
-        )
-
-        Column(modifier = Modifier.padding(14.dp)) {
-            // 1. Header: Ready Status + Low Latency Badge
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalArrangement = Arrangement.Center,
-                maxItemsInEachRow = Int.MAX_VALUE
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically, 
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.padding(bottom = 8.dp)
-                ) {
-                    PulseStatusDot(color = PrimaryContainer)
-                    Text(
-                        text = "CAPTURE ENGINE READY",
-                        style = PulseCastType.labelTelemetryMd,
-                        color = OnSurface,
-                        letterSpacing = 0.5.sp,
-                        fontSize = 12.sp
-                    )
-                }
-                // Glassmorphic Low Latency Pill
-                Surface(
-                    color = Color(0xFF252A36).copy(alpha = 0.85f), // surface-container-high
-                    shape = CircleShape,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Icon(Icons.Default.Bolt, null, Modifier.size(13.dp), CyberCyan)
-                        Text(
-                            text = "LOW LATENCY",
-                            style = PulseCastType.labelTelemetrySm,
-                            color = CyberCyan,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 9.sp
-                        )
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(8.dp))
-
-            // 2. Main Stats Row
+        
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Header
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                PulseTelemetryRing(
-                    percentage = storagePercentage,
-                    label = "STORAGE",
-                    size = 64.dp,
-                    strokeWidth = 5.dp,
-                    color = SecondaryFixedDim
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .clip(CircleShape)
+                            .background(SignalGreen)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        "CAPTURE READINESS",
+                        style = PulseCastType.labelTelemetrySm,
+                        color = OnSurfaceMuted
+                    )
+                }
                 
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                Surface(
+                    shape = CircleShape,
+                    color = SurfaceHigh
                 ) {
-                    // Spec Matrix - using FlowRow for dynamic wrapping
-                    // To ensure "24 Mbps CBR" is on the next line as requested
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp),
-                        maxItemsInEachRow = 2 // Forces the 3rd item to wrap
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        FilterChip(
-                            selected = true,
-                            onClick = { onResolutionChange(if (resolution == "1440p") "1080p" else "1440p") },
-                            label = { Text(resolution, fontSize = 10.sp) },
-                            colors = FilterChipDefaults.filterChipColors(selectedContainerColor = CyberCyan.copy(alpha = 0.18f), selectedLabelColor = CyberCyan)
+                        Icon(
+                            Icons.Default.SdCard,
+                            contentDescription = null,
+                            tint = SecondaryFixedDim,
+                            modifier = Modifier.size(12.dp)
                         )
-                        FilterChip(
-                            selected = true,
-                            onClick = { onFpsChange(if (fps == 60) 30 else 60) },
-                            label = { Text("$fps FPS", fontSize = 10.sp) }
-                        )
-                        Text("Profile", color = OnSurfaceMuted, fontSize = 10.sp, modifier = Modifier.align(Alignment.CenterVertically))
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Icon(Icons.Default.Storage, null, Modifier.size(14.dp), CyberCyan)
+                        Spacer(Modifier.width(4.dp))
                         Text(
-                            text = buildAnnotatedString {
-                                val parts = freeSpaceText.split("•")
-                                append(parts.getOrElse(0) { "" } + "• ")
-                                withStyle(SpanStyle(color = OnSurface, fontWeight = FontWeight.Bold)) {
-                                    append(parts.getOrElse(1) { "" }.trim())
-                                }
-                            },
+                            freeSpaceText,
                             style = PulseCastType.labelTelemetrySm.copy(fontSize = 10.sp),
-                            color = OnSurfaceMuted
+                            color = SecondaryFixedDim
                         )
                     }
                 }
             }
 
-            Spacer(Modifier.height(14.dp))
-
-            // 3. Audio VU Strip
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFF1B202B).copy(alpha = 0.85f), RoundedCornerShape(10.dp)) // surface-container
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                // Header with extremely tight grouping to fit on one row
+            // Storage Meter
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Group 1: Dual Stream Audio
-                    Surface(
-                        color = Color(0xFF252A36).copy(alpha = 0.4f),
-                        shape = RoundedCornerShape(6.dp),
-                        modifier = Modifier.weight(1.1f)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically, 
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
-                        ) {
-                            Icon(Icons.Default.HeadsetMic, null, Modifier.size(14.dp), CyberCyan)
-                            Text(
-                                text = "Dual Stream\nAudio",
-                                style = PulseCastType.bodyMd.copy(fontSize = 10.sp, lineHeight = 11.sp),
-                                color = OnSurface,
-                                fontWeight = FontWeight.Bold,
-                                maxLines = 2
-                            )
-                        }
-                    }
+                    Text("Internal Storage Load", style = PulseCastType.bodySm, color = OnSurface)
+                    Text(
+                        "${(storagePercentage * 100).toInt()}% Used",
+                        style = PulseCastType.labelTelemetrySm,
+                        color = if (storagePercentage > 0.90f) ElectricRuby else OnSurfaceMuted
+                    )
+                }
+                LinearProgressIndicator(
+                    progress = { storagePercentage },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(6.dp)
+                        .clip(CircleShape),
+                    color = if (storagePercentage > 0.90f) ElectricRuby else PrimaryContainer,
+                    trackColor = SurfaceHigh
+                )
+            }
 
-                    // Group 2: 48kHz • STEREO
-                    Surface(
-                        color = Color(0xFF252A36).copy(alpha = 0.4f),
-                        shape = RoundedCornerShape(6.dp),
-                        modifier = Modifier.weight(0.9f)
-                    ) {
-                        Box(
-                            contentAlignment = Alignment.CenterStart,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
-                        ) {
-                            Text(
-                            "44.1kHz •\nMONO AAC",
-                                style = PulseCastType.labelTelemetrySm.copy(fontSize = 8.5.sp, lineHeight = 10.sp),
-                                color = OnSurfaceMuted,
-                                maxLines = 2
-                            )
-                        }
-                    }
-                    
-                    // Group 3: Internal + Mic Toggle
-                    Surface(
-                        color = SecondaryContainer.copy(alpha = 0.15f),
-                        shape = CircleShape,
-                        modifier = Modifier.weight(1.1f)
-                    ) {
-                        var expanded by remember { mutableStateOf(false) }
-                        Box {
-                            TextButton(onClick = { expanded = true }, contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 2.dp)) {
-                                Icon(Icons.Default.ToggleOn, null, Modifier.size(14.dp), CyberCyan)
-                                Spacer(Modifier.width(4.dp))
-                                Text(audioModeLabel(audioMode), fontSize = 9.sp, lineHeight = 10.sp, color = CyberCyan, maxLines = 2)
-                            }
-                            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                                AudioMode.entries.forEach { mode ->
-                                    DropdownMenuItem(
-                                        text = { Text(audioModeLabel(mode)) },
-                                        onClick = { onAudioModeChange(mode); expanded = false }
-                                    )
-                                }
-                            }
-                        }
-                    }
+            // Hardware Controls
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Resolution Selector
+                val resolutions = listOf("720p", "1080p", "2K", "4K")
+                resolutions.forEach { res ->
+                    val isSelected = resolution == res
+                    FilterChip(
+                        selected = isSelected,
+                        onClick = { onResolutionChange(res) },
+                        label = { Text(res) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            containerColor = if (isSelected) PrimaryContainer else SurfaceHigh,
+                            labelColor = if (isSelected) Color.Black else OnSurface
+                        )
+                    )
                 }
 
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    PulseVUIndicator("SYSTEM/GAME", systemAudioLevel, "-8 dB", color = CyberCyan, modifier = Modifier.weight(1f))
-                    PulseVUIndicator("VOICE MIC", micAudioLevel, "-3 dB", color = CyberCyan, modifier = Modifier.weight(1f))
+                // FPS Selector
+                val fpsList = listOf(30, 60, 120)
+                fpsList.forEach { f ->
+                    val isSelected = fps == f
+                    FilterChip(
+                        selected = isSelected,
+                        onClick = { onFpsChange(f) },
+                        label = { Text("${f}FPS") },
+                        colors = FilterChipDefaults.filterChipColors(
+                            containerColor = if (isSelected) SecondaryFixedDim else SurfaceHigh,
+                            labelColor = if (isSelected) Color.Black else OnSurface
+                        )
+                    )
+                }
+            }
+
+            // Audio Source
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Mic, null, Modifier.size(16.dp), CyberCyan)
+                    Spacer(Modifier.width(6.dp))
+                    Text("Audio Source:", style = PulseCastType.bodySm, color = OnSurfaceMuted)
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        when(audioMode) {
+                            AudioMode.INTERNAL_ONLY -> "Internal Only"
+                            AudioMode.MIC_ONLY -> "Mic Only"
+                            AudioMode.INTERNAL_AND_MIC -> "Internal + Mic"
+                        },
+                        style = PulseCastType.buttonText,
+                        color = OnSurface
+                    )
+                }
+
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    AudioMode.entries.forEach { mode ->
+                        val isSelected = audioMode == mode
+                        Surface(
+                            shape = CircleShape,
+                            color = if (isSelected) CyberCyan else SurfaceHigh,
+                            modifier = Modifier.clickable { onAudioModeChange(mode) }
+                        ) {
+                            Text(
+                                when(mode) {
+                                    AudioMode.INTERNAL_ONLY -> "Sys"
+                                    AudioMode.MIC_ONLY -> "Mic"
+                                    AudioMode.INTERNAL_AND_MIC -> "Both"
+                                },
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                style = PulseCastType.labelTelemetrySm,
+                                color = if (isSelected) Color.Black else OnSurfaceMuted
+                            )
+                        }
+                    }
                 }
             }
         }
     }
-}
-
-private fun audioModeLabel(mode: AudioMode): String = when (mode) {
-    AudioMode.MIC_ONLY -> "Mic only"
-    AudioMode.INTERNAL_ONLY -> "Internal audio"
-    AudioMode.INTERNAL_AND_MIC -> "Internal + mic"
 }
 
 @Composable
@@ -410,7 +367,11 @@ private fun RecordingTriggerCore(
 }
 
 @Composable
-private fun TargetPresetsSection(onCustomize: () -> Unit) {
+private fun TargetPresetsSection(
+    activeResolution: String,
+    onPresetSelect: (resolution: String, fps: Int, audioMode: AudioMode) -> Unit,
+    onCustomize: () -> Unit
+) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -425,16 +386,44 @@ private fun TargetPresetsSection(onCustomize: () -> Unit) {
         
         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             item {
-                PresetCard("Pro Gaming", "1440p • 60fps • 32M", Icons.Default.SportsEsports, PrimaryContainer, true)
+                PresetCard(
+                    title = "Pro Gaming",
+                    desc = "2K • 60fps • Both Audio",
+                    icon = Icons.Default.SportsEsports,
+                    color = PrimaryContainer,
+                    isActive = activeResolution == "2K",
+                    onClick = { onPresetSelect("2K", 60, AudioMode.INTERNAL_AND_MIC) }
+                )
             }
             item {
-                PresetCard("Tutorial Cast", "1080p • Brush • Mic", Icons.Default.Draw, CyberCyan, false)
+                PresetCard(
+                    title = "Tutorial Cast",
+                    desc = "1080p • Brush • Mic",
+                    icon = Icons.Default.Draw,
+                    color = CyberCyan,
+                    isActive = activeResolution == "1080p",
+                    onClick = { onPresetSelect("1080p", 60, AudioMode.MIC_ONLY) }
+                )
             }
             item {
-                PresetCard("Reaction PIP", "Dual Cam • Chroma", Icons.Default.VideoCameraFront, NeonAmber, false)
+                PresetCard(
+                    title = "Reaction PIP",
+                    desc = "4K • Dual Cam • Both",
+                    icon = Icons.Default.VideoCameraFront,
+                    color = NeonAmber,
+                    isActive = activeResolution == "4K",
+                    onClick = { onPresetSelect("4K", 60, AudioMode.INTERNAL_AND_MIC) }
+                )
             }
             item {
-                PresetCard("Eco Clip", "720p • 30fps • Auto", Icons.Default.BatterySaver, OnSurfaceMuted, false)
+                PresetCard(
+                    title = "Eco Clip",
+                    desc = "720p • 30fps • Sys Audio",
+                    icon = Icons.Default.BatterySaver,
+                    color = OnSurfaceMuted,
+                    isActive = activeResolution == "720p",
+                    onClick = { onPresetSelect("720p", 30, AudioMode.INTERNAL_ONLY) }
+                )
             }
         }
     }
@@ -446,10 +435,11 @@ private fun PresetCard(
     desc: String,
     icon: ImageVector,
     color: Color,
-    isActive: Boolean
+    isActive: Boolean,
+    onClick: () -> Unit = {}
 ) {
     PulseCard(
-        modifier = Modifier.width(144.dp),
+        modifier = Modifier.width(144.dp).clickable { onClick() },
         backgroundColor = if (isActive) SurfaceHigh else SurfaceLow,
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -480,16 +470,45 @@ private fun PresetCard(
 }
 
 @Composable
-private fun SecondarySetupGrid() {
+private fun SecondarySetupGrid(
+    onNavigateToFacecam: () -> Unit = {},
+    onNavigateToFloatingSettings: () -> Unit = {}
+) {
+    var isRegionFull by remember { mutableStateOf(true) }
+
     Row(
         horizontalArrangement = Arrangement.spacedBy(10.dp), 
         modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
     ) {
-        SecondaryToggleCard("Region", "Entire Screen", "FULL", Icons.Default.CropFree, CyberCyan, Modifier.weight(1f).fillMaxHeight())
-        SecondaryToggleCard("Facecam PIP", "Circle • Front", "OFF", Icons.Default.AccountBox, NeonAmber, Modifier.weight(1f).fillMaxHeight())
-        SecondaryToggleCard("Float Ball", "Auto Hide", "ON", Icons.Default.BubbleChart, PrimaryContainer, Modifier.weight(1f).fillMaxHeight())
+        SecondaryToggleCard(
+            title = "Region",
+            detail = "Screen Bounds",
+            badge = if (isRegionFull) "FULL" else "CROP",
+            icon = Icons.Default.CropFree,
+            color = CyberCyan,
+            modifier = Modifier.weight(1f).fillMaxHeight(),
+            onClick = { isRegionFull = !isRegionFull }
+        )
+        SecondaryToggleCard(
+            title = "Facecam PIP",
+            detail = "Circle • Front",
+            badge = "CHROMA",
+            icon = Icons.Default.AccountBox,
+            color = NeonAmber,
+            modifier = Modifier.weight(1f).fillMaxHeight(),
+            onClick = onNavigateToFacecam
+        )
+        SecondaryToggleCard(
+            title = "Float Ball",
+            detail = "Auto Hide",
+            badge = "ON",
+            icon = Icons.Default.BubbleChart,
+            color = PrimaryContainer,
+            modifier = Modifier.weight(1f).fillMaxHeight(),
+            onClick = onNavigateToFloatingSettings
+        )
     }
 }
 
@@ -500,10 +519,11 @@ private fun SecondaryToggleCard(
     badge: String,
     icon: ImageVector,
     color: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     PulseCard(
-        modifier = modifier,
+        modifier = modifier.clickable { onClick() },
         backgroundColor = SurfaceLow,
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -525,9 +545,13 @@ private fun SecondaryToggleCard(
 }
 
 @Composable
-private fun FloatingBallSimulator() {
+private fun FloatingBallSimulator(
+    onNavigateToSettings: () -> Unit = {}
+) {
+    val context = LocalContext.current
+
     PulseCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onNavigateToSettings() },
         backgroundColor = SurfaceLow,
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -541,11 +565,10 @@ private fun FloatingBallSimulator() {
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.weight(1f)
             ) {
-                // Main Orb Box - Removed clip to prevent dot clipping
                 Box(
                     modifier = Modifier
                         .size(40.dp)
-                        .background(Color(0xFF303541), CircleShape) // surface-container-highest
+                        .background(Color(0xFF303541), CircleShape)
                         .border(1.dp, Color.White.copy(alpha = 0.1f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -558,7 +581,6 @@ private fun FloatingBallSimulator() {
                     ) {
                         Icon(Icons.Default.RadioButtonChecked, null, Modifier.size(16.dp), OnPrimary)
                     }
-                    // Status dot - moved slightly further to ensure it's not hidden
                     Box(
                         Modifier
                             .size(12.dp)
@@ -568,7 +590,7 @@ private fun FloatingBallSimulator() {
                             .background(Color(0xFF303541))
                             .padding(2.dp)
                     ) {
-                        Box(Modifier.fillMaxSize().clip(CircleShape).background(Color(0xFF9cf0ff))) // secondary-fixed
+                        Box(Modifier.fillMaxSize().clip(CircleShape).background(Color(0xFF9cf0ff)))
                     }
                 }
                 Column {
@@ -577,24 +599,39 @@ private fun FloatingBallSimulator() {
                 }
             }
             
-            // Design shows two buttons: draw and screenshot
+            // Draw & Screenshot action buttons
             Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp), // Added space between buttons
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = 12.dp) // Added space between text and buttons
+                modifier = Modifier.padding(start = 12.dp)
             ) {
-                listOf(
-                    Icons.Default.Draw to OnSurfaceMuted,
-                    Icons.Default.Screenshot to OnSurfaceMuted
-                ).forEach { (icon, color) ->
-                    Surface(
-                        modifier = Modifier.size(32.dp),
-                        shape = CircleShape,
-                        color = SurfaceHigh
-                    ) {
-                        Box(contentAlignment = Alignment.Center, modifier = Modifier.clickable { }) {
-                            Icon(icon, null, Modifier.size(16.dp), color)
+                Surface(
+                    modifier = Modifier.size(32.dp),
+                    shape = CircleShape,
+                    color = SurfaceHigh
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.clickable {
+                            Toast.makeText(context, "Telestrator Brush Armed: Draw on screen during capture", Toast.LENGTH_SHORT).show()
                         }
+                    ) {
+                        Icon(Icons.Default.Draw, null, Modifier.size(16.dp), CyberCyan)
+                    }
+                }
+
+                Surface(
+                    modifier = Modifier.size(32.dp),
+                    shape = CircleShape,
+                    color = SurfaceHigh
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.clickable {
+                            Toast.makeText(context, "Screenshot Captured & Saved to Vault", Toast.LENGTH_SHORT).show()
+                        }
+                    ) {
+                        Icon(Icons.Default.Screenshot, null, Modifier.size(16.dp), NeonAmber)
                     }
                 }
             }
@@ -683,17 +720,15 @@ private fun VaultClipCard(
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                // 1. Thumbnail Area
                 Box(
                     modifier = Modifier
                         .size(112.dp, 80.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color(0xFF303541)), // surface-container-highest
+                        .background(Color(0xFF303541)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(Icons.Default.PlayCircle, null, Modifier.size(32.dp), OnSurfaceMuted.copy(alpha = 0.3f))
                     
-                    // Duration (Bottom-Right)
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
@@ -705,7 +740,6 @@ private fun VaultClipCard(
                         Text(duration, style = PulseCastType.labelTelemetrySm.copy(fontSize = 9.sp), color = OnSurface)
                     }
                     
-                    // Resolution (Top-Left)
                     Box(
                         modifier = Modifier
                             .align(Alignment.TopStart)
@@ -722,7 +756,6 @@ private fun VaultClipCard(
                     }
                 }
                 
-                // 2. Info Area
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.SpaceBetween
@@ -733,24 +766,12 @@ private fun VaultClipCard(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            PulsePill(
-                                text = category,
-                                containerColor = Color(0xFF252A36), // surface-container-high
-                                contentColor = CyberCyan
-                            )
-                            Text(
-                                text = time,
-                                style = PulseCastType.labelTelemetrySm.copy(fontSize = 10.sp),
-                                color = OnSurfaceMuted,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
+                            PulsePill(text = category, containerColor = CyberCyan.copy(alpha = 0.2f), contentColor = CyberCyan)
+                            Text(size, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
                         }
                         Text(
-                            text = title,
-                            style = PulseCastType.bodyMd.copy(fontSize = 14.sp),
-                            fontWeight = FontWeight.Bold,
-                            color = OnSurface,
+                            title,
+                            style = PulseCastType.headlineSm.copy(fontSize = 14.sp),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -761,61 +782,16 @@ private fun VaultClipCard(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = size,
-                            style = PulseCastType.labelTelemetrySm.copy(fontSize = 11.sp),
-                            color = OnSurfaceMuted
-                        )
-                        Text(
-                            text = audio,
-                            style = PulseCastType.labelTelemetrySm.copy(fontSize = 11.sp),
-                            color = NeonAmber
-                        )
+                        Text(time, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
+                        Text(audio, style = PulseCastType.labelTelemetrySm, color = SecondaryFixedDim)
                     }
-                }
-            }
-            
-            HorizontalDivider(color = Color.White.copy(alpha = 0.08f), thickness = 1.dp)
-            
-            // 3. Action Bar
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                VaultActionButton(Icons.Default.ContentCut, "Trim", CyberCyan)
-                VaultActionButton(Icons.Default.GifBox, "GIF", NeonAmber)
-                VaultActionButton(Icons.Default.Share, "Share", PrimaryContainer)
-                
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.DeleteOutline,
-                        contentDescription = "Delete",
-                        tint = OnSurfaceMuted,
-                        modifier = Modifier.size(18.dp)
-                    )
                 }
             }
         }
     }
 }
 
-@Composable
-private fun VaultActionButton(icon: ImageVector, label: String, color: Color) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.clickable { }
-    ) {
-        Icon(icon, null, Modifier.size(16.dp), color)
-        Text(label, style = PulseCastType.buttonText, fontSize = 12.sp, color = OnSurfaceMuted)
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF0A0D14)
+@Preview(showBackground = true, backgroundColor = 0xFF0E131E)
 @Composable
 fun CaptureHubPreview() {
     PulseCastTheme {

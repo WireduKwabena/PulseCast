@@ -161,7 +161,9 @@ fun PulseCastNavigation(
                         onRecord = onRecord,
                         viewModel = captureViewModel,
                         onNavigateToVault = { navController.navigate(PulseCastRoute.Vault) },
-                        onNavigateToPresets = { navController.navigate(PulseCastRoute.BroadcastSetup) }
+                        onNavigateToPresets = { navController.navigate(PulseCastRoute.BroadcastSetup) },
+                        onNavigateToFacecam = { navController.navigate(PulseCastRoute.FacecamChroma) },
+                        onNavigateToFloatingSettings = { navController.navigate(PulseCastRoute.FloatingSettings) }
                     )
                 }
                 composable(PulseCastRoute.LiveStudio) {
@@ -268,7 +270,9 @@ private fun CaptureHubDestination(
     onRecord: () -> Unit,
     viewModel: CaptureViewModel,
     onNavigateToVault: () -> Unit,
-    onNavigateToPresets: () -> Unit
+    onNavigateToPresets: () -> Unit,
+    onNavigateToFacecam: () -> Unit = {},
+    onNavigateToFloatingSettings: () -> Unit = {}
 ) {
     val storagePercentage by viewModel.storagePercentage.collectAsState()
     val freeSpaceText by viewModel.freeSpaceText.collectAsState()
@@ -292,7 +296,9 @@ private fun CaptureHubDestination(
         onFpsChange = viewModel::setFps,
         onAudioModeChange = viewModel::setAudioMode,
         onNavigateToVault = onNavigateToVault,
-        onNavigateToPresets = onNavigateToPresets
+        onNavigateToPresets = onNavigateToPresets,
+        onNavigateToFacecam = onNavigateToFacecam,
+        onNavigateToFloatingSettings = onNavigateToFloatingSettings
     )
 }
 
