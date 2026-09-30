@@ -12,7 +12,9 @@ import android.hardware.display.VirtualDisplay
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.WindowManager
@@ -119,10 +121,20 @@ class ScreenRecordService : Service() {
 
         projection.registerCallback(object : MediaProjection.Callback() {
             override fun onStop() {
-                Log.w(TAG, "MediaProjection stopped by the system — finishing the recording gracefully")
-                handleStop()
+                Log.w(TAG, "MediaProjection onStop triggered")
+                if (stateMachine.isActive()) {
+                    handleStop()
+                }
             }
-        }, null)
+
+            override fun onCapturedContentVisibilityChanged(isVisible: Boolean) {
+                Log.d(TAG, "MediaProjection content visibility changed: $isVisible")
+            }
+
+            override fun onCapturedContentResize(width: Int, height: Int) {
+                Log.d(TAG, "MediaProjection content resized: $width x $height")
+            }
+        }, Handler(Looper.getMainLooper()))
 
         val windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         val metrics = DisplayMetrics().also { windowManager.defaultDisplay.getRealMetrics(it) }
@@ -184,7 +196,7 @@ class ScreenRecordService : Service() {
             resolution.width,
             resolution.height,
             metrics.densityDpi,
-            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
             videoEncoder!!.inputSurface,
             null,
             null
