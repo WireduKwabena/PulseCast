@@ -93,8 +93,8 @@ class MuxerWrapper(fd: FileDescriptor, private val expectedTrackCount: Int) {
     @Synchronized
     fun release() {
         if (started) {
-            muxer.stop()
+            runCatching { muxer.stop() }
         }
-        muxer.release()
+        runCatching { muxer.release() }
     }
 }

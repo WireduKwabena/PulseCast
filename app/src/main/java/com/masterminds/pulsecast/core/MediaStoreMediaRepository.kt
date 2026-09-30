@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -97,13 +98,30 @@ class MediaStoreMediaRepository(private val context: Context) {
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
                 val name = cursor.getString(nameColumn) ?: "PulseCast_Recording"
-                val duration = cursor.getLong(durationColumn)
+                val rawDuration = cursor.getLong(durationColumn)
                 val size = cursor.getLong(sizeColumn)
                 val height = cursor.getInt(heightColumn)
                 val dateSec = cursor.getLong(dateColumn)
                 val mime = cursor.getString(mimeColumn) ?: "video/mp4"
 
                 val contentUri = ContentUris.withAppendedId(collection, id)
+
+                // Normalize duration: MediaStore on Android 10+ sometimes returns duration in microseconds
+                var realDurationMs = when {
+                    rawDuration > 3_600_000 * 5 -> rawDuration / 1_000 // Convert microseconds to ms
+                    rawDuration > 0 -> rawDuration
+                    else -> 0L
+                }
+
+                if (realDurationMs <= 0 || realDurationMs > 3_600_000 * 5) {
+                    runCatching {
+                        val retriever = MediaMetadataRetriever()
+                        retriever.setDataSource(context, contentUri)
+                        val durStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                        retriever.release()
+                        durStr?.toLongOrNull()?.let { realDurationMs = it }
+                    }
+                }
 
                 val resText = when {
                     height >= 2160 -> "4K 60fps"
@@ -114,14 +132,14 @@ class MediaStoreMediaRepository(private val context: Context) {
                 }
 
                 val dateStr = dateFormat.format(Date(dateSec * 1000))
-                val isClip = duration in 1..60000 // Under 60 sec is a clip
+                val isClip = realDurationMs in 1..60000 // Under 60 sec is a clip
 
                 mediaList.add(
                     VaultMediaItem(
                         id = id,
                         contentUri = contentUri,
                         title = name.removeSuffix(".mp4"),
-                        durationMs = duration,
+                        durationMs = realDurationMs,
                         sizeBytes = size,
                         resolution = resText,
                         formattedDate = dateStr,

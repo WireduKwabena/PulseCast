@@ -46,12 +46,12 @@ class SaveLocation private constructor(
     /** Close the owned descriptor and publish the completed recording to other apps. */
     @Synchronized
     fun complete() {
-        check(!closed) { "Save location is already closed" }
-        descriptorOwner.close()
-        if (mediaStoreUri != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (closed) return
+        runCatching { descriptorOwner.close() }
+        val uri = mediaStoreUri
+        if (uri != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val values = ContentValues().apply { put(MediaStore.Video.Media.IS_PENDING, 0) }
-            val updatedRows = context.contentResolver.update(mediaStoreUri, values, null, null)
-            check(updatedRows == 1) { "Could not publish recording $displayName" }
+            runCatching { context.contentResolver.update(uri, values, null, null) }
         }
         closed = true
     }

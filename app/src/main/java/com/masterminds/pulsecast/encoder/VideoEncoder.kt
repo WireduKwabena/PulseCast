@@ -109,8 +109,9 @@ class VideoEncoder(
     }
 
     fun stop() {
-        codec.stop()
-        codec.release()
-        handlerThread.quitSafely()
+        runCatching { codec.signalEndOfInputStream() }
+        runCatching { codec.stop() }
+        runCatching { codec.release() }
+        runCatching { handlerThread.quitSafely() }
     }
 }

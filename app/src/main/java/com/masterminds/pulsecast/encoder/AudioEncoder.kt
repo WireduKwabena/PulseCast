@@ -264,20 +264,20 @@ class AudioEncoder(
 
     fun stop() {
         recording = false
-        dualBusMicThread?.join(500)
+        runCatching { dualBusMicThread?.join(500) }
         dualBusMicThread = null
 
-        micRecord?.stop()
-        micRecord?.release()
+        runCatching { micRecord?.stop() }
+        runCatching { micRecord?.release() }
         micRecord = null
 
-        internalRecord?.stop()
-        internalRecord?.release()
+        runCatching { internalRecord?.stop() }
+        runCatching { internalRecord?.release() }
         internalRecord = null
 
-        codec.stop()
-        codec.release()
-        handlerThread.quitSafely()
+        runCatching { codec.stop() }
+        runCatching { codec.release() }
+        runCatching { handlerThread.quitSafely() }
     }
 
     fun pauseCapture() {
