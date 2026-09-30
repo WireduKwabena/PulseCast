@@ -161,7 +161,7 @@ fun PulseCastNavigation(
                         onRecord = onRecord,
                         viewModel = captureViewModel,
                         onNavigateToVault = { navController.navigate(PulseCastRoute.Vault) },
-                        onNavigateToPresets = { showOrbCustomization = true }
+                        onNavigateToPresets = { navController.navigate(PulseCastRoute.BroadcastSetup) }
                     )
                 }
                 composable(PulseCastRoute.LiveStudio) {
