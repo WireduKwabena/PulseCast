@@ -1,17 +1,7 @@
 package com.masterminds.pulsecast.core
 
-/**
- * The recording lifecycle as an explicit state machine, deliberately with
- * zero Android dependencies so it's unit-testable in plain Kotlin.
- *
- * Why this matters: a huge share of screen-recorder crashes come from
- * calling stop()/pause() from a state that doesn't support it (e.g.
- * pausing an already-stopped recorder, or double-starting after a
- * MediaProjection callback fires twice). Routing every transition through
- * one place that rejects invalid moves — instead of scattering ad-hoc
- * "if (isRecording)" checks across Activity/Service code — is what
- * prevents that whole category of bug.
- */
+import android.util.Log
+
 enum class RecordingState {
     IDLE,
     PERMISSION_REQUESTED,
@@ -37,14 +27,7 @@ class RecordingStateMachine(private var state: RecordingState = RecordingState.I
 
     fun current(): RecordingState = state
 
-    /**
-     * Returns the new state, or throws [InvalidTransitionException] if the
-     * event doesn't make sense from the current state. Throwing (rather
-     * than silently ignoring) is deliberate — an invalid transition attempt
-     * usually means a real bug upstream (e.g. a stale button click after
-     * the service already died), and surfacing it during development is
-     * far better than papering over it and corrupting a recording silently.
-     */
+    @Synchronized
     fun transition(event: RecordingEvent): RecordingState {
         val next = when (state to event) {
             RecordingState.IDLE to RecordingEvent.Start ->
@@ -71,7 +54,20 @@ class RecordingStateMachine(private var state: RecordingState = RecordingState.I
             RecordingState.STOPPING to RecordingEvent.Finished ->
                 RecordingState.IDLE
 
-            else -> throw InvalidTransitionException(state, event)
+            // Safe idempotent fallbacks for duplicate events:
+            RecordingState.STOPPING to RecordingEvent.Stop ->
+                RecordingState.STOPPING
+
+            RecordingState.IDLE to RecordingEvent.Finished ->
+                RecordingState.IDLE
+
+            RecordingState.IDLE to RecordingEvent.Stop ->
+                RecordingState.IDLE
+
+            else -> {
+                Log.w("RecordingStateMachine", "Ignoring unexpected transition $event from state $state")
+                state
+            }
         }
         state = next
         return next

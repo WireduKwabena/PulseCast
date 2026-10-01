@@ -158,6 +158,7 @@ class MainActivity : ComponentActivity() {
             })
             pendingBroadcastLaunch = false
             startService(Intent(this, LiveHUDOverlayService::class.java))
+            moveTaskToBack(true)
         } catch (error: RuntimeException) {
             pendingBroadcastLaunch = false
             captureViewModel.setRecording(false)

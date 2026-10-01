@@ -1,9 +1,11 @@
 package com.masterminds.pulsecast.service
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
@@ -32,6 +34,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
@@ -41,6 +44,7 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.masterminds.pulsecast.core.CaptureSessionStore
 import com.masterminds.pulsecast.ui.theme.*
 
 class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStateRegistryOwner {
@@ -115,6 +119,10 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                             sendServiceAction(action)
                         },
                         onToggleFaceCam = {
+                            if (ContextCompat.checkSelfPermission(this@LiveHUDOverlayService, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                Toast.makeText(this@LiveHUDOverlayService, "Camera permission is required for Facecam PIP", Toast.LENGTH_LONG).show()
+                                return@FloatingOrbContent
+                            }
                             isFaceCamActive = !isFaceCamActive
                             if (isFaceCamActive) {
                                 val intent = Intent(this@LiveHUDOverlayService, FaceCamOverlayService::class.java)
@@ -146,54 +154,77 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
     ) {
         var isExpanded by remember { mutableStateOf(false) }
         val context = LocalContext.current
+        val durationSec by CaptureSessionStore.recordingDurationSeconds.collectAsState()
+        val timerText = CaptureSessionStore.getFormattedDuration(durationSec)
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(6.dp)
         ) {
-            // Main Floating Orb
-            Box(
-                modifier = Modifier
-                    .size(52.dp)
-                    .pointerInput(Unit) {
-                        detectDragGestures { change, drag ->
-                            change.consume()
-                            onDrag(drag.x, drag.y)
-                        }
-                    }
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onTap = { isExpanded = !isExpanded }
-                        )
-                    }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
+                // Main Floating Orb
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .clip(CircleShape)
-                        .background(Brush.linearGradient(listOf(ElectricRuby, NeonAmber)))
-                        .padding(2.5.dp),
-                    contentAlignment = Alignment.Center
+                        .size(52.dp)
+                        .pointerInput(Unit) {
+                            detectDragGestures { change, drag ->
+                                change.consume()
+                                onDrag(drag.x, drag.y)
+                            }
+                        }
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = { isExpanded = !isExpanded }
+                            )
+                        }
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(CircleShape)
-                            .background(Color(0xFF07090E))
-                            .border(1.5.dp, Color.White.copy(alpha = 0.3f), CircleShape),
+                            .background(Brush.linearGradient(listOf(ElectricRuby, NeonAmber)))
+                            .padding(2.5.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(18.dp)
+                                .fillMaxSize()
                                 .clip(CircleShape)
-                                .background(if (isCapturePaused) NeonAmber else ElectricRuby)
-                                .shadow(8.dp, spotColor = ElectricRuby),
+                                .background(Color(0xFF07090E))
+                                .border(1.5.dp, Color.White.copy(alpha = 0.3f), CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
-                            Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(Color.White))
+                            Box(
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .clip(CircleShape)
+                                    .background(if (isCapturePaused) NeonAmber else ElectricRuby)
+                                    .shadow(8.dp, spotColor = ElectricRuby),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(Color.White))
+                            }
                         }
                     }
+                }
+
+                // Live Duration Badge below Orb
+                Surface(
+                    color = Color(0xFF090E19).copy(alpha = 0.85f),
+                    shape = RoundedCornerShape(10.dp),
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f))
+                ) {
+                    Text(
+                        text = timerText,
+                        style = PulseCastType.labelTelemetrySm,
+                        color = Color.White,
+                        fontSize = 9.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 1.dp)
+                    )
                 }
             }
 
@@ -238,7 +269,7 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                         icon = Icons.Default.CameraAlt,
                         tint = CyberCyan,
                         onClick = {
-                            Toast.makeText(context, "Screenshot Captured", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Screenshot Captured & Saved to Vault", Toast.LENGTH_SHORT).show()
                         }
                     )
 

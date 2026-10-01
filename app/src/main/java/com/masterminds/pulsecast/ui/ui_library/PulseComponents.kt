@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.masterminds.pulsecast.core.CaptureSessionStore
 import com.masterminds.pulsecast.ui.theme.*
 
 /**
@@ -263,6 +264,8 @@ fun PulseRecordButton(
             horizontalArrangement = Arrangement.Center
         ) {
             if (isRecording) {
+                val durationSec by CaptureSessionStore.recordingDurationSeconds.collectAsState()
+                val timerText = CaptureSessionStore.getFormattedDuration(durationSec)
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
                     color = Color.Black,
@@ -270,7 +273,7 @@ fun PulseRecordButton(
                 )
                 Spacer(Modifier.width(12.dp))
                 Text(
-                    text = "Recording Active (00:01)",
+                    text = "Recording Active ($timerText)",
                     style = PulseCastType.headlineSm,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black

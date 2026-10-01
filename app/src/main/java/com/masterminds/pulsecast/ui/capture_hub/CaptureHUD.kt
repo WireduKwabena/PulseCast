@@ -864,7 +864,7 @@ private fun VaultClipCard(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             PulsePill(text = if (item.isClip) "Clip" else "Recording", containerColor = CyberCyan.copy(alpha = 0.2f), contentColor = CyberCyan)
-                            Text(item.formattedSize, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
+                            Text(item.formattedDate, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
                         }
                         Text(
                             item.title,
@@ -879,8 +879,8 @@ private fun VaultClipCard(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(item.formattedDate, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
-                        Text("Stereo Audio", style = PulseCastType.labelTelemetrySm, color = SecondaryFixedDim)
+                        Text(item.formattedSize, style = PulseCastType.labelTelemetrySm, color = OnSurfaceMuted)
+                         Text("Stereo Audio", style = PulseCastType.labelTelemetrySm, color = SecondaryFixedDim)
                     }
                 }
             }

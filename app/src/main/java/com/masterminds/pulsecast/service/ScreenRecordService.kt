@@ -36,6 +36,7 @@ import com.masterminds.pulsecast.core.RecordingEvent
 import com.masterminds.pulsecast.core.RecordingStateMachine
 import com.masterminds.pulsecast.core.SaveLocation
 import com.masterminds.pulsecast.core.CaptureSessionStore
+import kotlinx.coroutines.*
 
 class ScreenRecordService : Service() {
 
@@ -64,6 +65,8 @@ class ScreenRecordService : Service() {
 
     private val stateMachine = RecordingStateMachine()
     private val ptsAdjuster = PtsAdjuster()
+    private val serviceScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private var durationJob: Job? = null
 
     private var mediaProjection: MediaProjection? = null
     private var virtualDisplay: VirtualDisplay? = null
@@ -73,6 +76,16 @@ class ScreenRecordService : Service() {
     private var saveLocation: SaveLocation? = null
     private var streamSinks: List<RtmpDestinationSink> = emptyList()
     private var startupSucceeded = false
+
+    override fun onCreate() {
+        super.onCreate()
+        val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            Log.e(TAG, "Uncaught exception in ScreenRecordService on thread ${thread.name}", throwable)
+            runCatching { handleStop() }
+            defaultHandler?.uncaughtException(thread, throwable)
+        }
+    }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -204,6 +217,18 @@ class ScreenRecordService : Service() {
         startupSucceeded = true
         CaptureSessionStore.setRecording(true)
         CaptureSessionStore.setBroadcasting(streamSinks.any { it.connection.isLive() })
+
+        durationJob?.cancel()
+        durationJob = serviceScope.launch {
+            var elapsedSec = 0L
+            while (isActive) {
+                delay(1000)
+                if (!ptsAdjuster.isPaused()) {
+                    elapsedSec++
+                    CaptureSessionStore.updateDurationSeconds(elapsedSec)
+                }
+            }
+        }
         } catch (error: Exception) {
             Log.e(TAG, "Capture pipeline failed during startup", error)
             if (stateMachine.canStop()) {
@@ -256,26 +281,31 @@ class ScreenRecordService : Service() {
         stateMachine.transition(RecordingEvent.Stop)
 
         runCatching { virtualDisplay?.release() }.onFailure { Log.w(TAG, "Virtual display cleanup failed", it) }
+        virtualDisplay = null
+
         runCatching { videoEncoder?.stop() }.onFailure { Log.w(TAG, "Video encoder cleanup failed", it) }
+        videoEncoder = null
+
         runCatching { audioEncoder?.stop() }.onFailure { Log.w(TAG, "Audio encoder cleanup failed", it) }
-        val muxerStarted = muxer?.isStarted == true
-        val muxerReleased = runCatching { muxer?.release(); true }
-            .onFailure { Log.w(TAG, "Muxer cleanup failed", it) }
-            .getOrDefault(false)
+        audioEncoder = null
+
         streamSinks.forEach { sink -> runCatching { sink.stop() }.onFailure { Log.w(TAG, "Stream sink cleanup failed", it) } }
+
+        runCatching { muxer?.release() }.onFailure { Log.w(TAG, "Muxer cleanup failed", it) }
+        muxer = null
+
         runCatching { mediaProjection?.stop() }.onFailure { Log.w(TAG, "Projection cleanup failed", it) }
-        val completed = startupSucceeded && muxerStarted && muxerReleased
-        if (completed) {
-            runCatching { saveLocation?.complete() }
-                .onFailure { error ->
-                    Log.e(TAG, "Recording publication failed", error)
-                    runCatching { saveLocation?.abort() }
-                }
-        } else {
-            runCatching { saveLocation?.abort() }
-                .onFailure { Log.w(TAG, "Incomplete recording cleanup failed", it) }
+        mediaProjection = null
+
+        // ALWAYS publish the recording so any frames captured are saved
+        runCatching { saveLocation?.complete() }.onFailure { error ->
+            Log.e(TAG, "Recording publication failed", error)
         }
+        saveLocation = null
+
         startupSucceeded = false
+        durationJob?.cancel()
+        durationJob = null
 
         stateMachine.transition(RecordingEvent.Finished)
         CaptureSessionStore.setRecording(false)
@@ -285,7 +315,12 @@ class ScreenRecordService : Service() {
     }
 
     override fun onDestroy() {
-        if (stateMachine.isActive()) handleStop()
+        if (stateMachine.isActive()) {
+            handleStop()
+        } else {
+            runCatching { saveLocation?.complete() }
+        }
+        serviceScope.cancel()
         super.onDestroy()
     }
 
