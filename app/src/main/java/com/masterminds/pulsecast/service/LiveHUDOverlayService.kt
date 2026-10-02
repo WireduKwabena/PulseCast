@@ -26,6 +26,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
@@ -44,8 +45,10 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.masterminds.pulsecast.MainActivity
 import com.masterminds.pulsecast.core.CaptureSessionStore
 import com.masterminds.pulsecast.ui.theme.*
+import kotlinx.coroutines.delay
 
 class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStateRegistryOwner {
 
@@ -108,6 +111,13 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                             params.y += dy.toInt()
                             windowManager.updateViewLayout(this, params)
                         },
+                        onStartRecording = {
+                            val intent = Intent(this@LiveHUDOverlayService, MainActivity::class.java).apply {
+                                action = MainActivity.ACTION_START_RECORDING_FROM_ORB
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                            }
+                            startActivity(intent)
+                        },
                         onTogglePause = {
                             isCapturePaused = !isCapturePaused
                             val action = if (isCapturePaused) ScreenRecordService.ACTION_PAUSE else ScreenRecordService.ACTION_RESUME
@@ -134,7 +144,6 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                         onStopRecording = {
                             sendServiceAction(ScreenRecordService.ACTION_STOP)
                             stopService(Intent(this@LiveHUDOverlayService, FaceCamOverlayService::class.java))
-                            stopSelf()
                         }
                     )
                 }
@@ -147,15 +156,27 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
     @Composable
     private fun FloatingOrbContent(
         onDrag: (Float, Float) -> Unit,
+        onStartRecording: () -> Unit,
         onTogglePause: () -> Unit,
         onToggleMic: () -> Unit,
         onToggleFaceCam: () -> Unit,
         onStopRecording: () -> Unit
     ) {
         var isExpanded by remember { mutableStateOf(false) }
-        val context = LocalContext.current
+        var orbAlpha by remember { mutableFloatStateOf(0.35f) } // Faded low opacity by default
+
+        val isRecording by CaptureSessionStore.isRecording.collectAsState()
         val durationSec by CaptureSessionStore.recordingDurationSeconds.collectAsState()
         val timerText = CaptureSessionStore.getFormattedDuration(durationSec)
+        val context = LocalContext.current
+
+        // Smooth Opacity Decay Coroutine: Fades from 1.0f back down to 0.35f after 3.5s of inactivity
+        LaunchedEffect(orbAlpha, isExpanded) {
+            if (orbAlpha > 0.35f && !isExpanded) {
+                delay(3500)
+                orbAlpha = 0.35f
+            }
+        }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -169,15 +190,22 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                 Box(
                     modifier = Modifier
                         .size(52.dp)
+                        .alpha(if (isExpanded) 1.0f else orbAlpha)
                         .pointerInput(Unit) {
-                            detectDragGestures { change, drag ->
+                            detectDragGestures(
+                                onDragStart = { orbAlpha = 1.0f }
+                            ) { change, drag ->
                                 change.consume()
+                                orbAlpha = 1.0f
                                 onDrag(drag.x, drag.y)
                             }
                         }
                         .pointerInput(Unit) {
                             detectTapGestures(
-                                onTap = { isExpanded = !isExpanded }
+                                onTap = {
+                                    orbAlpha = 1.0f
+                                    isExpanded = !isExpanded
+                                }
                             )
                         }
                 ) {
@@ -211,20 +239,23 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                     }
                 }
 
-                // Live Duration Badge below Orb
-                Surface(
-                    color = Color(0xFF090E19).copy(alpha = 0.85f),
-                    shape = RoundedCornerShape(10.dp),
-                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f))
-                ) {
-                    Text(
-                        text = timerText,
-                        style = PulseCastType.labelTelemetrySm,
-                        color = Color.White,
-                        fontSize = 9.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 1.dp)
-                    )
+                // Live Duration Badge below Orb (Visible when recording or active)
+                if (isRecording) {
+                    Surface(
+                        color = Color(0xFF090E19).copy(alpha = 0.85f),
+                        shape = RoundedCornerShape(10.dp),
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+                        modifier = Modifier.alpha(if (isExpanded) 1.0f else orbAlpha)
+                    ) {
+                        Text(
+                            text = timerText,
+                            style = PulseCastType.labelTelemetrySm,
+                            color = Color.White,
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 1.dp)
+                        )
+                    }
                 }
             }
 
@@ -243,25 +274,62 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Pause/Resume
-                    OrbControlIconButton(
-                        icon = if (isCapturePaused) Icons.Default.PlayArrow else Icons.Default.Pause,
-                        tint = NeonAmber,
-                        onClick = onTogglePause
-                    )
+                    if (!isRecording) {
+                        // Start Recording Direct CTA
+                        Surface(
+                            color = PrimaryContainer,
+                            shape = CircleShape,
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clickable {
+                                    isExpanded = false
+                                    onStartRecording()
+                                }
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(Icons.Default.RadioButtonChecked, contentDescription = "Start Recording", tint = Color.Black, modifier = Modifier.size(20.dp))
+                            }
+                        }
+                    } else {
+                        // Pause/Resume
+                        OrbControlIconButton(
+                            icon = if (isCapturePaused) Icons.Default.PlayArrow else Icons.Default.Pause,
+                            tint = NeonAmber,
+                            onClick = {
+                                orbAlpha = 1.0f
+                                onTogglePause()
+                            }
+                        )
+
+                        // Stop Recording
+                        OrbControlIconButton(
+                            icon = Icons.Default.Stop,
+                            tint = ElectricRuby,
+                            onClick = {
+                                isExpanded = false
+                                onStopRecording()
+                            }
+                        )
+                    }
 
                     // Mic Mute
                     OrbControlIconButton(
                         icon = if (isMicMuted) Icons.Default.MicOff else Icons.Default.Mic,
                         tint = if (isMicMuted) ElectricRuby else SecondaryFixedDim,
-                        onClick = onToggleMic
+                        onClick = {
+                            orbAlpha = 1.0f
+                            onToggleMic()
+                        }
                     )
 
                     // Facecam PIP Toggle
                     OrbControlIconButton(
                         icon = Icons.Default.Face,
                         tint = if (isFaceCamActive) PrimaryContainer else OnSurfaceMuted,
-                        onClick = onToggleFaceCam
+                        onClick = {
+                            orbAlpha = 1.0f
+                            onToggleFaceCam()
+                        }
                     )
 
                     // Screenshot
@@ -269,15 +337,9 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                         icon = Icons.Default.CameraAlt,
                         tint = CyberCyan,
                         onClick = {
+                            orbAlpha = 1.0f
                             Toast.makeText(context, "Screenshot Captured & Saved to Vault", Toast.LENGTH_SHORT).show()
                         }
-                    )
-
-                    // Stop Recording
-                    OrbControlIconButton(
-                        icon = Icons.Default.Stop,
-                        tint = ElectricRuby,
-                        onClick = onStopRecording
                     )
                 }
             }

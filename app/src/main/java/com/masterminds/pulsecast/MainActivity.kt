@@ -83,9 +83,14 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    companion object {
+        const val ACTION_START_RECORDING_FROM_ORB = "com.masterminds.pulsecast.ACTION_START_RECORDING_FROM_ORB"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         projectionManager = getSystemService(MediaProjectionManager::class.java)
+        handleIntent(intent)
         setContent {
             val isRecording by captureViewModel.isRecording.collectAsState()
             val isBroadcasting by CaptureSessionStore.isBroadcasting.collectAsState()
@@ -135,6 +140,19 @@ class MainActivity : ComponentActivity() {
             }
         }
         captureViewModel.refreshStorage(this)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        if (intent?.action == ACTION_START_RECORDING_FROM_ORB) {
+            requestRecordingStart {
+                screenCaptureLauncher.launch(projectionManager.createScreenCaptureIntent())
+            }
+        }
     }
 
     private fun startRecordingService(resultCode: Int, data: Intent) {
