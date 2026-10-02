@@ -90,6 +90,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         projectionManager = getSystemService(MediaProjectionManager::class.java)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)) {
+            startService(Intent(this, LiveHUDOverlayService::class.java))
+        }
         handleIntent(intent)
         setContent {
             val isRecording by captureViewModel.isRecording.collectAsState()
