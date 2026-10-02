@@ -1,5 +1,6 @@
 package com.masterminds.pulsecast.service
 
+import android.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -330,7 +331,7 @@ class ScreenRecordService : Service() {
             val channel = NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
                 "Screen recording",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_HIGH
             )
             manager.createNotificationChannel(channel)
         }
@@ -342,8 +343,10 @@ class ScreenRecordService : Service() {
 
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Recording your screen")
-            .setContentText("Tap to return to the app")
-            .setSmallIcon(android.R.drawable.presence_video_online)
+            .setContentText("PulseCast High Bitrate Studio Capture Active")
+            .setSmallIcon(R.drawable.presence_video_online)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .setContentIntent(openAppIntent)
             .setOngoing(true)
             .build()
