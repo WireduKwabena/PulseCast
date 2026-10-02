@@ -341,6 +341,16 @@ class LiveHUDOverlayService : LifecycleService(), ViewModelStoreOwner, SavedStat
                             Toast.makeText(context, "Screenshot Captured & Saved to Vault", Toast.LENGTH_SHORT).show()
                         }
                     )
+
+                    // SFX Soundboard
+                    OrbControlIconButton(
+                        icon = Icons.Default.MusicNote,
+                        tint = NeonAmber,
+                        onClick = {
+                            orbAlpha = 1.0f
+                            Toast.makeText(context, "SFX Triggered: Airhorn / GG / Clutch", Toast.LENGTH_SHORT).show()
+                        }
+                    )
                 }
             }
         }

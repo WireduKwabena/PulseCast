@@ -6,6 +6,7 @@ import android.media.MediaFormat
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import android.view.Surface
 import com.masterminds.pulsecast.core.PtsAdjuster
 import com.masterminds.pulsecast.core.Resolution
@@ -90,7 +91,7 @@ class VideoEncoder(
             }
 
             override fun onError(codec: MediaCodec, e: MediaCodec.CodecException) {
-                throw e
+                Log.e("VideoEncoder", "Video MediaCodec error: ${e.diagnosticInfo}", e)
             }
         }, handler)
     }

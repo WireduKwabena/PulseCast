@@ -13,6 +13,7 @@ import android.media.projection.MediaProjection
 import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.masterminds.pulsecast.core.AudioCaptureConfig
 import com.masterminds.pulsecast.core.AudioMode
@@ -152,7 +153,7 @@ class AudioEncoder(
             }
 
             override fun onError(codec: MediaCodec, e: MediaCodec.CodecException) {
-                throw e
+                Log.e("AudioEncoder", "Audio MediaCodec error: ${e.diagnosticInfo}", e)
             }
         }, handler)
     }
@@ -241,20 +242,23 @@ class AudioEncoder(
 
         if (micRecord != null && internalRecord != null) {
             dualBusMicThread = Thread {
-                val buffer = ShortArray(1024)
+                val pool = Array(4) { ShortArray(2048) }
+                var poolIndex = 0
                 while (recording) {
                     if (capturePaused) {
                         try { Thread.sleep(20) } catch (_: InterruptedException) { break }
                         continue
                     }
-                    val read = micRecord?.read(buffer, 0, buffer.size) ?: 0
+                    val currentBuffer = pool[poolIndex]
+                    val read = micRecord?.read(currentBuffer, 0, currentBuffer.size) ?: 0
                     if (read > 0) {
-                        val chunk = ShortArray(read)
-                        System.arraycopy(buffer, 0, chunk, 0, read)
-                        if (dualBusMicQueue.size > 10) {
+                        val copy = ShortArray(read)
+                        System.arraycopy(currentBuffer, 0, copy, 0, read)
+                        if (dualBusMicQueue.size > 8) {
                             dualBusMicQueue.poll()
                         }
-                        dualBusMicQueue.offer(chunk)
+                        dualBusMicQueue.offer(copy)
+                        poolIndex = (poolIndex + 1) % pool.size
                     }
                 }
             }.apply { start() }
