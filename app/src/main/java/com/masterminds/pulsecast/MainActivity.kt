@@ -3,6 +3,7 @@ package com.masterminds.pulsecast
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.projection.MediaProjectionConfig
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
 import android.os.Build
@@ -104,7 +105,7 @@ class MainActivity : ComponentActivity() {
                     countdown--
                     if (countdown == 0) {
                         captureViewModel.setRecording(false)
-                        screenCaptureLauncher.launch(projectionManager.createScreenCaptureIntent())
+                        screenCaptureLauncher.launch(createScreenCaptureIntent())
                     }
                 }
             }
@@ -131,7 +132,7 @@ class MainActivity : ComponentActivity() {
                                 false
                             } else {
                                 pendingBroadcastLaunch = true
-                                requestRecordingStart { screenCaptureLauncher.launch(projectionManager.createScreenCaptureIntent()) }
+                                requestRecordingStart { screenCaptureLauncher.launch(createScreenCaptureIntent()) }
                                 true
                             }
                         },
@@ -153,8 +154,24 @@ class MainActivity : ComponentActivity() {
     private fun handleIntent(intent: Intent?) {
         if (intent?.action == ACTION_START_RECORDING_FROM_ORB) {
             requestRecordingStart {
-                screenCaptureLauncher.launch(projectionManager.createScreenCaptureIntent())
+                screenCaptureLauncher.launch(createScreenCaptureIntent())
             }
+        }
+    }
+
+    private fun createScreenCaptureIntent(): Intent {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            try {
+                val configClass = Class.forName("android.media.projection.MediaProjectionConfig")
+                val method = configClass.getMethod("createConfigWithApp")
+                val config = method.invoke(null)
+                val createIntentMethod = projectionManager.javaClass.getMethod("createScreenCaptureIntent", configClass)
+                createIntentMethod.invoke(projectionManager, config) as Intent
+            } catch (e: Exception) {
+                projectionManager.createScreenCaptureIntent()
+            }
+        } else {
+            projectionManager.createScreenCaptureIntent()
         }
     }
 
